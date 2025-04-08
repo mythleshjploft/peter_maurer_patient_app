@@ -49,9 +49,7 @@ class _NotificationViewState extends State<NotificationView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(
-        title: "Notifications",
-        onActionPress: () {},
-      ),
+          title: "Notifications", onActionPress: () {}, onBackPress: () {}),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

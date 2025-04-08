@@ -1,5 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-import 'dart:developer';
 import 'dart:io';
 
 // import 'dart:math';
@@ -852,7 +851,7 @@ String calculateAge(String dateString) {
 
 // date time format
 String monthYearDateFormat(String dateTimeString) {
-  DateTime dateTime = DateTime.parse(dateTimeString);
+  DateTime dateTime = DateTime.tryParse(dateTimeString) ?? DateTime.now();
   String formattedDate =
       "${_getDaySuffix(dateTime.day)} ${getMonthName(dateTime.month)} ${dateTime.year}";
   return formattedDate;

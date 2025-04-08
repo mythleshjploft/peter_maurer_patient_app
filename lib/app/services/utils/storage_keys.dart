@@ -15,4 +15,5 @@ class StorageKeys {
   static const String basicSub = "basic";
   static const String premiumSub = "premium";
   static const String userPlan = "userPlan";
+  static const String preExistingDisease = "preExistingDisease";
 }

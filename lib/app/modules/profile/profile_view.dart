@@ -32,23 +32,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: "Profile",
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: InkWell(
-                onTap: () {
-                  clearSessionData();
-                },
-                child: SvgPicture.asset(
-                  "assets/icons/logout_icon.svg",
-                )),
-          )
-        ],
-        onActionPress: () {
-          // Add action button functionality here
-        },
-      ),
+          title: "Profile",
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: InkWell(
+                  onTap: () {
+                    clearSessionData();
+                  },
+                  child: SvgPicture.asset(
+                    "assets/icons/logout_icon.svg",
+                  )),
+            )
+          ],
+          onActionPress: () {
+            // Add action button functionality here
+          },
+          onBackPress: () {}),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());

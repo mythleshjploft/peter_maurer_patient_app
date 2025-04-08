@@ -37,15 +37,15 @@ class DoctorListResponse {
 
 class Data {
   List<DoctorDatum>? docs;
-  int? totalDocs;
-  int? limit;
-  int? page;
-  int? totalPages;
-  int? pagingCounter;
-  bool? hasPrevPage;
-  bool? hasNextPage;
+  dynamic totalDocs;
+  dynamic limit;
+  dynamic page;
+  dynamic totalPages;
+  dynamic pagingCounter;
+  dynamic hasPrevPage;
+  dynamic hasNextPage;
   dynamic prevPage;
-  int? nextPage;
+  dynamic nextPage;
 
   Data({
     this.docs,
@@ -102,8 +102,8 @@ class DoctorDatum {
   dynamic mobileNumber;
   dynamic email;
   dynamic dob;
-  CountryId? countryId;
-  CityId? cityId;
+  dynamic countryId;
+  dynamic cityId;
   dynamic zipCode;
   dynamic otp;
   dynamic language;
@@ -191,11 +191,8 @@ class DoctorDatum {
         mobileNumber: json["mobile_number"],
         email: json["email"],
         dob: json["dob"],
-        countryId: json["country_id"] == null
-            ? null
-            : CountryId.fromJson(json["country_id"]),
-        cityId:
-            json["city_id"] == null ? null : CityId.fromJson(json["city_id"]),
+        countryId: json["country_id"],
+        cityId: json["city_id"],
         zipCode: json["zip_code"],
         otp: json["otp"],
         language: json["language"],
@@ -284,8 +281,8 @@ class DoctorDatum {
 }
 
 class CityId {
-  String? id;
-  String? name;
+  dynamic id;
+  dynamic name;
   CityId({
     this.id,
     this.name,
@@ -303,8 +300,8 @@ class CityId {
 }
 
 class CountryId {
-  String? id;
-  String? name;
+  dynamic id;
+  dynamic name;
 
   CountryId({
     this.id,

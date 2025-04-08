@@ -15,9 +15,13 @@ class ApiEndPoints {
   final String verifyOtp = 'app/auth/verify-otp';
   final String savePassword = 'app/auth/confirm_password';
   final String categoriesList = 'common/categories';
+  final String conditionList = 'admin/condition';
   final String profileDetails = 'app/auth/profile';
   final String updateProfile = 'app/auth/update-profile';
   final String notificationList = 'app/notification';
   final String appointmentList = 'app/appointment';
+  final String dashboard = 'app/dashboard';
   final String doctorList = 'app/dashboard/doctor?category_id=';
+  final String doctorDetails = 'app/doctor_clinic_detail/';
+  final String addAppointment = 'app/appointment/book-appointment_new';
 }
