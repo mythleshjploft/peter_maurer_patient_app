@@ -6,6 +6,7 @@ import 'package:peter_maurer_patients_app/app/controllers/doctor_controller.dart
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/category_list_response.dart';
+import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/dashboard/doctor_search_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -359,7 +360,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                           if (controller.selectedSlots.isEmpty) {
                             showSnackBar(subtitle: "Please select a time slot");
                           } else if (controller
-                              .selectedCategoriesId.value.isEmpty) {
+                              .selectedCategoriesList.isEmpty) {
                             showSnackBar(subtitle: "Please select a category");
                           } else if (controller
                               .selectedConditionId.value.isEmpty) {
@@ -417,31 +418,22 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
               ),
               buildSizeHeight(20),
               ListView.builder(
-                itemCount: controller.categoryList.length,
+                itemCount: controller.doctorCategories?.length ?? 0,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  var category = controller.categoryList[index];
+                  DoctorCategory category =
+                      controller.doctorCategories?[index] ?? DoctorCategory();
                   return Obx(
                     () => InkWell(
                       onTap: () {
-                        if (controller.selectedCategoriesList.contains(
-                            controller.categoryList[index] ??
-                                CategoryDatum())) {
-                          controller.selectedCategoriesList
-                              .remove(controller.categoryList[index]);
+                        if (controller.selectedCategoriesList
+                            .contains(category)) {
+                          controller.selectedCategoriesList.remove(category);
                         } else {
-                          controller.selectedCategoriesList.add(
-                              controller.categoryList[index] ??
-                                  CategoryDatum());
+                          controller.selectedCategoriesList.add(category);
                         }
 
-                        controller.selectedCategoriesId.value =
-                            category?.id?.toString() ?? "";
-                        controller.selectedCategories.value =
-                            category?.name?.toString() ?? "";
-                        controller.selectedCategoriesId.refresh();
-                        controller.selectedCategories.refresh();
                         controller.update();
                         // Get.back();
                       },
@@ -451,26 +443,17 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                           children: [
                             Checkbox(
                                 value: controller.selectedCategoriesList
-                                    .contains(controller.categoryList[index] ??
-                                        CategoryDatum()),
+                                    .contains(category),
                                 onChanged: (val) {
                                   if (controller.selectedCategoriesList
-                                      .contains(
-                                          controller.categoryList[index] ??
-                                              CategoryDatum())) {
+                                      .contains(category)) {
                                     controller.selectedCategoriesList
-                                        .remove(controller.categoryList[index]);
+                                        .remove(category);
                                   } else {
-                                    controller.selectedCategoriesList.add(
-                                        controller.categoryList[index] ??
-                                            CategoryDatum());
+                                    controller.selectedCategoriesList
+                                        .add(category);
                                   }
-                                  controller.selectedCategoriesId.value =
-                                      category?.id?.toString() ?? "";
-                                  controller.selectedCategories.value =
-                                      category?.name?.toString() ?? "";
-                                  controller.selectedCategoriesId.refresh();
-                                  controller.selectedCategories.refresh();
+
                                   controller.update();
                                   // Get.back();
                                 }),

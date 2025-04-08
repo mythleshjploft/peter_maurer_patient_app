@@ -15,12 +15,14 @@ class DoctorDetailsResponse {
   String? message;
   DoctorDetails? doctors;
   DoctorsAvailability? doctorsAvailability;
+  List<DoctorCategory>? doctorCategories;
 
   DoctorDetailsResponse({
     this.success,
     this.message,
     this.doctors,
     this.doctorsAvailability,
+    this.doctorCategories,
   });
 
   factory DoctorDetailsResponse.fromJson(Map<String, dynamic> json) =>
@@ -33,6 +35,10 @@ class DoctorDetailsResponse {
         doctorsAvailability: json["doctors_availability"] == null
             ? null
             : DoctorsAvailability.fromJson(json["doctors_availability"]),
+        doctorCategories: json["doctor_categories"] == null
+            ? []
+            : List<DoctorCategory>.from(json["doctor_categories"]!
+                .map((x) => DoctorCategory.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +46,37 @@ class DoctorDetailsResponse {
         "message": message,
         "doctors": doctors?.toJson(),
         "doctors_availability": doctorsAvailability?.toJson(),
+        "doctor_categories": doctorCategories == null
+            ? []
+            : List<dynamic>.from(doctorCategories!.map((x) => x.toJson())),
+      };
+}
+
+class DoctorCategory {
+  dynamic name;
+  dynamic image;
+  dynamic isDelete;
+  dynamic id;
+
+  DoctorCategory({
+    this.name,
+    this.image,
+    this.isDelete,
+    this.id,
+  });
+
+  factory DoctorCategory.fromJson(Map<String, dynamic> json) => DoctorCategory(
+        name: json["name"],
+        image: json["image"],
+        isDelete: json["is_delete"],
+        id: json["_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "image": image,
+        "is_delete": isDelete,
+        "_id": id,
       };
 }
 

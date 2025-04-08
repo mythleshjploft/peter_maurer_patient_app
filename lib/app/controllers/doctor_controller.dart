@@ -57,6 +57,7 @@ class DoctorController extends GetxController {
 
   RxList<Availability>? doctorsAvailability = <Availability>[].obs;
   Rx<DoctorDetails>? doctorDetails = DoctorDetails().obs;
+  RxList<DoctorCategory>? doctorCategories = <DoctorCategory>[].obs;
 
   final DateTime selectedDay = DateTime.now();
   final RxMap<String, List<String>> availableSlots =
@@ -132,35 +133,6 @@ class DoctorController extends GetxController {
     update();
   }
 
-  List<String> _generate15MinSlots(String? startTime, String? endTime) {
-    if (startTime == null || endTime == null) return [];
-
-    try {
-      DateFormat timeFormat = DateFormat("HH:mm");
-
-      DateTime start = timeFormat.parse(startTime);
-      DateTime end = timeFormat.parse(endTime);
-
-      List<String> slots = [];
-
-      while (start.isBefore(end)) {
-        DateTime next = start.add(const Duration(minutes: 15));
-        if (next.isAfter(end)) break;
-
-        String slot =
-            "${timeFormat.format(start)} - ${timeFormat.format(next)}";
-        slots.add(slot);
-
-        start = next;
-      }
-
-      return slots;
-    } catch (e) {
-      log("Slot parsing error: $e");
-      return [];
-    }
-  }
-
   getDoctorDetails(String id) {
     BaseApiService()
         .get(apiEndPoint: "${ApiEndPoints().doctorDetails}new/$id")
@@ -175,6 +147,8 @@ class DoctorController extends GetxController {
                     ? (response.doctorsAvailability?.availableDates ?? [])
                     : [];
             doctorDetails?.value = response.doctors ?? DoctorDetails();
+            doctorCategories?.value = response.doctorCategories ?? [];
+            doctorCategories?.refresh();
             doctorDetails?.refresh();
             doctorsAvailability?.refresh();
             processAvailabilityDataFromModel(response.doctorsAvailability);
@@ -254,7 +228,7 @@ class DoctorController extends GetxController {
   RxList<CategoryDatum?> categoryList = <CategoryDatum>[].obs;
   RxString selectedCategories = "".obs;
   RxString selectedCategoriesId = "".obs;
-  RxList<CategoryDatum> selectedCategoriesList = <CategoryDatum>[].obs;
+  RxList<DoctorCategory> selectedCategoriesList = <DoctorCategory>[].obs;
   getCategoryList() async {
     BaseApiService()
         .get(apiEndPoint: ApiEndPoints().categoriesList)
