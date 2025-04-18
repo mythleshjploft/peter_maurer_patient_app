@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class StepProgressIndicator extends StatelessWidget {
-  int currenStep;
-  StepProgressIndicator({super.key, required this.currenStep});
+  final int currenStep;
+  const StepProgressIndicator({super.key, required this.currenStep});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,9 @@ class StepProgressIndicator extends StatelessWidget {
       height: 36,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isCompleted ? Color(0xFF55A5C4) : Colors.white, // Filled for completed steps
+        color: isCompleted
+            ? const Color(0xFF55A5C4)
+            : Colors.white, // Filled for completed steps
         border: Border.all(color: Colors.grey), // Border for unselected step
       ),
       alignment: Alignment.center,

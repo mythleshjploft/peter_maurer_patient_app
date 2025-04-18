@@ -30,7 +30,7 @@ class _CreateViewState extends State<CreateView> {
                 'assets/images/splash_background_img.png', // Replace with your background image path
                 fit: BoxFit.cover,
               ),
-              Positioned(
+              const Positioned(
                 top: 90,
                 left: 0,
                 right: 0,
@@ -178,7 +178,7 @@ class TermsCheckbox extends StatefulWidget {
   const TermsCheckbox({super.key});
 
   @override
-  _TermsCheckboxState createState() => _TermsCheckboxState();
+  State<TermsCheckbox> createState() => _TermsCheckboxState();
 }
 
 class _TermsCheckboxState extends State<TermsCheckbox> {

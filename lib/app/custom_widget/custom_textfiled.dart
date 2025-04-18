@@ -71,7 +71,7 @@ class CustomTextFieldWithoutText extends StatelessWidget {
   final bool isPassword;
   final IconData? suffixIcon;
   final VoidCallback? onSuffixTap;
-
+  final void Function(String)? onChanged;
   const CustomTextFieldWithoutText({
     super.key,
     required this.hintText,
@@ -79,6 +79,7 @@ class CustomTextFieldWithoutText extends StatelessWidget {
     this.isPassword = false,
     this.suffixIcon,
     this.onSuffixTap,
+    this.onChanged,
   });
 
   @override
@@ -87,6 +88,7 @@ class CustomTextFieldWithoutText extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       cursorColor: Colors.black,
+      onChanged: onChanged,
       decoration: InputDecoration(
         filled: true, // Enables background color
         fillColor: Colors.white, // B

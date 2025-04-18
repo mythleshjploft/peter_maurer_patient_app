@@ -4,7 +4,7 @@ class ApiEndPoints {
   // final String socketUrl = "http://192.168.29.86:5000/";
   final String baseUrl = 'http://3.109.98.222:7900/api/';
   final String imgBaseUrl = 'http://3.109.98.222:7900/uploads/images/';
-  final String socketUrl = "";
+  final String socketUrl = "http://3.109.98.222:7900";
 
   /// Endpoints
   ///
@@ -22,6 +22,9 @@ class ApiEndPoints {
   final String appointmentList = 'app/appointment';
   final String dashboard = 'app/dashboard';
   final String doctorList = 'app/dashboard/doctor?category_id=';
-  final String doctorDetails = 'app/doctor_clinic_detail/';
+  final String doctorDetails = 'app/doctor_clinic_detail/new/';
   final String addAppointment = 'app/appointment/book-appointment_new';
+  final String chatList = 'common/getChatUsers';
+  final String changeAppointmentStatus = 'app/appointment/status/';
+  final String rescheduleAppointment = 'app/appointment/reschedule_appointment';
 }

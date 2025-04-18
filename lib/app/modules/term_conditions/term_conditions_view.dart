@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 
-
 class TermsAndConditionsScreen extends StatelessWidget {
   const TermsAndConditionsScreen({super.key});
 
@@ -9,7 +8,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(title: "Terms & Conditions"),
+      appBar: const CustomAppBar(title: "Terms & Conditions"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: SingleChildScrollView(
@@ -19,11 +18,10 @@ class TermsAndConditionsScreen extends StatelessWidget {
               const Text(
                 "Welcome to Peter-Maurer! By using our app, you agree to the following terms and conditions. Please read them carefully before booking an appointment.",
                 style: TextStyle(
-                  fontSize: 12.5,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                  height: 1.6
-                ),
+                    fontSize: 12.5,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                    height: 1.6),
               ),
               const SizedBox(height: 10),
               const Text(
@@ -33,7 +31,10 @@ class TermsAndConditionsScreen extends StatelessWidget {
               const SizedBox(height: 20),
               const Text(
                 "User Eligibility",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.black),
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
               ),
               const SizedBox(height: 5),
               const Text(
@@ -41,7 +42,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 12, color: Colors.black54),
               ),
               const SizedBox(height: 20),
-              
+
               // List of Cancellation and Refund Policy
               Column(
                 children: List.generate(4, (index) {

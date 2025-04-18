@@ -6,7 +6,6 @@ import 'package:peter_maurer_patients_app/app/controllers/home_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar_doctor.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
-import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/details/details_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
@@ -35,8 +34,11 @@ class _DashboardViewState extends State<DashboardView> {
     return Scaffold(
       backgroundColor: AppColors.grayBackground,
       appBar: CustomAppBarDoctor(
-        showBackButton: false,
-      ),
+          showBackButton: false,
+          profileImagePath: BaseStorage.read(StorageKeys.userImage) ?? "",
+          title:
+              "${(BaseStorage.read(StorageKeys.firstName) ?? "")} ${(BaseStorage.read(StorageKeys.lastName) ?? "")}",
+          isNetworkImage: true),
       body: SmartRefresher(
         controller: controller.refreshController,
         header: const WaterDropHeader(waterDropColor: AppColors.primaryColor),
@@ -77,25 +79,51 @@ class _DashboardViewState extends State<DashboardView> {
                       hintText: "Search",
                       controller: searchController,
                       suffixIcon: Icons.search,
+                      onChanged: (val) {
+                        controller.filterAppointments(val);
+                      },
                     ),
                     const SizedBox(height: 26),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("My Appointment",
+                        const Text("Book Your Appointment",
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
+                                fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(
-                          width: 100,
+                          width: 120,
+                          height: 40,
                           child: CustomButton(
-                            text: "Book",
+                            text: "Book Now",
                             onPressed: () {
                               Get.to(() => const DoctorDetailsView(
                                     id: "67ecd39be7a9300a7839e2c7",
+                                    isFromDashboard: true,
                                   ));
                             },
                           ),
                         )
+                      ],
+                    ),
+                    const SizedBox(height: 26),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("My Appointment",
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
+                        // SizedBox(
+                        //   width: 100,
+                        //   child: CustomButton(
+                        //     text: "Book",
+                        //     onPressed: () {
+                        //       Get.to(() => const DoctorDetailsView(
+                        //             id: "67ecd39be7a9300a7839e2c7",
+                        //             isFromDashboard: true,
+                        //           ));
+                        //     },
+                        //   ),
+                        // )
                       ],
                     ),
                     const SizedBox(height: 12),
@@ -103,16 +131,13 @@ class _DashboardViewState extends State<DashboardView> {
                       if (controller.isHomeLoading.value) {
                         return const Center(child: CircularProgressIndicator());
                       }
-                      if (controller
-                              .homeScreenData.value?.appointemnt?.isEmpty ??
-                          true) {
-                        return const BaseNoData();
+                      if (controller.filteredAppointments.isEmpty) {
+                        return const BaseNoData(
+                            size: 40, message: "No Appointment Found");
                       }
                       return ListView.builder(
                           shrinkWrap: true,
-                          itemCount: controller
-                                  .homeScreenData.value?.appointemnt?.length ??
-                              0,
+                          itemCount: controller.filteredAppointments.length,
                           physics: const ScrollPhysics(),
                           padding: const EdgeInsets.all(0),
                           itemBuilder: (context, index) {
@@ -137,9 +162,8 @@ class _DashboardViewState extends State<DashboardView> {
                                           children: [
                                             cachedNetworkImage(
                                                 image: controller
-                                                        .homeScreenData
-                                                        .value
-                                                        ?.appointemnt?[index]
+                                                        .filteredAppointments[
+                                                            index]
                                                         .doctorId
                                                         ?.image
                                                         ?.toString() ??
@@ -149,7 +173,7 @@ class _DashboardViewState extends State<DashboardView> {
                                                 borderRadius: 100),
                                             const SizedBox(width: 12),
                                             Text(
-                                                "${controller.homeScreenData.value?.appointemnt?[index].doctorId?.firstName?.toString() ?? ""} ${controller.homeScreenData.value?.appointemnt?[index].doctorId?.lastName?.toString() ?? ""}",
+                                                "${controller.filteredAppointments[index].doctorId?.firstName?.toString() ?? ""} ${controller.filteredAppointments[index].doctorId?.lastName?.toString() ?? ""}",
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 16)),
@@ -158,9 +182,7 @@ class _DashboardViewState extends State<DashboardView> {
                                         const SizedBox(height: 4),
                                         Text(
                                             controller
-                                                    .homeScreenData
-                                                    .value
-                                                    ?.appointemnt?[index]
+                                                    .filteredAppointments[index]
                                                     .doctorId
                                                     ?.specialist
                                                     ?.toString() ??
@@ -175,7 +197,7 @@ class _DashboardViewState extends State<DashboardView> {
                                                 'assets/icons/time_icon_new.svg'),
                                             const SizedBox(width: 4),
                                             Text(
-                                                "${controller.homeScreenData.value?.appointemnt?[index].date?.toString() ?? ""} ${controller.homeScreenData.value?.appointemnt?[index].slot?.toString() ?? ""}",
+                                                "${controller.filteredAppointments[index].date?.toString() ?? ""} ${controller.filteredAppointments[index].slot["start_time"]?.toString() ?? ""} - ${controller.homeScreenData.value?.appointemnt?[index].slot["end_time"]?.toString() ?? ""}",
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     color:
@@ -199,9 +221,8 @@ class _DashboardViewState extends State<DashboardView> {
                                               ),
                                               child: Text(
                                                   controller
-                                                          .homeScreenData
-                                                          .value
-                                                          ?.appointemnt?[index]
+                                                          .filteredAppointments[
+                                                              index]
                                                           .slotDuration
                                                           ?.toString() ??
                                                       "",
@@ -237,6 +258,7 @@ class _DashboardViewState extends State<DashboardView> {
                 padding: const EdgeInsets.all(20),
                 margin: const EdgeInsets.symmetric(),
                 height: 220,
+                width: double.maxFinite,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   gradient: const LinearGradient(
@@ -250,7 +272,8 @@ class _DashboardViewState extends State<DashboardView> {
                   if (controller
                           .homeScreenData.value?.pastAppointment?.isEmpty ??
                       true) {
-                    return const BaseNoData();
+                    return const BaseNoData(
+                        size: 40, message: "No Past Appointment Found");
                   }
                   return ListView.builder(
                       itemCount: controller

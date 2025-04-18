@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class DoctorAppointmentCalendar extends StatelessWidget {
+  const DoctorAppointmentCalendar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SfCalendar(

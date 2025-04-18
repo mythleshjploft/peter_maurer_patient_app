@@ -42,6 +42,14 @@ class ProfileController extends GetxController {
             if ((response.success ?? false)) {
               profileData?.value = response.data?.data ?? ProfileDatum();
               profileData?.refresh();
+              BaseStorage.write(StorageKeys.userId,
+                  response.data?.data?.id?.toString() ?? "");
+              BaseStorage.write(StorageKeys.userImage,
+                  response.data?.data?.image?.toString() ?? "");
+              BaseStorage.write(StorageKeys.firstName,
+                  response.data?.data?.firstName?.toString() ?? "");
+              BaseStorage.write(StorageKeys.lastName,
+                  response.data?.data?.lastName?.toString() ?? "");
               isLoading.value = false;
               update();
             } else {

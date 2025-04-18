@@ -3,9 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
+import 'package:peter_maurer_patients_app/app/controllers/appointment_controller.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar_doctor.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
-import 'package:peter_maurer_patients_app/app/custom_widget/schedule_view.dart';
+import 'package:peter_maurer_patients_app/app/modules/appointment/appoint_card_list_screen.dart';
+import 'package:peter_maurer_patients_app/app/modules/appointment/appointment_list_calendar_screen.dart';
 import 'package:peter_maurer_patients_app/app/modules/dialog/custom_dialog.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 
 class ApppointmentListView extends StatefulWidget {
   const ApppointmentListView({super.key});
@@ -16,22 +22,25 @@ class ApppointmentListView extends StatefulWidget {
 
 class _ApppointmentListViewState extends State<ApppointmentListView> {
   final TextEditingController searchController = TextEditingController();
-  final ChatController controller = Get.put(ChatController());
   final TextEditingController textController = TextEditingController();
-  int selectedTab = 0;
   bool isListView = true;
+  AppointmentController controller = Get.put(AppointmentController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
+      appBar: CustomAppBarDoctor(
+          showBackButton: true,
+          profileImagePath: BaseStorage.read(StorageKeys.userImage) ?? "",
+          title: (BaseStorage.read(StorageKeys.firstName) ?? "") +
+              " " +
+              (BaseStorage.read(StorageKeys.lastName) ?? ""),
+          isNetworkImage: true),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
           children: [
-            const SizedBox(height: 60),
-            const HeaderRow(),
-            const SizedBox(height: 18),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,13 +57,21 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
                       isListView = !isListView;
                       setState(() {});
                     },
-                    child: SvgPicture.asset(isListView ? "assets/icons/chat_list_switch.svg" : "assets/icons/calender_chat_switch.svg"))
+                    child: SvgPicture.asset(isListView
+                        ? "assets/icons/chat_list_switch.svg"
+                        : "assets/icons/calender_chat_switch.svg"))
               ],
             ),
             const SizedBox(height: 18),
-            CustomTextFieldWithoutText(
-              hintText: "Search",
-              controller: searchController,
+            Visibility(
+              visible: isListView,
+              child: CustomTextFieldWithoutText(
+                hintText: "Search",
+                controller: searchController,
+                onChanged: (val) {
+                  controller.filterAppointments(val);
+                },
+              ),
             ),
             const SizedBox(height: 20),
             // Segmented Control
@@ -74,110 +91,19 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
             const SizedBox(height: 20),
 
             if (isListView)
-              Expanded(
-                  child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    AppointmentCard(),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    AppointmentCard()
-                  ],
-                ),
-              )),
+              Obx(() {
+                if (controller.isAppointmentLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (controller.filteredAppointmentList.isEmpty) {
+                  return const BaseNoData();
+                }
+                return const AppointCardListScreen();
+              }),
 
-            
-                     if (!isListView) DateRangeSelector(),
-            if (!isListView) SizedBox(height: 16,),
-            if (!isListView) Expanded(child: ScheduleScreen()),
-
-            // Expanded(
-            //   child: Center(
-            //           child: Container(
-            //             width: 350,
-            //             padding: const EdgeInsets.all(16),
-            //             decoration: BoxDecoration(
-            //               color: Colors.white,
-            //               borderRadius: BorderRadius.circular(20),
-            //               boxShadow: const [
-            //                 BoxShadow(
-            //                   color: Colors.black12,
-            //                   blurRadius: 8,
-            //                   spreadRadius: 2,
-            //                 ),
-            //               ],
-            //             ),
-            //             child: Column(
-            //               children: [
-            //                 // Header
-            //                 const Row(
-            //                   children: [
-            //                     CircleAvatar(
-            //                       backgroundImage: AssetImage('assets/images/Ellipse 1.png'),
-            //                       radius: 20,
-            //                     ),
-            //                     SizedBox(width: 8),
-            //                     Column(
-            //                       crossAxisAlignment: CrossAxisAlignment.start,
-            //                       children: [
-            //                         Text(
-            //                           "Dr. Madelyn Ve...",
-            //                           style: TextStyle(fontWeight: FontWeight.bold),
-            //                         ),
-            //                         Text(
-            //                           "Dentist",
-            //                           style: TextStyle(color: Colors.grey),
-            //                         ),
-            //                       ],
-            //                     ),
-            //                   ],
-            //                 ),
-            //                 const Divider(),
-
-            //                 // Messages List
-            //                 Expanded(
-            //                   child: Obx(() => ListView.builder(
-            //                         itemCount: controller.messages.length,
-            //                         itemBuilder: (context, index) {
-            //                           final message = controller.messages[index];
-            //                           return _buildMessageBubble(message.text, message.isUser);
-            //                         },
-            //                       )),
-            //                 ),
-
-            //                 // Input Field
-            //                 _buildInputField(),
-            //               ],
-            //             ),
-            //           ),
-            //         ),
-            // ),
-
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(27),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(32),
-            //       border: Border.all(color: AppColors.borderColor),
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: Colors.black.withOpacity(0.1), // Light shadow
-            //           spreadRadius: 2, // How much the shadow spreads
-            //           blurRadius: 8, // Softness of the shadow
-            //           offset: Offset(2, 4), // Position of the shadow (X, Y)
-            //         ),
-            //       ],
-            //     ),
-            //     child: Column(
-            //       children: [
-
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(height: 26),
+            if (!isListView) const AppointmentListCalendarScreen()
           ],
         ),
       ),
@@ -186,25 +112,31 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
 
   Widget _buildSegmentButton(String title, int index) {
     return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedTab = index;
-          });
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          margin: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            color: selectedTab == index ? AppColors.primaryColor : Colors.white,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                color: selectedTab == index ? Colors.white : Colors.black,
-                fontWeight: FontWeight.w500,
+      child: Obx(
+        () => GestureDetector(
+          onTap: () {
+            controller.selectedTab.value = index;
+            searchController.clear();
+            controller.getAppointmentList();
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            margin: const EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: controller.selectedTab.value == index
+                  ? AppColors.primaryColor
+                  : Colors.transparent,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                  color: controller.selectedTab.value == index
+                      ? Colors.white
+                      : Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
@@ -218,7 +150,8 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min, // Prevents Row from taking full width
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns text and avatar properly
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Aligns text and avatar properly
         children: [
           // Show avatar only for received messages
           if (!isUser)
@@ -235,12 +168,17 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
               margin: const EdgeInsets.symmetric(vertical: 6),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isUser ? Colors.lightBlue.shade100 : Colors.grey.shade200,
+                color:
+                    isUser ? Colors.lightBlue.shade100 : Colors.grey.shade200,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(12),
                   topRight: const Radius.circular(12),
-                  bottomLeft: isUser ? const Radius.circular(12) : const Radius.circular(0),
-                  bottomRight: isUser ? const Radius.circular(0) : const Radius.circular(12),
+                  bottomLeft: isUser
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0),
+                  bottomRight: isUser
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
                 ),
               ),
               child: Text(
@@ -283,7 +221,7 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
           InkWell(
             onTap: () {
               if (textController.text.isNotEmpty) {
-                controller.sendMessage(textController.text, true);
+                // controller.sendMessage(textController.text, true);
                 textController.clear();
               }
             },
@@ -291,7 +229,9 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
               width: 47,
               height: 36,
               alignment: Alignment.center,
-              decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(20)),
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(20)),
               child: SvgPicture.asset("assets/icons/send_img.svg"),
             ),
           ),
@@ -302,6 +242,8 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
 }
 
 class AppointmentCard extends StatelessWidget {
+  const AppointmentCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -314,34 +256,31 @@ class AppointmentCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Row(
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundImage: AssetImage("assets/images/dr_img.png"), // Replace with actual image
+                      backgroundImage: AssetImage(
+                          "assets/images/dr_img.png"), // Replace with actual image
                     ),
                   ],
                 ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Dr. Dr. Maurer",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Dentist",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "Pharmacy A - xxx building, xxx street, xxx city",
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                    ),
-                  ],
+                const SizedBox(height: 12),
+                const Text(
+                  "Dr. Dr. Maurer",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Dentist",
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Pharmacy A - xxx building, xxx street, xxx city",
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 )
               ],
             ),
@@ -368,13 +307,14 @@ class AppointmentCard extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 24),
             Row(
               children: [
                 Expanded(
+                  flex: 2,
                   child: GestureDetector(
                     onTap: () {
-                     showRescheduleDialog(context);
+                      showRescheduleDialog(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 12),
@@ -384,7 +324,7 @@ class AppointmentCard extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: const Text(
-                        "Reschedule",
+                        "Cancel Appointment",
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -394,6 +334,7 @@ class AppointmentCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
+                  flex: 1,
                   child: GestureDetector(
                     onTap: () {
                       // Handle cancel action
@@ -406,8 +347,129 @@ class AppointmentCard extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       child: const Text(
-                        "Cancel",
+                        "Confirm",
                         style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AppointmentCardOtherType extends StatelessWidget {
+  const AppointmentCardOtherType({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundImage: AssetImage(
+                          "assets/images/dr_img.png"), // Replace with actual image
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "Dr. Dr. Maurer",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Dentist",
+                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "Pharmacy A - xxx building, xxx street, xxx city",
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                )
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xffDCFCE7),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.access_time, color: Colors.green, size: 16),
+                  SizedBox(width: 6),
+                  Text(
+                    "Monday  8:00 - 9:00 am",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  ),
+                  Spacer(),
+                  Text(
+                    "July 31, 2024",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      //  showRescheduleDialog(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xffDCFCE7),
+                        border: Border.all(color: const Color(0xffDCFCE7)),
+                        borderRadius: BorderRadius.circular(58),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Confirmed",
+                        style:
+                            TextStyle(fontSize: 15, color: Color(0xff16A34A)),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      // Get.to(const AppointmentRescheduleView(
+                      //   patientId: ,
+                      // ));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(58),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Reschedule",
+                        style: TextStyle(fontSize: 15, color: Colors.white),
                       ),
                     ),
                   ),
@@ -424,8 +486,10 @@ class AppointmentCard extends StatelessWidget {
 /// Widget for displaying user profile avatars
 
 class DateRangeSelector extends StatefulWidget {
+  const DateRangeSelector({super.key});
+
   @override
-  _DateRangeSelectorState createState() => _DateRangeSelectorState();
+  State<DateRangeSelector> createState() => _DateRangeSelectorState();
 }
 
 class _DateRangeSelectorState extends State<DateRangeSelector> {
@@ -453,7 +517,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             GestureDetector(
               onTap: () => updateDateRange(-7),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
@@ -464,7 +529,9 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                     SizedBox(width: 4),
                     Text(
                       "Previous 7 days",
-                      style: TextStyle(fontSize: 14, ),
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -474,7 +541,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             GestureDetector(
               onTap: () => updateDateRange(7),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
@@ -483,7 +551,9 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   children: [
                     Text(
                       "Next 7 days",
-                      style: TextStyle(fontSize: 14, ),
+                      style: TextStyle(
+                        fontSize: 14,
+                      ),
                     ),
                     SizedBox(width: 4),
                     Icon(Icons.chevron_right, color: AppColors.primaryColor),
@@ -493,7 +563,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -502,7 +572,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(width: 6),
-            const Icon(Icons.calendar_today_outlined, color: Colors.blue, size: 18),
+            const Icon(Icons.calendar_today_outlined,
+                color: Colors.blue, size: 18),
           ],
         ),
       ],
@@ -583,7 +654,8 @@ class MessageTile extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     message,
@@ -601,7 +673,10 @@ class MessageTile extends StatelessWidget {
             children: [
               Text(
                 time,
-                style: const TextStyle(fontSize: 12, color: Color(0xff94A3B8), fontWeight: FontWeight.w400),
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xff94A3B8),
+                    fontWeight: FontWeight.w400),
               ),
               const SizedBox(
                 height: 8,

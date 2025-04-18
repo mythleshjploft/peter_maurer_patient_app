@@ -3,273 +3,441 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
+import 'package:peter_maurer_patients_app/app/controllers/appointment_controller.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar_doctor.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 
 class AppointmentRescheduleView extends StatefulWidget {
-  const AppointmentRescheduleView({super.key});
-
+  const AppointmentRescheduleView(
+      {super.key,
+      required this.patientId,
+      required this.appointmentId,
+      required this.doctorId});
+  final String appointmentId;
+  final String patientId;
+  final String doctorId;
   @override
-  State<AppointmentRescheduleView> createState() => _AppointmentRescheduleViewState();
+  State<AppointmentRescheduleView> createState() =>
+      _AppointmentRescheduleViewState();
 }
 
 class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
   final TextEditingController searchController = TextEditingController();
-  final ChatController controller = Get.put(ChatController());
+
   final TextEditingController textController = TextEditingController();
+  AppointmentController controller = Get.find<AppointmentController>();
   int selectedTab = 0;
   bool isListView = false;
   DateTime _selectedDay = DateTime.now();
+  @override
+  void initState() {
+    super.initState();
+    controller.getDoctorDetails(widget.doctorId.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF8F8F8),
-      
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(height: 60),
-            const HeaderRow(),
-            const SizedBox(height: 18),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Appointments",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
+      appBar: CustomAppBarDoctor(
+          showBackButton: false,
+          profileImagePath: BaseStorage.read(StorageKeys.userImage) ?? "",
+          title: (BaseStorage.read(StorageKeys.firstName) ?? "") +
+              " " +
+              (BaseStorage.read(StorageKeys.lastName) ?? ""),
+          isNetworkImage: true),
+      body: GetBuilder<AppointmentController>(builder: (controller) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 16,
+              ),
+              const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Appointments",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              // CustomTextFieldWithoutText(
+              //   hintText: "Search",
+              //   controller: searchController,
+              // ),
+              // const SizedBox(height: 20),
+              // Segmented Control
+
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.white,
+                            border: Border.all(color: AppColors.borderColor)),
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Back Button
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: const Icon(Icons.arrow_back,
+                                        color: Colors.black54, size: 24),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+
+                                // Doctor's Info
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                        "assets/icons/equip_icon.svg"),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      (BaseStorage.read(
+                                                  StorageKeys.firstName) ??
+                                              "") +
+                                          " " +
+                                          (BaseStorage.read(
+                                                  StorageKeys.lastName) ??
+                                              ""),
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff7E7E7E)),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+
+                                // Appointment Duration
+                                Row(
+                                  children: [
+                                    const Icon(Icons.access_time,
+                                        color: Colors.grey, size: 28),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      "${controller.selectedSlots.length * 15} mins",
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Color(0xff7E7E7E)),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                TableCalendar(
+                                  focusedDay: _selectedDay,
+                                  firstDay: DateTime.now(),
+                                  lastDay: DateTime.now()
+                                      .add(const Duration(days: 365)),
+                                  calendarFormat: CalendarFormat.month,
+                                  selectedDayPredicate: (day) =>
+                                      isSameDay(_selectedDay, day),
+                                  enabledDayPredicate: (day) {
+                                    return controller.enabledDates.contains(
+                                        "${day.month < 10 ? "0${day.month}" : "${day.month}"}-${day.day < 10 ? "0${day.day}" : "${day.day}"}-${day.year}");
+                                  },
+                                  onDaySelected: (selectedDay, focusedDay) {
+                                    setState(() {
+                                      _selectedDay = selectedDay;
+                                    });
+                                    controller.selectedSlots.clear();
+                                    // controller.selectedSlot.value = "";
+                                  },
+                                  headerStyle: const HeaderStyle(
+                                    formatButtonVisible: false,
+                                    titleCentered: true,
+                                  ),
+                                  calendarStyle: const CalendarStyle(
+                                    todayDecoration: BoxDecoration(
+                                      color: Colors.blueAccent,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    selectedDecoration: BoxDecoration(
+                                      color: Colors.green,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    disabledTextStyle:
+                                        TextStyle(color: Colors.grey),
+                                  ),
+                                ),
+                                // TableCalendar(
+                                //   focusedDay: _selectedDay,
+                                //   firstDay: DateTime(2022),
+                                //   lastDay: DateTime(2030),
+                                //   calendarFormat: CalendarFormat.month,
+                                //   selectedDayPredicate: (day) {
+                                //     return isSameDay(_selectedDay, day);
+                                //   },
+                                //   onDaySelected: (selectedDay, focusedDay) {
+                                //     setState(() {
+                                //       _selectedDay = selectedDay;
+                                //     });
+                                //   },
+                                //   headerStyle: const HeaderStyle(
+                                //     formatButtonVisible: false,
+                                //     titleCentered: true,
+                                //   ),
+                                //   calendarStyle: const CalendarStyle(
+                                //     todayDecoration: BoxDecoration(
+                                //       color: Colors.blueAccent,
+                                //       shape: BoxShape.circle,
+                                //     ),
+                                //     selectedDecoration: BoxDecoration(
+                                //       color: AppColors.primaryColor,
+                                //       shape: BoxShape.circle,
+                                //     ),
+                                //   ),
+                                // ),
+
+                                Row(
+                                  children: [
+                                    Text(
+                                      monthYearDateFormat(
+                                          _selectedDay.toString()),
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 13,
+                                ),
+                                controller.availableSlots[
+                                            "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : "${_selectedDay.month}"}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : "${_selectedDay.day}"}-${_selectedDay.year}"] !=
+                                        null
+                                    ? Wrap(
+                                        spacing: 10,
+                                        runSpacing: 10,
+                                        children: controller.availableSlots[
+                                                "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : "${_selectedDay.month}"}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : "${_selectedDay.day}"}-${_selectedDay.year}"]!
+                                            .map((slot) => timeSlot(slot))
+                                            .toList(),
+                                      )
+                                    : const Text("No available slots"),
+                                // Wrap(
+                                //   spacing: 10,
+                                //   runSpacing: 10,
+                                //   children: [
+                                //     timeSlot("03:00pm"),
+                                //     timeSlot("03:30pm"),
+                                //     timeSlot("04:30pm"),
+                                //     timeSlot("11:30am"),
+                                //     timeSlot("05:30pm"),
+                                //     timeSlot("02:30pm", selected: true),
+                                //     timeSlot("05:00pm"),
+                                //     timeSlot("10:30am"),
+                                //   ],
+                                // ),
+
+                                const SizedBox(
+                                  height: 13,
+                                ),
+                              ],
+                            ),
+                            // TableCalendar(
+                            //   focusedDay: _selectedDay,
+                            //   firstDay: DateTime(2022),
+                            //   lastDay: DateTime(2030),
+                            //   calendarFormat: CalendarFormat.month,
+                            //   selectedDayPredicate: (day) {
+                            //     return isSameDay(_selectedDay, day);
+                            //   },
+                            //   onDaySelected: (selectedDay, focusedDay) {
+                            //     setState(() {
+                            //       _selectedDay = selectedDay;
+                            //     });
+                            //   },
+                            //   headerStyle: const HeaderStyle(
+                            //     formatButtonVisible: false,
+                            //     titleCentered: true,
+                            //   ),
+                            //   calendarStyle: const CalendarStyle(
+                            //     todayDecoration: BoxDecoration(
+                            //       color: Colors.blueAccent,
+                            //       shape: BoxShape.circle,
+                            //     ),
+                            //     selectedDecoration: BoxDecoration(
+                            //       color: AppColors.primaryColor,
+                            //       shape: BoxShape.circle,
+                            //     ),
+                            //   ),
+                            // ),
+                            // const Row(
+                            //   children: [
+                            //     Text(
+                            //       "Thursday, 10th August",
+                            //       style: TextStyle(
+                            //           fontSize: 14, fontWeight: FontWeight.w400),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const SizedBox(
+                            //   height: 13,
+                            // ),
+                            // Wrap(
+                            //   spacing: 10,
+                            //   runSpacing: 10,
+                            //   children: [
+                            //     timeSlot("03:00pm"),
+                            //     timeSlot("03:30pm"),
+                            //     timeSlot("04:30pm"),
+                            //     timeSlot("11:30am"),
+                            //     timeSlot("05:30pm"),
+                            //     timeSlot("02:30pm", selected: true),
+                            //     timeSlot("05:00pm"),
+                            //     timeSlot("10:30am"),
+                            //   ],
+                            // ),
+
+                            const SizedBox(
+                              height: 13,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      CustomButton(
+                        text: "Update",
+                        onPressed: () {
+                          if (controller.selectedSlots.isEmpty) {
+                            showSnackBar(subtitle: "Please select a time slot");
+                          } else {
+                            String formattedDate =
+                                "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : _selectedDay.month}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : _selectedDay.day}-${_selectedDay.year}";
+                            controller.updateAppointment(
+                                patientId: widget.patientId,
+                                date: formattedDate,
+                                appointmentId: widget.appointmentId);
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            CustomTextFieldWithoutText(
-              hintText: "Search",
-              controller: searchController,
-            ),
-            const SizedBox(height: 20),
-            // Segmented Control
-
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(15), color: Colors.white, border: Border.all(color: AppColors.borderColor)),
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Back Button
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.grey),
-                                  ),
-                                  child: Icon(Icons.arrow_back, color: Colors.black54, size: 24),
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                    
-                              // Doctor's Info
-                              Row(
-                                children: [
-                                  SvgPicture.asset("assets/icons/equip_icon.svg"),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "Dr. Steven John",
-                                    style: TextStyle(fontSize: 16, color: Color(0xff7E7E7E)),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                    
-                              // Appointment Duration
-                              Row(
-                                children: [
-                                  Icon(Icons.access_time, color: Colors.grey, size: 28),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    "30 mins",
-                                    style: TextStyle(fontSize: 16, color: Color(0xff7E7E7E)),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          TableCalendar(
-                            focusedDay: _selectedDay,
-                            firstDay: DateTime(2022),
-                            lastDay: DateTime(2030),
-                            calendarFormat: CalendarFormat.month,
-                            selectedDayPredicate: (day) {
-                              return isSameDay(_selectedDay, day);
-                            },
-                            onDaySelected: (selectedDay, focusedDay) {
-                              setState(() {
-                                _selectedDay = selectedDay;
-                              });
-                            },
-                            headerStyle: const HeaderStyle(
-                              formatButtonVisible: false,
-                              titleCentered: true,
-                            ),
-                            calendarStyle: const CalendarStyle(
-                              todayDecoration: BoxDecoration(
-                                color: Colors.blueAccent,
-                                shape: BoxShape.circle,
-                              ),
-                              selectedDecoration: BoxDecoration(
-                                color: AppColors.primaryColor,
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Thursday, 10th August",
-                                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 13,
-                          ),
-                          Wrap(
-                            spacing: 10,
-                            runSpacing: 10,
-                            children: [
-                              timeSlot("03:00pm"),
-                              timeSlot("03:30pm"),
-                              timeSlot("04:30pm"),
-                              timeSlot("11:30am"),
-                              timeSlot("05:30pm"),
-                              timeSlot("02:30pm", selected: true),
-                              timeSlot("05:00pm"),
-                              timeSlot("10:30am"),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 13,
-                          ),
-                    
-                        
-                        ],
-                      ),
-                    ),
-                      SizedBox(height: 16,),
-                       CustomButton(
-                                  text: "Update",
-                                  onPressed: () {},
-                                ),
-                  ],
-                ),
               ),
-            ),
 
-            // Expanded(
-            //   child: Center(
-            //           child: Container(
-            //             width: 350,
-            //             padding: const EdgeInsets.all(16),
-            //             decoration: BoxDecoration(
-            //               color: Colors.white,
-            //               borderRadius: BorderRadius.circular(20),
-            //               boxShadow: const [
-            //                 BoxShadow(
-            //                   color: Colors.black12,
-            //                   blurRadius: 8,
-            //                   spreadRadius: 2,
-            //                 ),
-            //               ],
-            //             ),
-            //             child: Column(
-            //               children: [
-            //                 // Header
-            //                 const Row(
-            //                   children: [
-            //                     CircleAvatar(
-            //                       backgroundImage: AssetImage('assets/images/Ellipse 1.png'),
-            //                       radius: 20,
-            //                     ),
-            //                     SizedBox(width: 8),
-            //                     Column(
-            //                       crossAxisAlignment: CrossAxisAlignment.start,
-            //                       children: [
-            //                         Text(
-            //                           "Dr. Madelyn Ve...",
-            //                           style: TextStyle(fontWeight: FontWeight.bold),
-            //                         ),
-            //                         Text(
-            //                           "Dentist",
-            //                           style: TextStyle(color: Colors.grey),
-            //                         ),
-            //                       ],
-            //                     ),
-            //                   ],
-            //                 ),
-            //                 const Divider(),
+              // Expanded(
+              //   child: Center(
+              //           child: Container(
+              //             width: 350,
+              //             padding: const EdgeInsets.all(16),
+              //             decoration: BoxDecoration(
+              //               color: Colors.white,
+              //               borderRadius: BorderRadius.circular(20),
+              //               boxShadow: const [
+              //                 BoxShadow(
+              //                   color: Colors.black12,
+              //                   blurRadius: 8,
+              //                   spreadRadius: 2,
+              //                 ),
+              //               ],
+              //             ),
+              //             child: Column(
+              //               children: [
+              //                 // Header
+              //                 const Row(
+              //                   children: [
+              //                     CircleAvatar(
+              //                       backgroundImage: AssetImage('assets/images/Ellipse 1.png'),
+              //                       radius: 20,
+              //                     ),
+              //                     SizedBox(width: 8),
+              //                     Column(
+              //                       crossAxisAlignment: CrossAxisAlignment.start,
+              //                       children: [
+              //                         Text(
+              //                           "Dr. Madelyn Ve...",
+              //                           style: TextStyle(fontWeight: FontWeight.bold),
+              //                         ),
+              //                         Text(
+              //                           "Dentist",
+              //                           style: TextStyle(color: Colors.grey),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ],
+              //                 ),
+              //                 const Divider(),
 
-            //                 // Messages List
-            //                 Expanded(
-            //                   child: Obx(() => ListView.builder(
-            //                         itemCount: controller.messages.length,
-            //                         itemBuilder: (context, index) {
-            //                           final message = controller.messages[index];
-            //                           return _buildMessageBubble(message.text, message.isUser);
-            //                         },
-            //                       )),
-            //                 ),
+              //                 // Messages List
+              //                 Expanded(
+              //                   child: Obx(() => ListView.builder(
+              //                         itemCount: controller.messages.length,
+              //                         itemBuilder: (context, index) {
+              //                           final message = controller.messages[index];
+              //                           return _buildMessageBubble(message.text, message.isUser);
+              //                         },
+              //                       )),
+              //                 ),
 
-            //                 // Input Field
-            //                 _buildInputField(),
-            //               ],
-            //             ),
-            //           ),
-            //         ),
-            // ),
+              //                 // Input Field
+              //                 _buildInputField(),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              // ),
 
-            // Expanded(
-            //   child: Container(
-            //     padding: const EdgeInsets.all(27),
-            //     decoration: BoxDecoration(
-            //       color: Colors.white,
-            //       borderRadius: BorderRadius.circular(32),
-            //       border: Border.all(color: AppColors.borderColor),
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: Colors.black.withOpacity(0.1), // Light shadow
-            //           spreadRadius: 2, // How much the shadow spreads
-            //           blurRadius: 8, // Softness of the shadow
-            //           offset: Offset(2, 4), // Position of the shadow (X, Y)
-            //         ),
-            //       ],
-            //     ),
-            //     child: Column(
-            //       children: [
+              // Expanded(
+              //   child: Container(
+              //     padding: const EdgeInsets.all(27),
+              //     decoration: BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.circular(32),
+              //       border: Border.all(color: AppColors.borderColor),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.black.withOpacity(0.1), // Light shadow
+              //           spreadRadius: 2, // How much the shadow spreads
+              //           blurRadius: 8, // Softness of the shadow
+              //           offset: Offset(2, 4), // Position of the shadow (X, Y)
+              //         ),
+              //       ],
+              //     ),
+              //     child: Column(
+              //       children: [
 
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(height: 26),
-          ],
-        ),
-      ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(height: 26),
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -307,7 +475,8 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
         mainAxisSize: MainAxisSize.min, // Prevents Row from taking full width
-        crossAxisAlignment: CrossAxisAlignment.start, // Aligns text and avatar properly
+        crossAxisAlignment:
+            CrossAxisAlignment.start, // Aligns text and avatar properly
         children: [
           // Show avatar only for received messages
           if (!isUser)
@@ -324,12 +493,17 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
               margin: const EdgeInsets.symmetric(vertical: 6),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: isUser ? Colors.lightBlue.shade100 : Colors.grey.shade200,
+                color:
+                    isUser ? Colors.lightBlue.shade100 : Colors.grey.shade200,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(12),
                   topRight: const Radius.circular(12),
-                  bottomLeft: isUser ? const Radius.circular(12) : const Radius.circular(0),
-                  bottomRight: isUser ? const Radius.circular(0) : const Radius.circular(12),
+                  bottomLeft: isUser
+                      ? const Radius.circular(12)
+                      : const Radius.circular(0),
+                  bottomRight: isUser
+                      ? const Radius.circular(0)
+                      : const Radius.circular(12),
                 ),
               ),
               child: Text(
@@ -343,69 +517,47 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
     );
   }
 
-  Widget timeSlot(String time, {bool selected = false}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-        border: Border.all(color: selected ? AppColors.primaryColor : Colors.grey.shade400),
-        borderRadius: BorderRadius.circular(4),
-        color: selected ? AppColors.primaryColor.withOpacity(0.1) : Colors.white,
-      ),
-      child: Text(
-        time,
-        style: TextStyle(color: selected ? AppColors.primaryColor : Colors.black),
-      ),
-    );
-  }
-
-  Widget _buildInputField() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xffD8D8D8)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: textController,
-              decoration: const InputDecoration(
-                hintText: "Type a message...",
-                border: InputBorder.none,
-              ),
-            ),
+  Widget timeSlot(
+    String time,
+  ) {
+    return Obx(
+      () => GestureDetector(
+        onTap: () {
+          if (controller.selectedSlots.contains(time)) {
+            controller.selectedSlots.remove(time);
+          } else {
+            controller.selectedSlots.add(time);
+          }
+          controller.update();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: controller.selectedSlots.contains(time)
+                    ? AppColors.primaryColor
+                    : Colors.grey.shade400),
+            borderRadius: BorderRadius.circular(4),
+            color: controller.selectedSlots.contains(time)
+                ? AppColors.primaryColor.withOpacity(0.1)
+                : Colors.white,
           ),
-          SvgPicture.asset("assets/icons/link.svg"),
-          const SizedBox(
-            width: 8,
+          child: Text(
+            time,
+            style: TextStyle(
+                color: controller.selectedSlots.contains(time)
+                    ? AppColors.primaryColor
+                    : Colors.black),
           ),
-          SvgPicture.asset("assets/icons/image.svg"),
-          const SizedBox(
-            width: 8,
-          ),
-          InkWell(
-            onTap: () {
-              if (textController.text.isNotEmpty) {
-                controller.sendMessage(textController.text, true);
-                textController.clear();
-              }
-            },
-            child: Container(
-              width: 47,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(20)),
-              child: SvgPicture.asset("assets/icons/send_img.svg"),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
 class AppointmentCard extends StatelessWidget {
+  const AppointmentCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -423,7 +575,8 @@ class AppointmentCard extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 24,
-                      backgroundImage: AssetImage("assets/images/dr_img.png"), // Replace with actual image
+                      backgroundImage: AssetImage(
+                          "assets/images/dr_img.png"), // Replace with actual image
                     ),
                   ],
                 ),
@@ -433,7 +586,8 @@ class AppointmentCard extends StatelessWidget {
                   children: [
                     const Text(
                       "Dr. Dr. Maurer",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -528,6 +682,8 @@ class AppointmentCard extends StatelessWidget {
 /// Widget for displaying user profile avatars
 
 class DateRangeSelector extends StatefulWidget {
+  const DateRangeSelector({super.key});
+
   @override
   _DateRangeSelectorState createState() => _DateRangeSelectorState();
 }
@@ -557,7 +713,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             GestureDetector(
               onTap: () => updateDateRange(-7),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
@@ -580,7 +737,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             GestureDetector(
               onTap: () => updateDateRange(7),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
@@ -610,7 +768,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             const SizedBox(width: 6),
-            const Icon(Icons.calendar_today_outlined, color: Colors.blue, size: 18),
+            const Icon(Icons.calendar_today_outlined,
+                color: Colors.blue, size: 18),
           ],
         ),
       ],
@@ -691,7 +850,8 @@ class MessageTile extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                   Text(
                     message,
@@ -709,7 +869,10 @@ class MessageTile extends StatelessWidget {
             children: [
               Text(
                 time,
-                style: const TextStyle(fontSize: 12, color: Color(0xff94A3B8), fontWeight: FontWeight.w400),
+                style: const TextStyle(
+                    fontSize: 12,
+                    color: Color(0xff94A3B8),
+                    fontWeight: FontWeight.w400),
               ),
               const SizedBox(
                 height: 8,

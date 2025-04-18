@@ -5,7 +5,6 @@ import 'package:peter_maurer_patients_app/app/controllers/signup_controller.dart
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/modules/login/login_view.dart';
-import 'package:peter_maurer_patients_app/app/modules/registration/create_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/step_progress_indicator.dart';
 
 class OtpView extends StatefulWidget {
@@ -29,7 +28,7 @@ class _OtpViewState extends State<OtpView> {
               'assets/images/splash_background_img.png', // Replace with your background image path
               fit: BoxFit.cover,
             ),
-            Positioned(
+            const Positioned(
               top: 90,
               left: 0,
               right: 0,
@@ -159,7 +158,7 @@ class TermsCheckbox extends StatefulWidget {
   const TermsCheckbox({super.key});
 
   @override
-  _TermsCheckboxState createState() => _TermsCheckboxState();
+  State<TermsCheckbox> createState() => _TermsCheckboxState();
 }
 
 class _TermsCheckboxState extends State<TermsCheckbox> {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomBottomSheet extends StatefulWidget {
+  const CustomBottomSheet({super.key});
+
   @override
-  _CustomBottomSheetState createState() => _CustomBottomSheetState();
+  State<CustomBottomSheet> createState() => _CustomBottomSheetState();
 }
 
 class _CustomBottomSheetState extends State<CustomBottomSheet> {
@@ -123,8 +125,7 @@ class RPSCustomPainter extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     path.moveTo(0, size.height * 0.1);
-    path.quadraticBezierTo(
-        size.width * 0.5, 0, size.width, size.height * 0.1);
+    path.quadraticBezierTo(size.width * 0.5, 0, size.width, size.height * 0.1);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
@@ -142,7 +143,7 @@ void showCustomBottomSheet(BuildContext context) {
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     builder: (context) {
-      return CustomBottomSheet();
+      return const CustomBottomSheet();
     },
   );
 }

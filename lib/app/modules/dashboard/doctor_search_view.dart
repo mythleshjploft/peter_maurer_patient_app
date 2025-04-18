@@ -3,12 +3,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/doctor_controller.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar_doctor.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_bottom_sheet.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
-import 'package:peter_maurer_patients_app/app/modules/chat/chat_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/details/details_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DoctorSearchView extends StatefulWidget {
@@ -27,7 +29,7 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        return CustomBottomSheet();
+        return const CustomBottomSheet();
       },
     );
   }
@@ -46,6 +48,15 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.grayBackground,
+      appBar: CustomAppBarDoctor(
+        backgroundColor: const Color(0xffF8F8F8),
+        showBackButton: false,
+        profileImagePath: BaseStorage.read(StorageKeys.userImage) ?? "",
+        title: (BaseStorage.read(StorageKeys.firstName) ?? "") +
+            " " +
+            (BaseStorage.read(StorageKeys.lastName) ?? ""),
+        isNetworkImage: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SmartRefresher(
@@ -55,14 +66,13 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 60),
-                const HeaderRow(),
-                const SizedBox(height: 18),
-
                 const SizedBox(height: 16),
                 CustomTextFieldWithoutText(
                   hintText: "Search",
                   controller: searchController,
+                  onChanged: (val) {
+                    controller.filterDoctors(val);
+                  },
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -84,12 +94,12 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                   if (controller.isLoading.value) {
                     return const Center(child: CircularProgressIndicator());
                   }
-                  if (controller.doctorList?.isEmpty ?? true) {
+                  if (controller.filteredDoctorList.isEmpty) {
                     return const BaseNoData();
                   }
                   return ListView.builder(
                     shrinkWrap: true,
-                    itemCount: controller.doctorList?.length ?? 0,
+                    itemCount: controller.filteredDoctorList.length,
                     physics: const ScrollPhysics(),
                     padding: const EdgeInsets.all(0),
                     itemBuilder: (context, index) {
@@ -105,55 +115,62 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    cachedNetworkImage(
-                                        image: controller
-                                                .doctorList?[index]?.image
-                                                ?.toString() ??
-                                            "",
-                                        height: 50,
-                                        width: 50,
-                                        borderRadius: 100),
-                                    const SizedBox(width: 12),
-                                    Text(
-                                      "${controller.doctorList?[index]?.firstName?.toString() ?? ""} ${controller.doctorList?[index]?.lastName?.toString() ?? ""}",
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      cachedNetworkImage(
+                                          image: controller
+                                                  .filteredDoctorList[index]
+                                                  ?.image
+                                                  ?.toString() ??
+                                              "",
+                                          height: 50,
+                                          width: 50,
+                                          borderRadius: 100),
+                                      const SizedBox(width: 12),
+                                      Flexible(
+                                        child: Text(
+                                          "${controller.filteredDoctorList[index]?.firstName?.toString() ?? ""} ${controller.filteredDoctorList[index]?.lastName?.toString() ?? ""}",
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                      controller.filteredDoctorList[index]
+                                              ?.specialist
+                                              ?.toString() ??
+                                          "",
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                    controller.doctorList?[index]?.specialist
-                                            ?.toString() ??
-                                        "",
-                                    style: const TextStyle(
-                                        fontSize: 14,
-                                        color: AppColors.grayMedium)),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                        'assets/icons/time_icon_new.svg'),
-                                    const SizedBox(width: 4),
-                                    const Text("8 years",
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: AppColors.grayMedium)),
-                                  ],
-                                ),
-                              ],
+                                          fontSize: 14,
+                                          color: AppColors.grayMedium)),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                          'assets/icons/time_icon_new.svg'),
+                                      const SizedBox(width: 4),
+                                      const Text("8 years",
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: AppColors.grayMedium)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             InkWell(
                               onTap: () {
                                 Get.to(() => DoctorDetailsView(
-                                    id: controller.doctorList?[index]?.id
+                                    id: controller.filteredDoctorList[index]?.id
                                             ?.toString() ??
                                         ""));
                               },
@@ -177,6 +194,7 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                     },
                   );
                 }),
+                buildSizeHeight(100),
                 // Column(
                 //   children: upcomingAppointments.map((appointment) {
                 //     return Container(

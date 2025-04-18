@@ -1,6 +1,6 @@
+import 'package:dio/dio.dart' as dio;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/dashboard_view.dart';
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/city_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list_response.dart';
@@ -12,7 +12,6 @@ import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.
 import 'package:peter_maurer_patients_app/app/services/backend/base_responses/base_success_response.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_variables.dart';
-import 'package:dio/dio.dart' as dio;
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 

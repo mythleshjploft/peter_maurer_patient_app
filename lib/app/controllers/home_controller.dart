@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:peter_maurer_patients_app/app/models/appointment_screen/appointment_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/home_screen/home_screen_response.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.dart';
@@ -12,6 +11,7 @@ class HomeController extends GetxController {
   Rx<HomeScreenDatum?> homeScreenData = HomeScreenDatum().obs;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  RxList<Appointemnt> filteredAppointments = <Appointemnt>[].obs;
   getHomeScreenData() async {
     isHomeLoading.value = true;
     try {
@@ -26,6 +26,9 @@ class HomeController extends GetxController {
                 HomeScreenResponse.fromJson(value?.data);
             if ((response.success ?? false)) {
               homeScreenData.value = response.data ?? HomeScreenDatum();
+              filteredAppointments.value =
+                  homeScreenData.value?.appointemnt ?? [];
+              filteredAppointments.refresh();
               homeScreenData.refresh();
               update();
             } else {
@@ -42,6 +45,21 @@ class HomeController extends GetxController {
       isHomeLoading.value = false;
       refreshController.refreshCompleted();
       showSnackBar(subtitle: "Something went wrong, please try again");
+    }
+  }
+
+  void filterAppointments(String query) {
+    final allAppointments = homeScreenData.value?.appointemnt ?? [];
+    if (query.isEmpty) {
+      filteredAppointments.value = allAppointments;
+    } else {
+      final lowerQuery = query.toLowerCase();
+      filteredAppointments.value = allAppointments.where((appointment) {
+        final fullName =
+            "${appointment.doctorId?.firstName ?? ""} ${appointment.doctorId?.lastName ?? ""}"
+                .toLowerCase();
+        return fullName.contains(lowerQuery);
+      }).toList();
     }
   }
 }

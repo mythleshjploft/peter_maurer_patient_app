@@ -5,7 +5,6 @@ import 'package:peter_maurer_patients_app/app/controllers/login_controller.dart'
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_social_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
-import 'package:peter_maurer_patients_app/app/custom_widget/dashboard_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/registration_view.dart';
 
 class LoginView extends StatefulWidget {

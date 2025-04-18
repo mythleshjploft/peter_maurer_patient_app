@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/controllers/base_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/dashboard_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/onbording/onbording_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
@@ -14,6 +15,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  BaseController controller = Get.put(BaseController());
   @override
   void initState() {
     super.initState();

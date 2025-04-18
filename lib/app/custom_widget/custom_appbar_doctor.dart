@@ -3,34 +3,38 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/modules/profile/menu_view.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 
-
-class CustomAppBarDoctor extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBarDoctor extends StatelessWidget
+    implements PreferredSizeWidget {
   final bool showBackButton;
   final String profileImagePath;
+  final bool isNetworkImage;
   final String title;
   final List<Widget>? actions;
-  Color? backgroundColor;
+  final Color? backgroundColor;
+  final void Function()? onPressed;
 
-   CustomAppBarDoctor({
-    super.key,
-    this.showBackButton = true, // Default to show back button
-    this.profileImagePath = 'assets/images/temp_profile_img.png',
-    this.title  = "Dr. Dr. Maurer",
-    this.actions,
-    this.backgroundColor
-  });
+  const CustomAppBarDoctor(
+      {super.key,
+      this.showBackButton = true, // Default to show back button
+      this.profileImagePath = 'assets/images/dr_img.png',
+      this.title = "Dr. Dr. Maurer",
+      this.actions,
+      this.backgroundColor,
+      this.isNetworkImage = false,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-   backgroundColor:backgroundColor?? AppColors.grayBackground,
+      backgroundColor: backgroundColor ?? AppColors.grayBackground,
       elevation: 0,
       automaticallyImplyLeading: false,
       leading: showBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.pop(context),
+              onPressed: onPressed ?? () => Navigator.pop(context),
             )
           : null,
       title: Row(
@@ -38,14 +42,22 @@ class CustomAppBarDoctor extends StatelessWidget implements PreferredSizeWidget 
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: AssetImage(profileImagePath),
+              Visibility(
+                visible: !isNetworkImage,
+                replacement: cachedNetworkImage(
+                    image: profileImagePath,
+                    height: 40,
+                    width: 40,
+                    borderRadius: 100),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage(profileImagePath),
+                ),
               ),
               const SizedBox(width: 8),
-               Text(
+              Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
@@ -53,11 +65,16 @@ class CustomAppBarDoctor extends StatelessWidget implements PreferredSizeWidget 
               ),
             ],
           ),
-          Row(children: actions ?? [InkWell(
-            onTap: (){
-              Get.to(MenuScreen());
-            },
-            child: SvgPicture.asset("assets/icons/options_icon.svg"))]),
+          Row(
+              children: actions ??
+                  [
+                    InkWell(
+                        onTap: () {
+                          Get.to(const MenuScreen());
+                        },
+                        child:
+                            SvgPicture.asset("assets/icons/options_icon.svg"))
+                  ]),
         ],
       ),
     );

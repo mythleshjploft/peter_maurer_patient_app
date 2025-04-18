@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
@@ -6,14 +7,16 @@ import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-  const CustomBottomNavigationBar({super.key, required this.currentIndex, required this.onTap});
+  const CustomBottomNavigationBar(
+      {super.key, required this.currentIndex, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(33),topRight: Radius.circular(33)),
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(33), topRight: Radius.circular(33)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05), // Shadow color
@@ -23,13 +26,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: Platform.isIOS ? 16 : 8),
+      padding: EdgeInsets.only(
+          left: 16, right: 16, top: 8, bottom: Platform.isIOS ? 16 : 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildNavItem("assets/icons/bottom_01.svg", "", () => onTap(0), currentIndex == 0),
-          buildNavItem("assets/icons/bottom_02.svg", "", () => onTap(1), currentIndex == 1),
-          buildNavItem("assets/icons/bottom_03.svg", "", () => onTap(2), currentIndex == 2),
+          buildNavItem("assets/icons/bottom_01.svg", "", () => onTap(0),
+              currentIndex == 0),
+          buildNavItem("assets/icons/bottom_02.svg", "", () => onTap(1),
+              currentIndex == 1),
+          buildNavItem("assets/icons/bottom_03.svg", "", () => onTap(2),
+              currentIndex == 2),
           buildNavItem(
             "assets/icons/bottom_04.svg",
             "",
@@ -42,7 +49,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget buildNavItem(String iconsPath, String label, VoidCallback onTap, bool isSelected, {bool? isImage}) {
+  Widget buildNavItem(
+      String iconsPath, String label, VoidCallback onTap, bool isSelected,
+      {bool? isImage}) {
     return InkWell(
       focusColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -56,11 +65,16 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: Container(
               width: 46,
               height: 46,
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(color: isSelected ? AppColors.primaryColor.withOpacity(0.42) : Colors.transparent, borderRadius: BorderRadius.circular(30)),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primaryColor.withOpacity(0.42)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(30)),
               child: SvgPicture.asset(
                 iconsPath,
-                color: isSelected ? AppColors.black : Color(0XFFCFCFCF),
+                // ignore: deprecated_member_use
+                color: isSelected ? AppColors.black : const Color(0XFFCFCFCF),
               ),
             ),
           ),

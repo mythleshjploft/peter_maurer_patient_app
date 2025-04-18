@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,15 +7,15 @@ import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/doctor_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
-import 'package:peter_maurer_patients_app/app/models/doctor_screen/category_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/dashboard/doctor_search_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DoctorDetailsView extends StatefulWidget {
-  const DoctorDetailsView({super.key, required this.id});
-
+  const DoctorDetailsView(
+      {super.key, required this.id, this.isFromDashboard = false});
+  final bool isFromDashboard;
   final String id;
 
   @override
@@ -29,6 +31,10 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   void initState() {
     super.initState();
     controller.getDoctorDetails(widget.id);
+    controller.selectedCategoriesList.clear();
+    controller.selectedConditionId.value = "";
+    controller.selectedCondition.value = "";
+    controller.selectedSlots.clear();
   }
 
   @override
@@ -330,25 +336,28 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                     //   onPressed: () {},
                     //   child: Icon(Icons.message, color: Colors.black),
                     // ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(() => const DoctorSearchView());
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 10),
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Book Other Doctor",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500),
+                    Visibility(
+                      visible: widget.isFromDashboard,
+                      child: Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => const DoctorSearchView());
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 10),
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                "Book Other Doctor",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),
@@ -367,7 +376,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                             showSnackBar(subtitle: "Please select a Condition");
                           } else {
                             String formattedDate =
-                                "${_selectedDay.day < 10 ? "0${_selectedDay.day}" : _selectedDay.day}-${_selectedDay.month < 10 ? "0${_selectedDay.month}" : _selectedDay.month}-${_selectedDay.year}";
+                                "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : _selectedDay.month}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : _selectedDay.day}-${_selectedDay.year}";
                             controller.createAppointment(
                                 doctorId: widget.id, date: formattedDate);
                           }
@@ -433,7 +442,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                         } else {
                           controller.selectedCategoriesList.add(category);
                         }
-
+                        log("Selected Categories: ${controller.selectedCategoriesList.map((e) => e.name.toString()).toList()}");
                         controller.update();
                         // Get.back();
                       },
@@ -457,9 +466,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                                   controller.update();
                                   // Get.back();
                                 }),
-                            Text(controller.categoryList[index]?.name
-                                    ?.toString() ??
-                                ""),
+                            Text(category.name?.toString() ?? ""),
                           ],
                         ),
                       ),

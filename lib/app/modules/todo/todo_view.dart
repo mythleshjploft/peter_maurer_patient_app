@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 
-
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
 
@@ -10,7 +9,8 @@ class TaskScreen extends StatefulWidget {
   State<TaskScreen> createState() => _TaskScreenState();
 }
 
-class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateMixin {
+class _TaskScreenState extends State<TaskScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int selectedTab = 0;
   @override
@@ -29,27 +29,25 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-     appBar: CustomAppBar(title: "To-Do"),
+      appBar: const CustomAppBar(title: "To-Do"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-             
           children: [
-             
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.primaryColor),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  children: [
-                    _buildSegmentButton('Today', 0),
-                    _buildSegmentButton('Completed', 1),
-                    _buildSegmentButton('Pending', 2),
-                  ],
-                ),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.primaryColor),
+                borderRadius: BorderRadius.circular(30),
               ),
-              SizedBox(height: 20),
+              child: Row(
+                children: [
+                  _buildSegmentButton('Today', 0),
+                  _buildSegmentButton('Completed', 1),
+                  _buildSegmentButton('Pending', 2),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
             Expanded(child: _buildTaskList()),
             // const Center(child: Text("Completed Tasks")),
             // const Center(child: Text("Pending Tasks")),
@@ -61,11 +59,11 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
 
   Widget _buildTaskList() {
     return ListView(
-     
       children: [
         _buildTaskCard(
           title: "Follow Up with Patient",
-          description: "Ensure timely and effective patient care by following up on previous consultations.\nCheck progress, review test",
+          description:
+              "Ensure timely and effective patient care by following up on previous consultations.\nCheck progress, review test",
           status: "Done",
           statusColor: AppColors.primaryColor,
           time: "Monday  8:00 - 9:00 am  July 31, 2024",
@@ -74,7 +72,8 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
         const SizedBox(height: 16),
         _buildTaskCard(
           title: "Follow Up with Patient",
-          description: "Ensure timely and effective patient care by following up on previous consultations.\nCheck progress, review test",
+          description:
+              "Ensure timely and effective patient care by following up on previous consultations.\nCheck progress, review test",
           status: "Pending",
           statusColor: Colors.grey,
           time: "Monday  8:00 - 9:00 am  July 31, 2024",
@@ -113,7 +112,6 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
     );
   }
 
-
   Widget _buildTaskCard({
     required String title,
     required String description,
@@ -145,15 +143,16 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   // color: backgroundColor,
-                  border: Border.all(   color: backgroundColor,),
+                  border: Border.all(
+                    color: backgroundColor,
+                  ),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
                   children: [
                     Text(
                       status,
-                      style: TextStyle(
-                       
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -179,9 +178,9 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
           ),
           const SizedBox(height: 12),
           Container(
-            padding:  EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color:  Color(0xffDCFCE7),
+              color: const Color(0xffDCFCE7),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -190,7 +189,7 @@ class _TaskScreenState extends State<TaskScreen> with SingleTickerProviderStateM
                 const SizedBox(width: 8),
                 Text(
                   time,
-                  style: const TextStyle( fontSize: 13),
+                  style: const TextStyle(fontSize: 13),
                 ),
               ],
             ),

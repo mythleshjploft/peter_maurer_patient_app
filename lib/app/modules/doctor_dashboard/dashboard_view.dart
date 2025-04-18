@@ -36,16 +36,28 @@ class DashboardView extends StatelessWidget {
   ];
 
   final List<Map<String, dynamic>> pastAppointments = [
-    {"name": "Dr. Dr. Maurer", "specialty": "Stomach Specialist", "date": "28 November 2023", "image": "assets/images/dr_img.png"},
-    {"name": "Dr. Dr. Maurer", "specialty": "Stomach Specialist", "date": "28 November 2023", "image": "assets/images/dr_img.png"},
+    {
+      "name": "Dr. Dr. Maurer",
+      "specialty": "Stomach Specialist",
+      "date": "28 November 2023",
+      "image": "assets/images/dr_img.png"
+    },
+    {
+      "name": "Dr. Dr. Maurer",
+      "specialty": "Stomach Specialist",
+      "date": "28 November 2023",
+      "image": "assets/images/dr_img.png"
+    },
   ];
+
+  DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.grayBackground,
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -56,17 +68,17 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(height: 60),
                   const HeaderRow(),
                   const SizedBox(height: 18),
-                  Row(
+                  const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "Good Morning ",
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const Text(
+                      Text(
                         "Angela ",
                         style: TextStyle(
                           fontSize: 22,
@@ -82,21 +94,22 @@ class DashboardView extends StatelessWidget {
                     controller: searchController,
                   ),
                   const SizedBox(height: 26),
-                  Row(
+                  const Row(
                     children: [
-                      Text("My Appointment", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Text("My Appointment",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   _buildVisitsSummary(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildCalendar(),
-                  SizedBox(height: 16),
-              
+                  const SizedBox(height: 16),
                   _buildPatientList(),
-                  SizedBox(height: 16),
-                  ConsultationCard(),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
+                  const ConsultationCard(),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -105,29 +118,37 @@ class DashboardView extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black12, blurRadius: 4)
+                      ],
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           children: [
-                            CircleAvatar(radius: 4, backgroundColor: Colors.green),
+                            CircleAvatar(
+                                radius: 4, backgroundColor: Colors.green),
                             SizedBox(width: 6),
-                            Text("DAILY READ", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                            Text("DAILY READ",
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
                           ],
                         ),
-                        SizedBox(height: 8),
-                        Text("Equitable medical education with efforts toward real change",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 8),
+                        const Text(
+                            "Equitable medical education with efforts toward real change",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16)),
+                        const SizedBox(height: 12),
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
-                          child: Image.asset("assets/images/Rectangle 39896.png"),
+                          child:
+                              Image.asset("assets/images/Rectangle 39896.png"),
                         ),
                       ],
                     ),
@@ -143,69 +164,81 @@ class DashboardView extends StatelessWidget {
 
   // Visits Summary Section
   Widget _buildVisitsSummary() {
-    return Container(
-      child: Stack(
-        children: [
-          Image.asset("assets/images/Group 1000005470.png"),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text("Visits for Today", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 8),
-                Text("104", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
-                SizedBox(height: 35),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildInfoBox("New Patients", "40", "51%", Colors.green,"assets/icons/loss_icon.svg"),
-                    SizedBox(width: 8),
-                    _buildInfoBox("Old Patients", "64", "20%", Colors.red,"assets/icons/success_icon.svg"),
-                  ],
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+    return Stack(
+      children: [
+        Image.asset("assets/images/Group 1000005470.png"),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text("Visits for Today",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              const Text("104",
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 35),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildInfoBox("New Patients", "40", "51%", Colors.green,
+                      "assets/icons/loss_icon.svg"),
+                  const SizedBox(width: 8),
+                  _buildInfoBox("Old Patients", "64", "20%", Colors.red,
+                      "assets/icons/success_icon.svg"),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
-  Widget _buildInfoBox(String title, String count, String percentage, Color color,String icon) {
+  Widget _buildInfoBox(
+      String title, String count, String percentage, Color color, String icon) {
     return Container(
       width: 185,
       height: 95,
-      padding: EdgeInsets.all(12),
-      margin: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        
         color: Colors.white.withOpacity(0.7),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 3)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 3)],
       ),
       child: Column(
         children: [
           Row(
             children: [
-              Text(title, style: TextStyle(fontSize: 14, color: Colors.black,fontWeight: FontWeight.w500)),
+              Text(title,
+                  style: const TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500)),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(count, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-              SizedBox(height: 4),
+              Text(count,
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 4),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
                   children: [
-                    Text(percentage, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
-                    SizedBox(width: 8,),
+                    Text(percentage,
+                        style: TextStyle(
+                            color: color, fontWeight: FontWeight.bold)),
+                    const SizedBox(
+                      width: 8,
+                    ),
                     SvgPicture.asset(icon)
                   ],
                 ),
@@ -220,18 +253,15 @@ class DashboardView extends StatelessWidget {
   // Calendar Section
   Widget _buildCalendar() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomCalendar(),
-          UpcomingMeetings()
-        ],
+        children: [CustomCalendar(), UpcomingMeetings()],
       ),
     );
   }
@@ -239,26 +269,31 @@ class DashboardView extends StatelessWidget {
   // Upcoming Event Section
   Widget _buildUpcomingEvent() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Upcoming", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("Upcoming",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
           Row(
             children: [
-              CircleAvatar(backgroundColor: Colors.blue, child: Text("M", style: TextStyle(color: Colors.white))),
+              CircleAvatar(
+                  backgroundColor: Colors.blue,
+                  child: Text("M", style: TextStyle(color: Colors.white))),
               SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Monthly doctor's meet", style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("8 April, 2021 | 04:00 PM", style: TextStyle(color: Colors.grey)),
+                  Text("Monthly doctor's meet",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("8 April, 2021 | 04:00 PM",
+                      style: TextStyle(color: Colors.grey)),
                 ],
               ),
             ],
@@ -271,93 +306,110 @@ class DashboardView extends StatelessWidget {
   // Patient List Section
   Widget _buildPatientList() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Patient List", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
-          _buildPatientItem("SM", "Stacy Mitchell", "Weekly Visit", "9:15 AM", Color(0xffF62088)),
-          _buildPatientItem("AD", "Amy Dunham", "Routine Checkup", "9:30 AM", Color(0xff0000FF)),
-          _buildPatientItem("DJ", "Demi Joan", "Report", "9:50 AM", Color(0xff128983)),
+          const Text("Patient List",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          _buildPatientItem("SM", "Stacy Mitchell", "Weekly Visit", "9:15 AM",
+              const Color(0xffF62088)),
+          _buildPatientItem("AD", "Amy Dunham", "Routine Checkup", "9:30 AM",
+              const Color(0xff0000FF)),
+          _buildPatientItem(
+              "DJ", "Demi Joan", "Report", "9:50 AM", const Color(0xff128983)),
         ],
       ),
     );
   }
 
-  Widget _buildPatientItem(String initials, String name, String visitType, String time, Color color) {
+  Widget _buildPatientItem(String initials, String name, String visitType,
+      String time, Color color) {
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      leading:    CircleAvatar(backgroundColor: color.withOpacity(0.15), child: Text(initials, style: TextStyle(color: Colors.black))),
-      title: Text(name, style: TextStyle(fontWeight: FontWeight.w500)),
-      subtitle: Text(visitType, style: TextStyle(color: Colors.grey)),
+      leading: CircleAvatar(
+          backgroundColor: color.withOpacity(0.15),
+          child: Text(initials, style: const TextStyle(color: Colors.black))),
+      title: Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
+      subtitle: Text(visitType, style: const TextStyle(color: Colors.grey)),
       trailing: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-        decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(12),
-         color: color.withOpacity(0.15)
-        ),
-        child: Text(time, style: TextStyle(color: color, fontWeight: FontWeight.w400))),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: color.withOpacity(0.15)),
+          child: Text(time,
+              style: TextStyle(color: color, fontWeight: FontWeight.w400))),
     );
   }
 
   // Consultation Card Section
-  Widget _buildConsultationCard() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Consultation", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.blue, child: Text("DW", style: TextStyle(color: Colors.white))),
-            title: Text("Denzel White", style: TextStyle(fontWeight: FontWeight.bold)),
-            subtitle: Text("Male - 28 Years 3 Months", style: TextStyle(color: Colors.grey)),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildConsultationCard() {
+  //   return Container(
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(20),
+  //       boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
+  //     ),
+  //     child: const Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text("Consultation",
+  //             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+  //         ListTile(
+  //           leading: CircleAvatar(
+  //               backgroundColor: Colors.blue,
+  //               child: Text("DW", style: TextStyle(color: Colors.white))),
+  //           title: Text("Denzel White",
+  //               style: TextStyle(fontWeight: FontWeight.bold)),
+  //           subtitle: Text("Male - 28 Years 3 Months",
+  //               style: TextStyle(color: Colors.grey)),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  // Daily Read Section
-  Widget _buildDailyReadCard() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("DAILY READ", style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
-          Text("Equitable medical education with efforts toward real change", style: TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
+  // // Daily Read Section
+  // Widget _buildDailyReadCard() {
+  //   return Container(
+  //     padding: const EdgeInsets.all(16),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(20),
+  //       boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
+  //     ),
+  //     child: const Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text("DAILY READ",
+  //             style:
+  //                 TextStyle(color: Colors.green, fontWeight: FontWeight.bold)),
+  //         Text("Equitable medical education with efforts toward real change",
+  //             style: TextStyle(fontWeight: FontWeight.bold)),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class ConsultationCard extends StatelessWidget {
+  const ConsultationCard({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -370,12 +422,15 @@ class ConsultationCard extends StatelessWidget {
         children: [
           Row(
             children: [
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: CircleAvatar(backgroundColor: Color(0xff128983).withOpacity(0.15), child: Text("DW", style: TextStyle(color: Colors.black))),
-            ),
-              SizedBox(width: 12),
-              Column(
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: CircleAvatar(
+                    backgroundColor: const Color(0xff128983).withOpacity(0.15),
+                    child: const Text("DW",
+                        style: TextStyle(color: Colors.black))),
+              ),
+              const SizedBox(width: 12),
+              const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -394,11 +449,11 @@ class ConsultationCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
-              Icon(Icons.more_horiz, color: Colors.grey),
+              const Spacer(),
+              const Icon(Icons.more_horiz, color: Colors.grey),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -407,12 +462,21 @@ class ConsultationCard extends StatelessWidget {
               _buildIconText("assets/icons/heart_burn.svg", 'Heart Burn'),
             ],
           ),
-          SizedBox(height: 12),
-          _buildInfoRow('Last Checked', 'Dr Everly on 21 April 2024 Prescription', '#2J983KT0'),
-          SizedBox(height: 12,),
-          _buildInfoRow('Observation', 'High fever and cough at normal hemoglobin levels.', ''),
-            SizedBox(height: 12,),
-          _buildInfoRow('Prescription', 'Paracetamol - 2 times a day\nDizopam - Day and Night before meal Wikoryl', ''),
+          const SizedBox(height: 12),
+          _buildInfoRow('Last Checked',
+              'Dr Everly on 21 April 2024 Prescription', '#2J983KT0'),
+          const SizedBox(
+            height: 12,
+          ),
+          _buildInfoRow('Observation',
+              'High fever and cough at normal hemoglobin levels.', ''),
+          const SizedBox(
+            height: 12,
+          ),
+          _buildInfoRow(
+              'Prescription',
+              'Paracetamol - 2 times a day\nDizopam - Day and Night before meal Wikoryl',
+              ''),
         ],
       ),
     );
@@ -425,10 +489,10 @@ class ConsultationCard extends StatelessWidget {
           icon,
           color: AppColors.primaryColor,
         ),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(
           text,
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
           textAlign: TextAlign.center,
         ),
       ],
@@ -443,24 +507,25 @@ class ConsultationCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
                     text: value,
-                    style: TextStyle(color: Colors.black.withOpacity(.50), fontSize: 14),
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(.50), fontSize: 14),
                   ),
                   if (link.isNotEmpty)
                     TextSpan(
                       text: ' $link',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.primaryColor,
                         fontSize: 14,
                         decoration: TextDecoration.underline,
@@ -484,13 +549,13 @@ class InitialsAvatar extends StatelessWidget {
   final Color textColor;
 
   const InitialsAvatar({
-    Key? key,
+    super.key,
     required this.initials,
     this.size = 60.0,
     this.backgroundColor = const Color(0xFFD9EAE9),
     this.borderColor = const Color(0xFF7AA6A4),
     this.textColor = Colors.black,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -516,9 +581,9 @@ class InitialsAvatar extends StatelessWidget {
   }
 }
 
-
-
 class UpcomingMeetings extends StatelessWidget {
+  const UpcomingMeetings({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -530,13 +595,13 @@ class UpcomingMeetings extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "Upcoming",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextButton(
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   "View All",
                   style: TextStyle(
                     fontSize: 14,
@@ -548,21 +613,21 @@ class UpcomingMeetings extends StatelessWidget {
             ],
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
 
           /// Meeting Card
           Container(
             decoration: BoxDecoration(
-              color:  Color(0xffF0F9FD), // Light background color
+              color: const Color(0xffF0F9FD), // Light background color
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: EdgeInsets.all(12),
-            child: Row(
+            padding: const EdgeInsets.all(12),
+            child: const Row(
               children: [
                 /// Circle Avatar with Initial
                 CircleAvatar(
                   radius: 20,
-                  backgroundColor:    AppColors.primaryColor,
+                  backgroundColor: AppColors.primaryColor,
                   child: Text(
                     "M",
                     style: TextStyle(
@@ -616,19 +681,17 @@ class UpcomingMeetings extends StatelessWidget {
   }
 }
 
-
-
-
-
 class CustomCalendar extends StatefulWidget {
+  const CustomCalendar({super.key});
+
   @override
-  _CustomCalendarState createState() => _CustomCalendarState();
+  State<CustomCalendar> createState() => _CustomCalendarState();
 }
 
 class _CustomCalendarState extends State<CustomCalendar> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
 
   // Sample events
   final Map<DateTime, List<String>> _events = {
@@ -644,7 +707,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// Calendar Header
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
@@ -655,13 +718,13 @@ class _CustomCalendarState extends State<CustomCalendar> {
             ],
           ),
 
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
 
           /// Month Selector
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
+              const Text(
                 "September 2022",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
@@ -676,7 +739,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                         );
                       });
                     },
-                    icon: Icon(Icons.chevron_left),
+                    icon: const Icon(Icons.chevron_left),
                   ),
                   IconButton(
                     onPressed: () {
@@ -687,14 +750,14 @@ class _CustomCalendarState extends State<CustomCalendar> {
                         );
                       });
                     },
-                    icon: Icon(Icons.chevron_right),
+                    icon: const Icon(Icons.chevron_right),
                   ),
                 ],
               ),
             ],
           ),
 
-          Divider(),
+          const Divider(),
 
           /// Calendar Widget
           TableCalendar(
@@ -717,11 +780,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 color: Colors.blue.shade200,
                 shape: BoxShape.circle,
               ),
-              selectedDecoration: BoxDecoration(
+              selectedDecoration: const BoxDecoration(
                 color: AppColors.primaryColor,
                 shape: BoxShape.circle,
               ),
-              markerDecoration: BoxDecoration(
+              markerDecoration: const BoxDecoration(
                 color: AppColors.primaryColor,
                 shape: BoxShape.circle,
               ),
@@ -735,4 +798,3 @@ class _CustomCalendarState extends State<CustomCalendar> {
     );
   }
 }
-

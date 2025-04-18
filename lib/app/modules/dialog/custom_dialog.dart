@@ -9,19 +9,18 @@ void showRescheduleDialog(BuildContext context) {
       return Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        insetPadding: EdgeInsets.symmetric(horizontal: 16),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16),
         child: Stack(
-        alignment: Alignment.center,
+          alignment: Alignment.center,
           children: [
-             // SVG Background
+            // SVG Background
             SvgPicture.asset(
               'assets/icons/Rectangle 69.svg', // Your SVG card background
-            
             ),
             Container(
               // width: MediaQuery.of(context).size.width * 0.8,
               // height: 50,
-               padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               // decoration: BoxDecoration(
               //   borderRadius: BorderRadius.circular(20),
               //   color: Colors.white,
@@ -33,7 +32,6 @@ void showRescheduleDialog(BuildContext context) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                     
                       SvgPicture.asset(
                         'assets/icons/reschedule_appoinment_icon.svg', // Replace with your success icon SVG
                         height: 80,
@@ -78,13 +76,13 @@ void showRescheduleDialog(BuildContext context) {
               top: 50,
               right: 10,
               child: IconButton(
-                icon: SvgPicture.asset("assets/icons/close_icon_with_background.svg"),
+                icon: SvgPicture.asset(
+                    "assets/icons/close_icon_with_background.svg"),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
             ),
-          
           ],
         ),
       );

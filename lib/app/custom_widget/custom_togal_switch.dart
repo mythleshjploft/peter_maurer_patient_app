@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomToggleSwitch extends StatefulWidget {
+  const CustomToggleSwitch({super.key});
+
   @override
-  _CustomToggleSwitchState createState() => _CustomToggleSwitchState();
+  State<CustomToggleSwitch> createState() => _CustomToggleSwitchState();
 }
 
 class _CustomToggleSwitchState extends State<CustomToggleSwitch> {
@@ -17,7 +19,7 @@ class _CustomToggleSwitchState extends State<CustomToggleSwitch> {
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         width: 130, // Adjust width
         height: 50, // Adjust height
         decoration: BoxDecoration(
@@ -30,7 +32,7 @@ class _CustomToggleSwitchState extends State<CustomToggleSwitch> {
           children: [
             // Background Fill (Moves left & right)
             AnimatedPositioned(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               left: isCallSelected ? 0 : 65, // Moves based on selection
               child: Container(
                 width: 65, // Half width

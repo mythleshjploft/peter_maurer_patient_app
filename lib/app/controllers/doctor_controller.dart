@@ -18,7 +18,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DoctorController extends GetxController {
   RxList<DoctorDatum?>? doctorList = <DoctorDatum>[].obs;
+  RxList<DoctorDatum?> filteredDoctorList = <DoctorDatum?>[].obs;
   RxBool isLoading = true.obs;
+
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
@@ -36,6 +38,8 @@ class DoctorController extends GetxController {
                 DoctorListResponse.fromJson(value?.data);
             if ((response.success ?? false)) {
               doctorList?.value = response.data?.docs ?? [];
+              // Initially assign full list to filtered list
+              filteredDoctorList.value = doctorList!;
               doctorList?.refresh();
               update();
             } else {
@@ -52,6 +56,20 @@ class DoctorController extends GetxController {
       isLoading.value = false;
       refreshController.refreshCompleted();
       showSnackBar(subtitle: "Something went wrong, please try again");
+    }
+  }
+
+  void filterDoctors(String query) {
+    final List<DoctorDatum?> allDoctors = doctorList ?? [];
+    if (query.isEmpty) {
+      filteredDoctorList.value = allDoctors;
+    } else {
+      final lowerQuery = query.toLowerCase();
+      filteredDoctorList.value = allDoctors.where((doc) {
+        final fullName =
+            "${doc?.firstName ?? ""} ${doc?.lastName ?? ""}".toLowerCase();
+        return fullName.contains(lowerQuery);
+      }).toList();
     }
   }
 
@@ -135,7 +153,7 @@ class DoctorController extends GetxController {
 
   getDoctorDetails(String id) {
     BaseApiService()
-        .get(apiEndPoint: "${ApiEndPoints().doctorDetails}new/$id")
+        .get(apiEndPoint: "${ApiEndPoints().doctorDetails}$id")
         .then((value) {
       if (value?.statusCode == 200) {
         try {
@@ -192,7 +210,7 @@ class DoctorController extends GetxController {
       "description": "description",
       "date": date,
       "slot": slots,
-      "appointment_type": selectedConditionId.value,
+      "appointment_type": selectedCondition.value,
       "is_delete": false
     };
     BaseApiService()

@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/profile_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
-import 'package:peter_maurer_patients_app/app/modules/profile/menu_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/profile/personal_info.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';

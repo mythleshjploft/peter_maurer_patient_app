@@ -14,7 +14,6 @@ import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dar
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/city_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/login/login_view.dart';
-import 'package:peter_maurer_patients_app/app/modules/registration/otp_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/step_progress_indicator.dart';
 
 class PersonalInfoRegistrationView extends StatefulWidget {
@@ -43,7 +42,7 @@ class _PersonalInfoRegistrationViewState
                 'assets/images/splash_background_img.png', // Replace with your background image path
                 fit: BoxFit.cover,
               ),
-              Positioned(
+              const Positioned(
                 top: 90,
                 left: 0,
                 right: 0,
@@ -522,7 +521,7 @@ class TermsCheckbox extends StatefulWidget {
   const TermsCheckbox({super.key});
 
   @override
-  _TermsCheckboxState createState() => _TermsCheckboxState();
+  State<TermsCheckbox> createState() => _TermsCheckboxState();
 }
 
 class _TermsCheckboxState extends State<TermsCheckbox> {
