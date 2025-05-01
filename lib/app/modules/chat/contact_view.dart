@@ -23,11 +23,6 @@ class ContactView extends StatefulWidget {
 class _ContactViewState extends State<ContactView> {
   final TextEditingController searchController = TextEditingController();
   ChatDetailsController controller = Get.put(ChatDetailsController());
-  @override
-  void initState() {
-    // controller.getChatList();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +84,10 @@ class _ContactViewState extends State<ContactView> {
                 ),
                 child: SmartRefresher(
                   controller: controller.chatListRefreshController,
-                  onRefresh: () => controller.reloadChatList(),
+                  onRefresh: () {
+                    searchController.clear();
+                    controller.reloadChatList();
+                  },
                   header: const WaterDropHeader(
                       waterDropColor: AppColors.primaryColor),
                   child: SingleChildScrollView(

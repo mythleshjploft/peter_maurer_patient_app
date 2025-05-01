@@ -337,7 +337,7 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
                             String formattedDate =
                                 "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : _selectedDay.month}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : _selectedDay.day}-${_selectedDay.year}";
                             controller.updateAppointment(
-                                patientId: widget.patientId,
+                                doctorId: widget.doctorId,
                                 date: formattedDate,
                                 appointmentId: widget.appointmentId);
                           }

@@ -19,6 +19,7 @@ import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.da
 import 'package:peter_maurer_patients_app/app/services/utils/base_variables.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 triggerHapticFeedback() {
   HapticFeedback.lightImpact();
@@ -248,7 +249,13 @@ extension IsUser on String {
     return false;
   }
 }
+
 /////////////////////////////
+Future<void> baseLaunchUrl(String url) async {
+  if (!await launchUrl(Uri.parse(url))) {
+    throw Exception('Could not launch $url');
+  }
+}
 
 Future<File?> showMediaPicker(
     {bool? isCropEnabled, bool? showGalleryOption}) async {

@@ -5,6 +5,7 @@ class ApiEndPoints {
   final String baseUrl = 'http://3.109.98.222:7900/api/';
   final String imgBaseUrl = 'http://3.109.98.222:7900/uploads/images/';
   final String socketUrl = "http://3.109.98.222:7900";
+  final String callbackUrl = "http://3.109.98.222:7902/";
 
   /// Endpoints
   ///
@@ -27,4 +28,5 @@ class ApiEndPoints {
   final String chatList = 'common/getChatUsers';
   final String changeAppointmentStatus = 'app/appointment/status/';
   final String rescheduleAppointment = 'app/appointment/reschedule_appointment';
+  final String uploadMediaInChat = 'common/upload-media';
 }

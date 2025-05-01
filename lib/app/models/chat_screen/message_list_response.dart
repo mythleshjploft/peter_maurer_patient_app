@@ -35,6 +35,7 @@ class MessageListResponse {
 class MessageListDatum {
   dynamic text;
   dynamic imageUrl;
+  dynamic pdfUrl;
   dynamic videoUrl;
   dynamic seen;
   dynamic id;
@@ -50,6 +51,7 @@ class MessageListDatum {
   MessageListDatum({
     this.text,
     this.imageUrl,
+    this.pdfUrl,
     this.videoUrl,
     this.seen,
     this.id,
@@ -67,6 +69,7 @@ class MessageListDatum {
       MessageListDatum(
         text: json["text"],
         imageUrl: json["imageUrl"],
+        pdfUrl: json["pdfUrl"],
         videoUrl: json["videoUrl"],
         seen: json["seen"],
         id: json["_id"],
@@ -88,6 +91,7 @@ class MessageListDatum {
         "text": text,
         "imageUrl": imageUrl,
         "videoUrl": videoUrl,
+        "pdfUrl": pdfUrl,
         "seen": seen,
         "_id": id,
         "senderId": senderId,

@@ -1,11 +1,14 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/chat_details_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar_doctor.dart';
-import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/models/chat_screen/message_list_response.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
@@ -29,7 +32,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   final TextEditingController searchController = TextEditingController();
-  final TextEditingController textController = TextEditingController();
+  // final TextEditingController textController = TextEditingController();
   ChatDetailsController chatScreenController =
       Get.isRegistered<ChatDetailsController>()
           ? Get.find<ChatDetailsController>()
@@ -159,12 +162,15 @@ class _ChatViewState extends State<ChatView> {
                                     chatScreenController.messageList?[index] ??
                                         MessageListDatum();
                                 return _buildMessageBubble(
-                                    message.text?.toString() ?? "",
-                                    (chatScreenController
-                                                .messageList?[index]?.senderId
-                                                ?.toString() ??
-                                            "") ==
-                                        userId);
+                                  message.text?.toString() ?? "",
+                                  (chatScreenController
+                                              .messageList?[index]?.senderId
+                                              ?.toString() ??
+                                          "") ==
+                                      userId,
+                                  imageUrl: message.imageUrl?.toString() ?? "",
+                                  pdfUrl: message.pdfUrl?.toString() ?? "",
+                                );
                               },
                             );
                           }),
@@ -209,7 +215,8 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  Widget _buildMessageBubble(String text, bool isUser) {
+  Widget _buildMessageBubble(String text, bool isUser,
+      {String imageUrl = "", String pdfUrl = ""}) {
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Row(
@@ -246,9 +253,47 @@ class _ChatViewState extends State<ChatView> {
                       : const Radius.circular(12),
                 ),
               ),
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Visibility(
+                    visible: imageUrl != "",
+                    child: cachedNetworkImage(
+                        image: imageUrl,
+                        height: 200,
+                        width: 200,
+                        fit: BoxFit.cover,
+                        borderRadius: 12),
+                  ),
+                  if (pdfUrl != "")
+                    GestureDetector(
+                      onTap: () {
+                        baseLaunchUrl(
+                            ApiEndPoints().imgBaseUrl + pdfUrl.toString());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        color: Colors.red.shade100,
+                        child: const Row(
+                          children: [
+                            Icon(Icons.picture_as_pdf, color: Colors.red),
+                            SizedBox(width: 8),
+                            Expanded(
+                                child: Text("Open PDF",
+                                    style: TextStyle(fontSize: 14))),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (text != "")
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        text,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -264,46 +309,133 @@ class _ChatViewState extends State<ChatView> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: const Color(0xffD8D8D8)),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: textController,
-              decoration: const InputDecoration(
-                hintText: "Type a message...",
-                border: InputBorder.none,
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if ((chatScreenController.selectedFile?.value.path ?? "")
+                .isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10, top: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    chatScreenController.selectedFile?.value ?? File(""),
+                    height: 80,
+                    width: 80,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
+            if ((chatScreenController.selectedPdfFile?.value.path ?? "")
+                .isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Row(
+                  children: [
+                    const Icon(Icons.picture_as_pdf, color: Colors.red),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        chatScreenController.selectedPdfFile?.value.path ?? "",
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        chatScreenController.selectedPdfFile?.value = File("");
+                      },
+                    )
+                  ],
+                ),
+              ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: chatScreenController.chatTextController,
+                    decoration: const InputDecoration(
+                      hintText: "Type a message...",
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                    onTap: () async {
+                      chatScreenController.selectedFile?.value = File("");
+                      chatScreenController.selectedPdfFile?.value = File("");
+                      chatScreenController.selectedFile?.refresh();
+                      chatScreenController.selectedPdfFile?.refresh();
+                      FilePickerResult? result =
+                          await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['pdf'],
+                      );
+
+                      if (result != null && result.files.single.path != null) {
+                        chatScreenController.selectedPdfFile?.value =
+                            File(result.files.single.path!);
+                        chatScreenController.selectedPdfFile?.refresh();
+                      } else {
+                        showSnackBar(subtitle: "Please select a PDF file");
+                      }
+                    },
+                    child: SvgPicture.asset("assets/icons/link.svg")),
+                const SizedBox(
+                  width: 8,
+                ),
+                GestureDetector(
+                    onTap: () async {
+                      chatScreenController.selectedFile?.value = File("");
+                      chatScreenController.selectedPdfFile?.value = File("");
+                      chatScreenController.selectedFile?.refresh();
+                      chatScreenController.selectedPdfFile?.refresh();
+                      await showMediaPicker(isCropEnabled: true).then((value) {
+                        if (value?.path.isNotEmpty ?? false) {
+                          chatScreenController.selectedFile?.value =
+                              File(value?.path ?? "");
+                          chatScreenController.selectedFile?.refresh();
+                        } else {
+                          showSnackBar(subtitle: "Please select image");
+                        }
+                      });
+                    },
+                    child: SvgPicture.asset("assets/icons/image.svg")),
+                const SizedBox(
+                  width: 8,
+                ),
+                InkWell(
+                  onTap: () {
+                    if ((chatScreenController.selectedFile?.value.path ?? "")
+                        .isNotEmpty) {
+                      chatScreenController.uploadFile();
+                    } else if ((chatScreenController
+                                .selectedPdfFile?.value.path ??
+                            "")
+                        .isNotEmpty) {
+                      chatScreenController.uploadFile();
+                    } else if (chatScreenController
+                        .chatTextController.text.isNotEmpty) {
+                      chatScreenController.sendMessages(
+                          message: chatScreenController.chatTextController.text,
+                          receiverId: widget.chatUserId);
+                    }
+                  },
+                  child: Container(
+                    width: 47,
+                    height: 36,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: AppColors.primaryColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: SvgPicture.asset("assets/icons/send_img.svg"),
+                  ),
+                ),
+              ],
             ),
-          ),
-          SvgPicture.asset("assets/icons/link.svg"),
-          const SizedBox(
-            width: 8,
-          ),
-          SvgPicture.asset("assets/icons/image.svg"),
-          const SizedBox(
-            width: 8,
-          ),
-          InkWell(
-            onTap: () {
-              if (textController.text.isNotEmpty) {
-                chatScreenController.sendMessages(
-                    message: textController.text,
-                    receiverId: widget.chatUserId,
-                    type: "Text");
-                textController.clear();
-              }
-            },
-            child: Container(
-              width: 47,
-              height: 36,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(20)),
-              child: SvgPicture.asset("assets/icons/send_img.svg"),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -436,7 +568,7 @@ class MessageTile extends StatelessWidget {
 //   ChatScreen({super.key});
 
 //    final ChatController controller = Get.put(ChatController());
-//   final TextEditingController textController = TextEditingController();
+//   final TextEditingController chatScreenController.chatTextController = TextEditingController();
 
 //   @override
 //   Widget build(BuildContext context) {

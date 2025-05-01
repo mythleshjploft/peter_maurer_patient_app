@@ -242,7 +242,7 @@ class AppointmentController extends GetxController {
   // }
 
   updateAppointment({
-    required String patientId,
+    required String doctorId,
     required String date,
     required String appointmentId,
   }) {
@@ -256,8 +256,8 @@ class AppointmentController extends GetxController {
     }).toList();
 
     Map<String, dynamic> data = {
-      "doctor_id": BaseStorage.read(StorageKeys.userId) ?? "",
-      "patient_id": patientId,
+      "doctor_id": doctorId,
+      // "patient_id": BaseStorage.read(StorageKeys.userId) ?? "",,
       "appointment_id": appointmentId,
       "date": date,
       "slot": slots,

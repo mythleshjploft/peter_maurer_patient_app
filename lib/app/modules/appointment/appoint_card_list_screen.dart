@@ -4,6 +4,7 @@ import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/appointment_controller.dart';
 import 'package:peter_maurer_patients_app/app/models/appointment_screen/appointment_history_reponse.dart';
 import 'package:peter_maurer_patients_app/app/modules/appointment/appointment_reschedule_view.dart';
+import 'package:peter_maurer_patients_app/app/modules/appointment/appointment_webview.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 
 class AppointCardListScreen extends StatefulWidget {
@@ -259,7 +260,32 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     ),
                   ],
                 ),
-              )
+              ),
+              Visibility(
+                visible: controller.selectedTab.value == 0,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => AppointmentWebViewScreen(
+                        url:
+                            //  "https://pub.dev/packages/webview_flutter"
+                            "http://3.109.98.222:7902/noteForm/${widget.appointmentDatum.id}"));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    margin: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      border: Border.all(color: AppColors.primaryColor),
+                      borderRadius: BorderRadius.circular(58),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Text(
+                      "Fill Form",
+                      style: TextStyle(fontSize: 14, color: AppColors.white),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

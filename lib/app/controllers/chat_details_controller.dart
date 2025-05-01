@@ -2,19 +2,24 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/models/chat_screen/chat_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/chat_screen/message_list_response.dart';
+import 'package:peter_maurer_patients_app/app/models/chat_screen/upload_media_response.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/base_responses/base_success_response.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io_request;
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:dio/dio.dart' as dio;
 
 class ChatDetailsController extends GetxController {
 // For Chat lIst Screen
@@ -45,6 +50,7 @@ class ChatDetailsController extends GetxController {
   // late Timer timer;
   RxBool isBlockResInMemory = false.obs;
   RxInt notificationCount = 0.obs;
+  TextEditingController chatTextController = TextEditingController();
 
   // emitIsUserBlocked(String userId) {
   //   timer = Timer.periodic(const Duration(seconds: 6), (timer) {
@@ -402,7 +408,8 @@ class ChatDetailsController extends GetxController {
   Future<void> sendMessages(
       {required String receiverId,
       required String message,
-      required String type}) async {
+      String? imageUrl,
+      String? pdfUrl}) async {
     final String userId = BaseStorage.read(StorageKeys.userId) ?? "";
     messageController.value.clear();
     // isSendMessage.value = true;
@@ -417,6 +424,8 @@ class ChatDetailsController extends GetxController {
           // type: type,
           senderId: userId,
           receiverId: receiverId,
+          imageUrl: imageUrl,
+          pdfUrl: pdfUrl,
           createdAt: DateTime.now().toString(),
         ));
     messageList?.refresh();
@@ -426,8 +435,9 @@ class ChatDetailsController extends GetxController {
         "sender": userId,
         "receiver": receiverId,
         "text": message,
-        "imageUrl": '',
+        "imageUrl": imageUrl,
         "videoUrl": '',
+        "pdfUrl": pdfUrl,
         "msgByUserId": userId,
         // "type": type
       }, ack: (data) {
@@ -441,9 +451,65 @@ class ChatDetailsController extends GetxController {
     } catch (_) {
       log("Exception........");
     }
+    chatTextController.clear();
   }
 
 ////// Create Poll Module
 
   RxBool isFirstMessageDeleted = false.obs;
+  Rx<File>? selectedFile = File("").obs;
+  Rx<File>? selectedPdfFile = File("").obs;
+
+  uploadFile() async {
+    dio.FormData data = dio.FormData.fromMap({});
+    if ((selectedFile?.value.path ?? "").isNotEmpty) {
+      data.files.add(MapEntry(
+          "image",
+          await dio.MultipartFile.fromFile((selectedFile?.value.path ?? ""),
+              filename: (selectedFile?.value.path ?? "").split("/").last)));
+    }
+    if ((selectedPdfFile?.value.path ?? "").isNotEmpty) {
+      data.files.add(MapEntry(
+          "pdf",
+          await dio.MultipartFile.fromFile((selectedPdfFile?.value.path ?? ""),
+              filename: (selectedPdfFile?.value.path ?? "").split("/").last)));
+    }
+    BaseApiService()
+        .post(apiEndPoint: ApiEndPoints().uploadMediaInChat, data: data)
+        .then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          UplooadMediaResponse response =
+              UplooadMediaResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            if ((selectedFile?.value.path ?? "").isNotEmpty) {
+              sendMessages(
+                imageUrl: response.data?.image ?? "",
+                message: chatTextController.text.trim(),
+                receiverId: chatUserIdForPaging.value,
+              );
+            } else if ((selectedPdfFile?.value.path ?? "").isNotEmpty) {
+              sendMessages(
+                pdfUrl: response.data?.pdf ?? "",
+                message: chatTextController.text.trim(),
+                receiverId: chatUserIdForPaging.value,
+              );
+            }
+            selectedFile?.value = File("");
+            selectedPdfFile?.value = File("");
+            selectedPdfFile?.refresh();
+            selectedFile?.refresh();
+            update();
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          log("$e");
+          showSnackBar(subtitle: "$e");
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
 }
