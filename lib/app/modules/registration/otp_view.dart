@@ -59,10 +59,10 @@ class _OtpViewState extends State<OtpView> {
                             const SizedBox(
                               height: 12,
                             ),
-                            const Text(
-                              'An OTP has been sent your email',
+                            Text(
+                              'An OTP has been sent your email'.tr,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 25, fontWeight: FontWeight.w600),
                             ),
                             const SizedBox(
@@ -80,9 +80,9 @@ class _OtpViewState extends State<OtpView> {
                               onTap: () {
                                 Get.to(const LoginView());
                               },
-                              child: const Text(
-                                "Login here",
-                                style: TextStyle(color: Color(0xff2EB3D6)
+                              child: Text(
+                                "Login here".tr,
+                                style: const TextStyle(color: Color(0xff2EB3D6)
                                     // Apply underline decoration
                                     ),
                               ),
@@ -104,7 +104,7 @@ class _OtpViewState extends State<OtpView> {
                             ),
                             const SizedBox(height: 18),
                             CustomButton(
-                              text: "Verify",
+                              text: "Verify".tr,
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
                                   controller.verifyOtp();
@@ -114,10 +114,10 @@ class _OtpViewState extends State<OtpView> {
                             const SizedBox(
                               height: 20,
                             ),
-                            const Text(
-                              'Did not recieve code? 00:30s',
+                            Text(
+                              'Did not recieve code? 00:30s'.tr,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             ),
                             const SizedBox(
@@ -127,9 +127,9 @@ class _OtpViewState extends State<OtpView> {
                               onTap: () {
                                 // Get.to(LoginView());
                               },
-                              child: const Text(
-                                "Resend OTP",
-                                style: TextStyle(
+                              child: Text(
+                                "Resend OTP".tr,
+                                style: const TextStyle(
                                   color: Color(0xff2EB3D6),
                                   decoration: TextDecoration.underline,
                                   // Apply underline decoration
@@ -186,15 +186,15 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
                 const TextSpan(text: "I have read and accept 4Smile's "),
-                _linkText("Terms of Use", () {
+                _linkText("Terms of Use".tr, () {
                   // Handle Terms of Use click
                 }),
                 const TextSpan(text: ", "),
-                _linkText("Privacy Policy", () {
+                _linkText("Privacy Policy".tr, () {
                   // Handle Privacy Policy click
                 }),
                 const TextSpan(text: ", "),
-                _linkText("Terms & Conditions", () {
+                _linkText("Terms & Conditions".tr, () {
                   // Handle Terms & Conditions click
                 }),
               ],

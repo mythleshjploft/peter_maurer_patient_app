@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 
 void showRescheduleDialog(BuildContext context) {
@@ -39,16 +40,18 @@ void showRescheduleDialog(BuildContext context) {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Appointment Rescheduled Successfully!",
+                  Text(
+                    "Appointment Rescheduled Successfully!".tr,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
-                    "Your appointment has been successfully rescheduled. Here are the updated details:",
+                  Text(
+                    "Your appointment has been successfully rescheduled. Here are the updated details:"
+                        .tr,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                   const SizedBox(height: 20),
                   GestureDetector(
@@ -63,9 +66,10 @@ void showRescheduleDialog(BuildContext context) {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Done",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                      child: Text(
+                        "Done".tr,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),

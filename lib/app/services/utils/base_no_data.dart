@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class BaseNoData extends StatelessWidget {
   final String? message;
@@ -25,7 +26,7 @@ class BaseNoData extends StatelessWidget {
             ),
           ),
           Text(
-            message ?? "No Data Found!",
+            message?.tr ?? "No Data Found!".tr,
             style: TextStyle(
               fontSize: 16,
               color: textColor ?? Colors.black,

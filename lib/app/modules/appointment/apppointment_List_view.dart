@@ -45,9 +45,9 @@ class _ApppointmentListViewState extends State<ApppointmentListView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Appointments",
-                  style: TextStyle(
+                Text(
+                  "Appointments".tr,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
@@ -323,9 +323,9 @@ class AppointmentCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Cancel Appointment",
-                        style: TextStyle(
+                      child: Text(
+                        "Cancel Appointment".tr,
+                        style: const TextStyle(
                           fontSize: 14,
                         ),
                       ),
@@ -346,9 +346,10 @@ class AppointmentCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Confirm",
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      child: Text(
+                        "Confirm".tr,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.white),
                       ),
                     ),
                   ),
@@ -444,10 +445,10 @@ class AppointmentCardOtherType extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Confirmed",
-                        style:
-                            TextStyle(fontSize: 15, color: Color(0xff16A34A)),
+                      child: Text(
+                        "Confirmed".tr,
+                        style: const TextStyle(
+                            fontSize: 15, color: Color(0xff16A34A)),
                       ),
                     ),
                   ),
@@ -467,9 +468,10 @@ class AppointmentCardOtherType extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Reschedule",
-                        style: TextStyle(fontSize: 15, color: Colors.white),
+                      child: Text(
+                        "Reschedule".tr,
+                        style:
+                            const TextStyle(fontSize: 15, color: Colors.white),
                       ),
                     ),
                   ),
@@ -523,13 +525,14 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.chevron_left, color: AppColors.primaryColor),
-                    SizedBox(width: 4),
+                    const Icon(Icons.chevron_left,
+                        color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
                     Text(
-                      "Previous 7 days",
-                      style: TextStyle(
+                      "Previous 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
@@ -547,16 +550,17 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
-                      "Next 7 days",
-                      style: TextStyle(
+                      "Next 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.chevron_right,
+                        color: AppColors.primaryColor),
                   ],
                 ),
               ),

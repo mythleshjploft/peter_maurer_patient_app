@@ -169,7 +169,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     GestureDetector(
                       onTap: () {
                         showBaseDialgueBox(
-                          title: const Text("Slot Details"),
+                          title: Text("Slot Details".tr),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -226,9 +226,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             borderRadius: BorderRadius.circular(58),
                           ),
                           alignment: Alignment.center,
-                          child: const Text(
-                            "Reschedule",
-                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          child: Text(
+                            "Reschedule".tr,
+                            style: const TextStyle(
+                                fontSize: 15, color: Colors.white),
                           ),
                         ),
                       ),
@@ -249,9 +250,9 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             borderRadius: BorderRadius.circular(58),
                           ),
                           alignment: Alignment.center,
-                          child: const Text(
-                            "Cancel Appointment",
-                            style: TextStyle(
+                          child: Text(
+                            "Cancel Appointment".tr,
+                            style: const TextStyle(
                               fontSize: 14,
                             ),
                           ),
@@ -279,9 +280,10 @@ class _AppointmentCardState extends State<AppointmentCard> {
                       borderRadius: BorderRadius.circular(58),
                     ),
                     alignment: Alignment.center,
-                    child: const Text(
-                      "Fill Form",
-                      style: TextStyle(fontSize: 14, color: AppColors.white),
+                    child: Text(
+                      "Fill Form".tr,
+                      style:
+                          const TextStyle(fontSize: 14, color: AppColors.white),
                     ),
                   ),
                 ),

@@ -80,11 +80,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           },
                         ),
                         const SizedBox(height: 18),
-                        const Row(
+                        Row(
                           children: [
                             Text(
-                              "Gender",
-                              style: TextStyle(
+                              "Gender".tr,
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ],
@@ -132,11 +132,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                                   ],
                                 )),
                         const SizedBox(height: 18),
-                        const Row(
+                        Row(
                           children: [
                             Text(
-                              "Phone no",
-                              style: TextStyle(
+                              "Phone no".tr,
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ],
@@ -248,11 +248,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           },
                         ),
                         const SizedBox(height: 22),
-                        const Row(
+                        Row(
                           children: [
                             Text(
-                              "Country",
-                              style: TextStyle(
+                              "Country".tr,
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ],
@@ -305,11 +305,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           ),
                         ),
                         const SizedBox(height: 22),
-                        const Row(
+                        Row(
                           children: [
                             Text(
-                              "City",
-                              style: TextStyle(
+                              "City".tr,
+                              style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ],
@@ -379,7 +379,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: CustomButton(
-                      text: "Login",
+                      text: "Login".tr,
                       onPressed: () {
                         if (formKey.currentState?.validate() ?? false) {
                           controller.updateProfile();

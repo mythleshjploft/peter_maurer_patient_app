@@ -101,14 +101,14 @@ class _LoginViewState extends State<LoginView> {
                                     children: [
                                       Checkbox(
                                           value: false, onChanged: (value) {}),
-                                      const Text("Keep me login"),
+                                      Text("Keep me login".tr),
                                     ],
                                   ),
                                   TextButton(
                                     onPressed: () {},
-                                    child: const Text(
-                                      "Forgot Password?",
-                                      style: TextStyle(
+                                    child: Text(
+                                      "Forgot Password?".tr,
+                                      style: const TextStyle(
                                         color: Colors
                                             .black, // Set the text color to black
                                         fontWeight: FontWeight.w400,
@@ -121,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
                               ),
                               const SizedBox(height: 15),
                               CustomButton(
-                                text: "Login",
+                                text: "Login".tr,
                                 onPressed: () {
                                   if (formKey.currentState?.validate() ??
                                       false) {
@@ -136,10 +136,10 @@ class _LoginViewState extends State<LoginView> {
                                 children: [
                                   SvgPicture.asset(
                                       "assets/icons/devider_l.svg"),
-                                  const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8),
-                                    child: Text("or login with"),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Text("or login with".tr),
                                   ),
                                   SvgPicture.asset("assets/icons/devider_r.svg")
                                 ],
@@ -166,13 +166,13 @@ class _LoginViewState extends State<LoginView> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text("Don’t have an account?"),
+                                  Text("Don’t have an account?".tr),
                                   TextButton(
                                     onPressed: () {
                                       Get.to(
                                           const PersonalInfoRegistrationView());
                                     },
-                                    child: const Text("Create new account"),
+                                    child: Text("Create new account".tr),
                                   ),
                                 ],
                               ),

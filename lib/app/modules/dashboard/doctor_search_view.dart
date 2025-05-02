@@ -78,7 +78,7 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Doctors",
+                    Text("Doctors".tr,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     InkWell(

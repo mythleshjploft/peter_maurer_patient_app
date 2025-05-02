@@ -57,9 +57,9 @@ class _DashboardViewState extends State<DashboardView> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Good Morning ",
-                          style: TextStyle(
+                        Text(
+                          getGreetingOfTheDay(),
+                          style: const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w500,
                           ),
@@ -87,14 +87,14 @@ class _DashboardViewState extends State<DashboardView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("Book Your Appointment",
-                            style: TextStyle(
+                        Text("Book Your Appointment".tr,
+                            style: const TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold)),
                         SizedBox(
-                          width: 120,
+                          width: 150,
                           height: 40,
                           child: CustomButton(
-                            text: "Book Now",
+                            text: "Book Now".tr,
                             onPressed: () {
                               Get.to(() => const DoctorDetailsView(
                                     id: "67ecd39be7a9300a7839e2c7",
@@ -106,11 +106,11 @@ class _DashboardViewState extends State<DashboardView> {
                       ],
                     ),
                     const SizedBox(height: 26),
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("My Appointment",
-                            style: TextStyle(
+                        Text("My Appointment".tr,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                         // SizedBox(
                         //   width: 100,
@@ -243,10 +243,10 @@ class _DashboardViewState extends State<DashboardView> {
                           });
                     }),
                     const SizedBox(height: 20),
-                    const Row(
+                    Row(
                       children: [
-                        Text("Past Appointment",
-                            style: TextStyle(
+                        Text("Past Appointment".tr,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                       ],
                     ),
@@ -342,10 +342,10 @@ class _DashboardViewState extends State<DashboardView> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    const Row(
+                    Row(
                       children: [
-                        Text("Daily Read",
-                            style: TextStyle(
+                        Text("Daily Read".tr,
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                       ],
                     ),
@@ -363,13 +363,13 @@ class _DashboardViewState extends State<DashboardView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Row(
+                            Row(
                               children: [
-                                CircleAvatar(
+                                const CircleAvatar(
                                     radius: 4, backgroundColor: Colors.green),
-                                SizedBox(width: 6),
-                                Text("DAILY READ",
-                                    style: TextStyle(
+                                const SizedBox(width: 6),
+                                Text("DAILY READ".tr,
+                                    style: const TextStyle(
                                         color: Colors.grey, fontSize: 12)),
                               ],
                             ),

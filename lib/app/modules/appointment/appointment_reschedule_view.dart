@@ -60,13 +60,13 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
               const SizedBox(
                 height: 16,
               ),
-              const Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Appointments",
-                    style: TextStyle(
+                    "Appointments".tr,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
@@ -243,7 +243,7 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
                                             .map((slot) => timeSlot(slot))
                                             .toList(),
                                       )
-                                    : const Text("No available slots"),
+                                    : Text("No available slots".tr),
                                 // Wrap(
                                 //   spacing: 10,
                                 //   runSpacing: 10,
@@ -329,7 +329,7 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
                         height: 16,
                       ),
                       CustomButton(
-                        text: "Update",
+                        text: "Update".tr,
                         onPressed: () {
                           if (controller.selectedSlots.isEmpty) {
                             showSnackBar(subtitle: "Please select a time slot");
@@ -641,9 +641,9 @@ class AppointmentCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Reschedule",
-                        style: TextStyle(
+                      child: Text(
+                        "Reschedule".tr,
+                        style: const TextStyle(
                           fontSize: 14,
                         ),
                       ),
@@ -663,9 +663,10 @@ class AppointmentCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(58),
                       ),
                       alignment: Alignment.center,
-                      child: const Text(
-                        "Cancel",
-                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      child: Text(
+                        "Cancel".tr,
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.white),
                       ),
                     ),
                   ),
@@ -719,13 +720,14 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.chevron_left, color: AppColors.primaryColor),
-                    SizedBox(width: 4),
+                    const Icon(Icons.chevron_left,
+                        color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
                     Text(
-                      "Previous 7 days",
-                      style: TextStyle(
+                      "Previous 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
@@ -743,16 +745,17 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
-                      "Next 7 days",
-                      style: TextStyle(
+                      "Next 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.chevron_right,
+                        color: AppColors.primaryColor),
                   ],
                 ),
               ),

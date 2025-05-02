@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 
 class CustomDropdownButton2<T> extends StatelessWidget {
@@ -33,7 +34,7 @@ class CustomDropdownButton2<T> extends StatelessWidget {
         hint: Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Text(
-            hintText,
+            hintText.tr,
             style: const TextStyle(fontSize: 16),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
 
 class CustomisedGreyErrorScreen extends StatelessWidget {
@@ -18,7 +19,8 @@ class CustomisedGreyErrorScreen extends StatelessWidget {
             BaseNoData(
               message: kDebugMode
                   ? errorDetails.summary.toString()
-                  : "We encountered an error and we've notified our engineering team about it. Sorry for the inconvenience caused.",
+                  : "We encountered an error and we've notified our engineering team about it. Sorry for the inconvenience caused."
+                      .tr,
             )
           ],
         ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/modules/chat/chat_view.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DashboardView extends StatelessWidget {
@@ -68,17 +70,17 @@ class DashboardView extends StatelessWidget {
                   const SizedBox(height: 60),
                   const HeaderRow(),
                   const SizedBox(height: 18),
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Good Morning ",
-                        style: TextStyle(
+                        getGreetingOfTheDay(),
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Text(
+                      const Text(
                         "Angela ",
                         style: TextStyle(
                           fontSize: 22,
@@ -94,10 +96,10 @@ class DashboardView extends StatelessWidget {
                     controller: searchController,
                   ),
                   const SizedBox(height: 26),
-                  const Row(
+                  Row(
                     children: [
-                      Text("My Appointment",
-                          style: TextStyle(
+                      Text("My Appointment".tr,
+                          style: const TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -129,13 +131,13 @@ class DashboardView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            CircleAvatar(
+                            const CircleAvatar(
                                 radius: 4, backgroundColor: Colors.green),
-                            SizedBox(width: 6),
-                            Text("DAILY READ",
-                                style: TextStyle(
+                            const SizedBox(width: 6),
+                            Text("DAILY READ".tr,
+                                style: const TextStyle(
                                     color: Colors.grey, fontSize: 12)),
                           ],
                         ),
@@ -275,13 +277,14 @@ class DashboardView extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Upcoming",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
-          Row(
+          Text("Upcoming".tr,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          const Row(
             children: [
               CircleAvatar(
                   backgroundColor: Colors.blue,

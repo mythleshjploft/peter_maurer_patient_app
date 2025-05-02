@@ -75,12 +75,12 @@ class _ChatViewState extends State<ChatView> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Messages",
-                    style: TextStyle(
+                    "Messages".tr,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
@@ -274,13 +274,13 @@ class _ChatViewState extends State<ChatView> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         color: Colors.red.shade100,
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.picture_as_pdf, color: Colors.red),
-                            SizedBox(width: 8),
+                            const Icon(Icons.picture_as_pdf, color: Colors.red),
+                            const SizedBox(width: 8),
                             Expanded(
-                                child: Text("Open PDF",
-                                    style: TextStyle(fontSize: 14))),
+                                child: Text("Open PDF".tr,
+                                    style: const TextStyle(fontSize: 14))),
                           ],
                         ),
                       ),

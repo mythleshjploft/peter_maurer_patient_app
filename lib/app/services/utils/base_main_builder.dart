@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/customised_grey_screen.dart';
 
@@ -64,8 +65,8 @@ class BaseMainBuilder extends StatelessWidget {
                                   : Colors.green.shade800,
                               width: MediaQuery.of(context).size.width,
                               alignment: Alignment.center,
-                              child: const Text("No Connection!",
-                                  style: TextStyle(
+                              child: Text("No Connection!".tr,
+                                  style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w500,

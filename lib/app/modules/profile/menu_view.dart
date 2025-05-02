@@ -43,22 +43,24 @@ class MenuScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Menu Items
-            _buildMenuItem('assets/icons/home_icon.svg', "Dashboard",
+            _buildMenuItem('assets/icons/home_icon.svg', "Dashboard".tr,
                 onTap: () {
               Get.offAll(() => const DashBoardView());
             }),
-            _buildMenuItem('assets/icons/home_icon.svg', "Doctor", onTap: () {
+            _buildMenuItem('assets/icons/home_icon.svg', "Doctor".tr,
+                onTap: () {
               Get.to(const DoctorSearchView());
             }),
-            _buildMenuItem('assets/icons/history.svg', "Appointments History",
+            _buildMenuItem(
+                'assets/icons/history.svg', "Appointments History".tr,
                 onTap: () {
               Get.to(const ApppointmentListView());
             }),
-            _buildMenuItem('assets/icons/profile_icon.svg', "Profile",
+            _buildMenuItem('assets/icons/profile_icon.svg', "Profile".tr,
                 onTap: () {
               Get.offAll(() => const DashBoardView(index: 3));
             }),
-            _buildMenuItem('assets/icons/logout_icon_v1.svg', "Log Out",
+            _buildMenuItem('assets/icons/logout_icon_v1.svg', "Log Out".tr,
                 onTap: () {
               clearSessionData();
             }),

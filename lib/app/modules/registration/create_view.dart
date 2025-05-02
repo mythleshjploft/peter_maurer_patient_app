@@ -61,19 +61,19 @@ class _CreateViewState extends State<CreateView> {
                               const SizedBox(
                                 height: 12,
                               ),
-                              const Text(
-                                'Enter your password',
+                              Text(
+                                'Enter your password'.tr,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(
                                 height: 8,
                               ),
-                              const Text(
-                                'Kindly enter your password to confirm',
+                              Text(
+                                'Kindly enter your password to confirm'.tr,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -82,11 +82,12 @@ class _CreateViewState extends State<CreateView> {
                                 onTap: () {
                                   Get.to(const LoginView());
                                 },
-                                child: const Text(
-                                  "Login here",
-                                  style: TextStyle(color: Color(0xff2EB3D6)
-                                      // Apply underline decoration
-                                      ),
+                                child: Text(
+                                  "Login here".tr,
+                                  style:
+                                      const TextStyle(color: Color(0xff2EB3D6)
+                                          // Apply underline decoration
+                                          ),
                                 ),
                               ),
                               const SizedBox(
@@ -205,16 +206,16 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
             text: TextSpan(
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
-                const TextSpan(text: "I have read and accept 4Smile's "),
+                TextSpan(text: "I have read and accept 4Smile's ".tr),
                 _linkText("Terms of Use", () {
                   // Handle Terms of Use click
                 }),
                 const TextSpan(text: ", "),
-                _linkText("Privacy Policy", () {
+                _linkText("Privacy Policy".tr, () {
                   // Handle Privacy Policy click
                 }),
                 const TextSpan(text: ", "),
-                _linkText("Terms & Conditions", () {
+                _linkText("Terms & Conditions".tr, () {
                   // Handle Terms & Conditions click
                 }),
               ],

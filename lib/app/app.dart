@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:peter_maurer_patients_app/app/modules/splash/splash_view.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_localization.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_main_builder.dart';
 
 class MyApp extends StatelessWidget {
@@ -10,6 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
+      translations: BaseLocalization(),
+      locale: const Locale('de', 'DE'),
+      fallbackLocale: const Locale('de', 'DE'),
       title: 'My App',
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(

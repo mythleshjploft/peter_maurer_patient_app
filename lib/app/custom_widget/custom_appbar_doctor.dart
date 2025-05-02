@@ -56,7 +56,7 @@ class CustomAppBarDoctor extends StatelessWidget
               ),
               const SizedBox(width: 8),
               Text(
-                title,
+                title.tr,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,

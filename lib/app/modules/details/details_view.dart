@@ -122,9 +122,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                         const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     child: InkWell(
                       onTap: () {},
-                      child: const Text(
-                        "Read More",
-                        style: TextStyle(
+                      child: Text(
+                        "Read More".tr,
+                        style: const TextStyle(
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.w400,
                           decoration: TextDecoration.underline,
@@ -160,11 +160,13 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
               ),
 
               // Date & Time Section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Text(
-                  "Select Date And Time",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  "Select Date And Time".tr,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
 
@@ -264,7 +266,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                                 .map((slot) => timeSlot(slot))
                                 .toList(),
                           )
-                        : const Text("No available slots"),
+                        : Text("No available slots".tr),
                     // Wrap(
                     //   spacing: 10,
                     //   runSpacing: 10,
@@ -350,10 +352,10 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                               color: AppColors.primaryColor,
                               borderRadius: BorderRadius.circular(25),
                             ),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                "Book Other Doctor",
-                                style: TextStyle(
+                                "Book Other Doctor".tr,
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500),
@@ -388,10 +390,10 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                             color: AppColors.primaryColor,
                             borderRadius: BorderRadius.circular(25),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Book",
-                              style: TextStyle(
+                              "Book".tr,
+                              style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w500),
@@ -418,9 +420,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
           padding: const EdgeInsets.all(18.0),
           child: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              const Text(
-                "Select Categories",
-                style: TextStyle(
+              Text(
+                "Select Categories".tr,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
@@ -489,9 +491,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
           padding: const EdgeInsets.all(18.0),
           child: SingleChildScrollView(
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              const Text(
-                "Select Condition",
-                style: TextStyle(
+              Text(
+                "Select Condition".tr,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),

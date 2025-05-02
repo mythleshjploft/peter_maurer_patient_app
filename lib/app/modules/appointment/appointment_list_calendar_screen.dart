@@ -74,7 +74,7 @@ class _AppointmentListCalendarScreenState
                             onPressed: () {
                               Get.back();
                             },
-                            child: const Text("Close"),
+                            child: Text("Close".tr),
                           ),
                         ],
                       ),
@@ -200,13 +200,14 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.chevron_left, color: AppColors.primaryColor),
-                    SizedBox(width: 4),
+                    const Icon(Icons.chevron_left,
+                        color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
                     Text(
-                      "Previous 7 days",
-                      style: TextStyle(
+                      "Previous 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
@@ -224,16 +225,17 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                   border: Border.all(color: AppColors.borderColorGray),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
-                      "Next 7 days",
-                      style: TextStyle(
+                      "Next 7 days".tr,
+                      style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: AppColors.primaryColor),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.chevron_right,
+                        color: AppColors.primaryColor),
                   ],
                 ),
               ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomBottomSheet extends StatefulWidget {
   const CustomBottomSheet({super.key});
@@ -33,16 +34,16 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
-              "Filter",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              "Filter".tr,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            _buildDropdown("Sort By"),
+            _buildDropdown("Sort By".tr),
             _buildDatePicker(context),
-            _buildDropdown("Condition"),
-            _buildDropdown("Category"),
-            _buildDropdown("Service"),
+            _buildDropdown("Condition".tr),
+            _buildDropdown("Category".tr),
+            _buildDropdown("Service".tr),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {},
@@ -53,9 +54,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 ),
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text(
-                "+ Add New",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                "+ Add New".tr,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -74,7 +75,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
       ),
       child: DropdownButtonFormField<String>(
         decoration: const InputDecoration(border: InputBorder.none),
-        hint: Text(label),
+        hint: Text(label.tr),
         items: ["Option 1", "Option 2"]
             .map((e) => DropdownMenuItem(value: e, child: Text(e)))
             .toList(),
@@ -110,7 +111,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
           children: [
             Text(selectedDate != null
                 ? "${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}"
-                : "Select Date"),
+                : "Select Date".tr),
             const Icon(Icons.calendar_today, color: Colors.blue),
           ],
         ),

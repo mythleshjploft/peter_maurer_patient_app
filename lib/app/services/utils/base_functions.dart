@@ -314,8 +314,8 @@ Future<File?> showMediaPicker(
                         const Icon(Icons.camera_alt_outlined,
                             color: AppColors.primaryColor, size: 60),
                         buildSizeHeight(10),
-                        const Text("Camera",
-                            style: TextStyle(
+                        Text("Camera".tr,
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -349,8 +349,8 @@ Future<File?> showMediaPicker(
                           const Icon(Icons.photo_library_outlined,
                               color: AppColors.primaryColor, size: 60),
                           buildSizeHeight(10),
-                          const Text("Gallery",
-                              style: TextStyle(
+                          Text("Gallery".tr,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
@@ -500,8 +500,8 @@ Future<File?> showVideoPicker({bool? showGalleryOption}) async {
                         const Icon(Icons.camera_alt_outlined,
                             color: AppColors.primaryColor, size: 60),
                         buildSizeHeight(10),
-                        const Text("Camera",
-                            style: TextStyle(
+                        Text("Camera".tr,
+                            style: const TextStyle(
                               fontSize: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
@@ -532,8 +532,8 @@ Future<File?> showVideoPicker({bool? showGalleryOption}) async {
                           const Icon(Icons.photo_library_outlined,
                               color: AppColors.primaryColor, size: 60),
                           buildSizeHeight(10),
-                          const Text("Gallery",
-                              style: TextStyle(
+                          Text("Gallery".tr,
+                              style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w400,
@@ -653,6 +653,20 @@ showSnackBar({
   // ScaffoldMessenger.of(context??Get.context!)
   //   ..hideCurrentSnackBar()
   //   ..showSnackBar(snackBar);
+}
+
+String getGreetingOfTheDay() {
+  final hour = DateTime.now().hour;
+
+  if (hour < 12) {
+    return 'Good Morning'.tr;
+  } else if (hour < 17) {
+    return 'Good Afternoon'.tr;
+  } else if (hour < 21) {
+    return 'Good Evening'.tr;
+  } else {
+    return 'Good Night'.tr;
+  }
 }
 
 Widget customCheckBox(

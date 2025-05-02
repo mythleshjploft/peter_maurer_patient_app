@@ -191,9 +191,9 @@ class _NotificationViewState extends State<NotificationView> {
                   onPressed: () {
                     controller.deleteNotification();
                   },
-                  child: const Center(
-                    child: Text("Clear All",
-                        style: TextStyle(
+                  child: Center(
+                    child: Text("Clear All".tr,
+                        style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: Colors.white)),

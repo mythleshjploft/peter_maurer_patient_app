@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class CustomSocialButton extends StatelessWidget {
   final String text;
@@ -31,7 +32,7 @@ class CustomSocialButton extends StatelessWidget {
             SvgPicture.asset(imagePath, height: 24), // Google/Facebook icon
             const SizedBox(width: 10),
             Text(
-              text,
+              text.tr,
               style: TextStyle(
                   fontSize: 16,
                   color: const Color(0xff020202).withOpacity(0.50)),

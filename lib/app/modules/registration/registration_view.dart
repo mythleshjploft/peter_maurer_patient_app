@@ -73,19 +73,19 @@ class _PersonalInfoRegistrationViewState
                               const SizedBox(
                                 height: 12,
                               ),
-                              const Text(
-                                'Patient Registration',
+                              Text(
+                                'Patient Registration'.tr,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.w600),
                               ),
                               const SizedBox(
                                 height: 8,
                               ),
-                              const Text(
-                                'If you already have an account,',
+                              Text(
+                                'If you already have an account,'.tr,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -94,11 +94,12 @@ class _PersonalInfoRegistrationViewState
                                 onTap: () {
                                   Get.to(const LoginView());
                                 },
-                                child: const Text(
-                                  "Login here",
-                                  style: TextStyle(color: Color(0xff2EB3D6)
-                                      // Apply underline decoration
-                                      ),
+                                child: Text(
+                                  "Login here".tr,
+                                  style:
+                                      const TextStyle(color: Color(0xff2EB3D6)
+                                          // Apply underline decoration
+                                          ),
                                 ),
                               ),
                               const SizedBox(
@@ -126,11 +127,11 @@ class _PersonalInfoRegistrationViewState
                                 },
                               ),
                               const SizedBox(height: 18),
-                              const Row(
+                              Row(
                                 children: [
                                   Text(
-                                    "Gender",
-                                    style: TextStyle(
+                                    "Gender".tr,
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -183,11 +184,11 @@ class _PersonalInfoRegistrationViewState
                                         ],
                                       )),
                               const SizedBox(height: 18),
-                              const Row(
+                              Row(
                                 children: [
                                   Text(
-                                    "Phone no",
-                                    style: TextStyle(
+                                    "Phone no".tr,
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -311,11 +312,11 @@ class _PersonalInfoRegistrationViewState
                                 },
                               ),
                               const SizedBox(height: 22),
-                              const Row(
+                              Row(
                                 children: [
                                   Text(
-                                    "Country",
-                                    style: TextStyle(
+                                    "Country".tr,
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -370,11 +371,11 @@ class _PersonalInfoRegistrationViewState
                                 ),
                               ),
                               const SizedBox(height: 22),
-                              const Row(
+                              Row(
                                 children: [
                                   Text(
-                                    "City",
-                                    style: TextStyle(
+                                    "City".tr,
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400),
                                   ),
@@ -489,7 +490,7 @@ class _PersonalInfoRegistrationViewState
                               const TermsCheckbox(),
                               const SizedBox(height: 22),
                               CustomButton(
-                                  text: "sign Up",
+                                  text: "sign Up".tr,
                                   onPressed: () {
                                     if (controller.isChecked.value) {
                                       if (formKey.currentState?.validate() ??
@@ -571,7 +572,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
   /// Function to create a clickable link
   TextSpan _linkText(String text, VoidCallback onTap) {
     return TextSpan(
-      text: text,
+      text: text.tr,
       style: const TextStyle(
         color: Color(0xff2EB3D6),
         fontSize: 13,

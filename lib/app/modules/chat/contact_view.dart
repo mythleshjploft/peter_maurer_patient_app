@@ -44,12 +44,12 @@ class _ContactViewState extends State<ContactView> {
             const SizedBox(
               height: 16,
             ),
-            const Row(
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Messages",
-                  style: TextStyle(
+                  "Messages".tr,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),

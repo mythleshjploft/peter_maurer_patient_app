@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -21,7 +22,7 @@ class CustomButton extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         ),
         onPressed: onPressed,
-        child: Text(text,
+        child: Text(text.tr,
             style: const TextStyle(color: Colors.white, fontSize: 16)),
       ),
     );

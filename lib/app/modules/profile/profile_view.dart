@@ -146,12 +146,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                "Personal Info",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: AppColors.black,
-                                    fontWeight: FontWeight.w500),
+                              Expanded(
+                                child: Text(
+                                  "Personal Info".tr,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
                               TextButton(
                                 onPressed: () {
@@ -184,8 +186,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   controller.selectedCountry = null;
                                   Get.to(const PersonalInfo());
                                 },
-                                child: const Text("Edit",
-                                    style: TextStyle(
+                                child: Text("Edit".tr,
+                                    style: const TextStyle(
                                         color: AppColors.black,
                                         fontWeight: FontWeight.w500)),
                               ),

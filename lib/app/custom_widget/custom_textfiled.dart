@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -30,7 +31,7 @@ class CustomTextField extends StatelessWidget {
         Row(
           children: [
             Text(
-              hintText,
+              hintText.tr,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
             ),
           ],
@@ -47,7 +48,7 @@ class CustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            hintText: hintText,
+            hintText: hintText.tr,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
             ),
@@ -94,7 +95,7 @@ class CustomTextFieldWithoutText extends StatelessWidget {
         fillColor: Colors.white, // B
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        hintText: hintText,
+        hintText: hintText.tr,
 
         hintStyle: const TextStyle(color: Color(0xffCFCFCF)),
         border: OutlineInputBorder(
