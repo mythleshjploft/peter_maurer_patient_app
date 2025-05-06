@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>467194117630-sofuvvjke47t6oc640hiuokovsst9ggo.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.467194117630-sofuvvjke47t6oc640hiuokovsst9ggo</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>467194117630-n64oah4mdc9psk9et6j0n21lfceh1g9n.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDYthCd_odUsSuXkREqcOBgXwQeQDhCNGY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>467194117630</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.peterMaurerPatientsApp</string>
+	<key>PROJECT_ID</key>
+	<string>mkg-maurer</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mkg-maurer.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:467194117630:ios:6b2128b7b904d03cf954af</string>
+</dict>
+</plist>

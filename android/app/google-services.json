@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "467194117630",
+    "project_id": "mkg-maurer",
+    "storage_bucket": "mkg-maurer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467194117630:android:f0b9fce6feba6726f954af",
+        "android_client_info": {
+          "package_name": "com.example.peter_maurer_patients_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467194117630-n64oah4mdc9psk9et6j0n21lfceh1g9n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.peter_maurer_patients_app",
+            "certificate_hash": "f78690ce3e6ac429b6531bb23c49de85ff6eb1c2"
+          }
+        },
+        {
+          "client_id": "467194117630-f4a3n8v465df238tu7odfkbj02k8ct6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW2PBJshaoyPxWTY988fM9tpriLAYEECE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467194117630-f4a3n8v465df238tu7odfkbj02k8ct6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

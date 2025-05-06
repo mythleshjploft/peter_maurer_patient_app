@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/controllers/login_controller.dart';
+import 'package:peter_maurer_patients_app/app/controllers/social_login_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_social_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
@@ -16,6 +17,8 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final controller = Get.put(LoginController());
+  SocialLoginController socialLoginController =
+      Get.put(SocialLoginController());
 
   final formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
@@ -150,6 +153,7 @@ class _LoginViewState extends State<LoginView> {
                                 imagePath:
                                     "assets/icons/google_icon.svg", // Add your Google icon in assets
                                 onPressed: () {
+                                  socialLoginController.signInWithGoogle();
                                   // Handle Google login
                                 },
                               ),
