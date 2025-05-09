@@ -3,6 +3,7 @@ class StorageKeys {
   static const String apiToken = "ApiToken";
   static const String isIntroShown = "IsIntroShown";
   static const String isLoggedIn = "IsLoggedIn";
+  static const String isSocialLogin = "isSocialLogin";
   static const String isBusiness = "isBusiness";
   static const String firstName = "UserName";
   static const String lastName = "nickName";

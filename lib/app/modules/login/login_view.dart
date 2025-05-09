@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_social_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/registration_view.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -107,16 +110,18 @@ class _LoginViewState extends State<LoginView> {
                                       Text("Keep me login".tr),
                                     ],
                                   ),
-                                  TextButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      "Forgot Password?".tr,
-                                      style: const TextStyle(
-                                        color: Colors
-                                            .black, // Set the text color to black
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration
-                                            .underline, // Apply underline decoration
+                                  Expanded(
+                                    child: TextButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "Forgot Password?".tr,
+                                        style: const TextStyle(
+                                          color: Colors
+                                              .black, // Set the text color to black
+                                          fontWeight: FontWeight.w400,
+                                          decoration: TextDecoration
+                                              .underline, // Apply underline decoration
+                                        ),
                                       ),
                                     ),
                                   )
@@ -153,18 +158,38 @@ class _LoginViewState extends State<LoginView> {
                                 imagePath:
                                     "assets/icons/google_icon.svg", // Add your Google icon in assets
                                 onPressed: () {
-                                  socialLoginController.signInWithGoogle();
+                                  showBaseLoader();
+                                  socialLoginController
+                                      .signInWithGoogle()
+                                      .then((val) {
+                                    dismissBaseLoader();
+                                    if (val.isEmpty) {
+                                      socialLoginController.socialLoginApi();
+                                    }
+                                  });
                                   // Handle Google login
                                 },
                               ),
                               const SizedBox(height: 10),
-                              CustomSocialButton(
-                                text: "Login with Facebook",
-                                imagePath:
-                                    "assets/icons/facebook_icon.svg", // Add your Facebook icon in assets
-                                onPressed: () {
-                                  // Handle Facebook login
-                                },
+                              Visibility(
+                                visible: Platform.isIOS,
+                                child: CustomSocialButton(
+                                  text: "Login with Apple",
+                                  imagePath:
+                                      "assets/icons/apple_logo.svg", // Add your Facebook icon in assets
+                                  onPressed: () {
+                                    showBaseLoader();
+                                    socialLoginController
+                                        .signInWithApple()
+                                        .then((val) {
+                                      dismissBaseLoader();
+                                      if (val.isEmpty) {
+                                        socialLoginController.socialLoginApi();
+                                      }
+                                    });
+                                    // Handle Facebook login
+                                  },
+                                ),
                               ),
                               const SizedBox(height: 20),
                               Row(

@@ -29,4 +29,5 @@ class ApiEndPoints {
   final String changeAppointmentStatus = 'app/appointment/status/';
   final String rescheduleAppointment = 'app/appointment/reschedule_appointment';
   final String uploadMediaInChat = 'common/upload-media';
+  final String socialLogin = 'app/auth/social-login';
 }

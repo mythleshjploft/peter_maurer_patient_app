@@ -57,19 +57,25 @@ class _DashboardViewState extends State<DashboardView> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          getGreetingOfTheDay(),
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w500,
+                        Flexible(
+                          child: Text(
+                            getGreetingOfTheDay(),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        Text(
-                          "${BaseStorage.read(StorageKeys.firstName) ?? ""} ${BaseStorage.read(StorageKeys.lastName) ?? ""}",
-                          style: const TextStyle(
-                            fontSize: 22,
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.w700,
+                        Expanded(
+                          child: Text(
+                            " ${BaseStorage.read(StorageKeys.firstName) ?? ""} ${BaseStorage.read(StorageKeys.lastName) ?? ""}",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ],

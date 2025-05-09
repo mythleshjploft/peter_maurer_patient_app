@@ -30,8 +30,9 @@ class BaseMainBuilder extends StatelessWidget {
                     overlayColor: Colors.black.withOpacity(0.6),
                     overlayWidgetBuilder: (_) {
                       return const Center(
-                          // child: Lottie.asset(BaseAssets.loader, height: 200),
-                          );
+                        child: CircularProgressIndicator(),
+                        // child: Lottie.asset(BaseAssets.loader, height: 200),
+                      );
                     },
                     child: MediaQuery(
                       data: MediaQuery.of(context)

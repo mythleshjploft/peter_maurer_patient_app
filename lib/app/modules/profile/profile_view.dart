@@ -251,7 +251,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title,
+          Text(title.tr,
               style: const TextStyle(
                   color: AppColors.headingColor, fontWeight: FontWeight.w500)),
           Text(value, style: const TextStyle(color: AppColors.grayDark)),

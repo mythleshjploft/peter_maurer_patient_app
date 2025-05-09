@@ -1,7 +1,17 @@
 import 'dart:developer';
+import 'package:easy_stepper/easy_stepper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/dashboard_view.dart';
+import 'package:peter_maurer_patients_app/app/models/login_screen/social_login_response.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.dart';
+import 'package:peter_maurer_patients_app/app/services/backend/base_responses/base_success_response.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_variables.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class SocialLoginController extends GetxController {
@@ -79,6 +89,44 @@ class SocialLoginController extends GetxController {
       log("Exception ::: ${e.toString()}");
       return "Authorization revoked";
     }
+  }
+
+  socialLoginApi() async {
+    Map<String, dynamic> data = {
+      "email": userEmail.value,
+      "first_name": userName.value,
+      "social_id": userId.value
+    };
+    BaseApiService()
+        .post(apiEndPoint: ApiEndPoints().socialLogin, data: data)
+        .then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          SocialLoginResponse response =
+              SocialLoginResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            BaseStorage.write(
+                StorageKeys.apiToken, response.data?.token?.toString() ?? "");
+            BaseStorage.write(
+                StorageKeys.userId, response.data?.user?.id?.toString() ?? "");
+            BaseStorage.write(StorageKeys.firstName,
+                response.data?.user?.firstName?.toString() ?? "");
+            BaseStorage.write(StorageKeys.lastName,
+                response.data?.user?.lastName?.toString() ?? "");
+            BaseStorage.write(StorageKeys.isLoggedIn, true);
+            BaseStorage.write(StorageKeys.isSocialLogin, true);
+            Get.offAll(() => const DashBoardView());
+            showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
   }
 //   Future signInWithFacebook() async {
 //     try {
