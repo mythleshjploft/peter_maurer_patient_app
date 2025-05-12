@@ -758,10 +758,21 @@ String getBookingDetailsStatusTitle(
   }
 }
 
-void clearSessionData() {
+void clearSessionData() async {
+  bool isRememberMe = await BaseStorage.read(StorageKeys.isRememberMe) ?? false;
+  String rememberEmail =
+      await BaseStorage.read(StorageKeys.rememberEmail) ?? "";
+  String rememberPassword =
+      await BaseStorage.read(StorageKeys.rememberPassword) ?? "";
+
   triggerHapticFeedback();
   BaseStorage.box.erase();
   Get.offAll(() => const LoginView());
+  if (isRememberMe) {
+    BaseStorage.write(StorageKeys.isRememberMe, true);
+    BaseStorage.write(StorageKeys.rememberEmail, rememberEmail);
+    BaseStorage.write(StorageKeys.rememberPassword, rememberPassword);
+  }
 }
 
 Widget cachedNetworkImage(

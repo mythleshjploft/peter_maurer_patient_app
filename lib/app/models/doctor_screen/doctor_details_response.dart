@@ -104,7 +104,7 @@ class DoctorDetails {
   dynamic deviceType;
   dynamic socialId;
   dynamic loginType;
-  List<String>? categoryId;
+  final List<CategoryId>? categoryId;
   List<String>? subCategoryId;
   dynamic schoolAttended;
   dynamic degreeObtained;
@@ -206,7 +206,8 @@ class DoctorDetails {
         loginType: json["login_type"],
         categoryId: json["category_id"] == null
             ? []
-            : List<String>.from(json["category_id"]!.map((x) => x)),
+            : List<CategoryId>.from(
+                json["category_id"]!.map((x) => CategoryId.fromJson(x))),
         subCategoryId: json["sub_category_id"] == null
             ? []
             : List<String>.from(json["sub_category_id"]!.map((x) => x)),
@@ -265,7 +266,7 @@ class DoctorDetails {
         "login_type": loginType,
         "category_id": categoryId == null
             ? []
-            : List<dynamic>.from(categoryId!.map((x) => x)),
+            : List<dynamic>.from(categoryId!.map((x) => x.toJson())),
         "sub_category_id": subCategoryId == null
             ? []
             : List<dynamic>.from(subCategoryId!.map((x) => x)),
@@ -292,6 +293,54 @@ class DoctorDetails {
         "category_ids": categoryIds == null
             ? []
             : List<dynamic>.from(categoryIds!.map((x) => x)),
+      };
+}
+
+class CategoryId {
+  final String? name;
+  final dynamic image;
+  final bool? isDelete;
+  final bool? isActive;
+  final String? id;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
+
+  CategoryId({
+    this.name,
+    this.image,
+    this.isDelete,
+    this.isActive,
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory CategoryId.fromJson(Map<String, dynamic> json) => CategoryId(
+        name: json["name"],
+        image: json["image"],
+        isDelete: json["is_delete"],
+        isActive: json["is_active"],
+        id: json["_id"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        "image": image,
+        "is_delete": isDelete,
+        "is_active": isActive,
+        "_id": id,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "__v": v,
       };
 }
 

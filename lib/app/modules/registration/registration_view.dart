@@ -15,6 +15,7 @@ import 'package:peter_maurer_patients_app/app/models/sign_up_screen/city_list_re
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/login/login_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/step_progress_indicator.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 
 class PersonalInfoRegistrationView extends StatefulWidget {
   const PersonalInfoRegistrationView({super.key});
@@ -500,7 +501,7 @@ class _PersonalInfoRegistrationViewState
                                     }
                                   }),
                               const SizedBox(
-                                height: 50,
+                                height: 350,
                               ),
                             ],
                           ),
@@ -550,17 +551,17 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
                 const TextSpan(text: "I have read and accept 4Smile's "),
-                _linkText("Terms of Use", () {
-                  // Handle Terms of Use click
-                }),
-                const TextSpan(text: ", "),
-                _linkText("Privacy Policy", () {
+                // _linkText("Terms of Use", () {
+                //   // Handle Terms of Use click
+                // }),
+                _linkText("Privacy Policy".tr, () {
+                  baseLaunchUrl("https://mkg-maurer.de/datenschutz/");
                   // Handle Privacy Policy click
                 }),
-                const TextSpan(text: ", "),
-                _linkText("Terms & Conditions", () {
-                  // Handle Terms & Conditions click
-                }),
+                // const TextSpan(text: ", "),
+                // _linkText("Terms & Conditions", () {
+                //   // Handle Terms & Conditions click
+                // }),
               ],
             ),
           ),

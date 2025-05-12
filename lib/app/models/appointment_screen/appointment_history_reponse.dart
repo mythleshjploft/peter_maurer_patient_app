@@ -101,7 +101,7 @@ class AppointmentData {
   dynamic uid;
   dynamic patientId;
   DoctorId? doctorId;
-  CategoryId? categoryId;
+  // CategoryId? categoryId;
   dynamic preExistDiseasesId;
   dynamic subCategoryId;
   dynamic status;
@@ -123,7 +123,7 @@ class AppointmentData {
     this.uid,
     this.patientId,
     this.doctorId,
-    this.categoryId,
+    // this.categoryId,
     this.preExistDiseasesId,
     this.subCategoryId,
     this.status,
@@ -149,9 +149,9 @@ class AppointmentData {
         doctorId: json["doctor_id"] == null
             ? null
             : DoctorId.fromJson(json["doctor_id"]),
-        categoryId: json["category_id"] == null
-            ? null
-            : CategoryId.fromJson(json["category_id"]),
+        // categoryId: json["category_id"] == null
+        //     ? null
+        //     : CategoryId.fromJson(json["category_id"]),
         preExistDiseasesId: json["preExistDiseases_id"],
         subCategoryId: json["sub_category_id"],
         status: json["status"],
@@ -183,7 +183,7 @@ class AppointmentData {
         "uid": uid,
         "patient_id": patientId,
         "doctor_id": doctorId?.toJson(),
-        "category_id": categoryId?.toJson(),
+        // "category_id": categoryId?.toJson(),
         "preExistDiseases_id": preExistDiseasesId,
         "sub_category_id": subCategoryId,
         "status": status,
@@ -205,61 +205,61 @@ class AppointmentData {
       };
 }
 
-class CategoryId {
-  String? id;
-  String? name;
-  dynamic image;
-  bool? isDelete;
-  bool? isActive;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  int? v;
-  String? categoryId;
-  String? slotDuration;
+// class CategoryId {
+//   String? id;
+//   String? name;
+//   dynamic image;
+//   bool? isDelete;
+//   bool? isActive;
+//   DateTime? createdAt;
+//   DateTime? updatedAt;
+//   int? v;
+//   String? categoryId;
+//   String? slotDuration;
 
-  CategoryId({
-    this.id,
-    this.name,
-    this.image,
-    this.isDelete,
-    this.isActive,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-    this.categoryId,
-    this.slotDuration,
-  });
+//   CategoryId({
+//     this.id,
+//     this.name,
+//     this.image,
+//     this.isDelete,
+//     this.isActive,
+//     this.createdAt,
+//     this.updatedAt,
+//     this.v,
+//     this.categoryId,
+//     this.slotDuration,
+//   });
 
-  factory CategoryId.fromJson(Map<String, dynamic> json) => CategoryId(
-        id: json["_id"],
-        name: json["name"],
-        image: json["image"],
-        isDelete: json["is_delete"],
-        isActive: json["is_active"],
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null
-            ? null
-            : DateTime.parse(json["updated_at"]),
-        v: json["__v"],
-        categoryId: json["category_id"],
-        slotDuration: json["slot_duration"],
-      );
+//   factory CategoryId.fromJson(Map<String, dynamic> json) => CategoryId(
+//         id: json["_id"],
+//         name: json["name"],
+//         image: json["image"],
+//         isDelete: json["is_delete"],
+//         isActive: json["is_active"],
+//         createdAt: json["created_at"] == null
+//             ? null
+//             : DateTime.parse(json["created_at"]),
+//         updatedAt: json["updated_at"] == null
+//             ? null
+//             : DateTime.parse(json["updated_at"]),
+//         v: json["__v"],
+//         categoryId: json["category_id"],
+//         slotDuration: json["slot_duration"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "name": name,
-        "image": image,
-        "is_delete": isDelete,
-        "is_active": isActive,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "__v": v,
-        "category_id": categoryId,
-        "slot_duration": slotDuration,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "_id": id,
+//         "name": name,
+//         "image": image,
+//         "is_delete": isDelete,
+//         "is_active": isActive,
+//         "created_at": createdAt?.toIso8601String(),
+//         "updated_at": updatedAt?.toIso8601String(),
+//         "__v": v,
+//         "category_id": categoryId,
+//         "slot_duration": slotDuration,
+//       };
+// }
 
 class DoctorId {
   String? id;
@@ -284,8 +284,8 @@ class DoctorId {
   String? deviceType;
   dynamic socialId;
   dynamic loginType;
-  CategoryId? categoryId;
-  List<CategoryId>? subCategoryId;
+  // CategoryId? categoryId;
+  // List<CategoryId>? subCategoryId;
   String? schoolAttended;
   String? degreeObtained;
   String? graduationYear;
@@ -331,8 +331,8 @@ class DoctorId {
     this.deviceType,
     this.socialId,
     this.loginType,
-    this.categoryId,
-    this.subCategoryId,
+    // this.categoryId,
+    // this.subCategoryId,
     this.schoolAttended,
     this.degreeObtained,
     this.graduationYear,
@@ -382,13 +382,13 @@ class DoctorId {
         deviceType: json["device_type"],
         socialId: json["social_id"],
         loginType: json["login_type"],
-        categoryId: json["category_id"] == null
-            ? null
-            : CategoryId.fromJson(json["category_id"]),
-        subCategoryId: json["sub_category_id"] == null
-            ? []
-            : List<CategoryId>.from(
-                json["sub_category_id"]!.map((x) => CategoryId.fromJson(x))),
+        // categoryId: json["category_id"] == null
+        //     ? null
+        //     : CategoryId.fromJson(json["category_id"]),
+        // subCategoryId: json["sub_category_id"] == null
+        //     ? []
+        //     : List<CategoryId>.from(
+        //         json["sub_category_id"]!.map((x) => CategoryId.fromJson(x))),
         schoolAttended: json["school_attended"],
         degreeObtained: json["degree_obtained"],
         graduationYear: json["graduation_year"],
@@ -441,10 +441,10 @@ class DoctorId {
         "device_type": deviceType,
         "social_id": socialId,
         "login_type": loginType,
-        "category_id": categoryId?.toJson(),
-        "sub_category_id": subCategoryId == null
-            ? []
-            : List<dynamic>.from(subCategoryId!.map((x) => x.toJson())),
+        // "category_id": categoryId?.toJson(),
+        // "sub_category_id": subCategoryId == null
+        //     ? []
+        //     : List<dynamic>.from(subCategoryId!.map((x) => x.toJson())),
         "school_attended": schoolAttended,
         "degree_obtained": degreeObtained,
         "graduation_year": graduationYear,

@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: BaseLocalization(),
-      locale: const Locale('de', 'DE'),
-      fallbackLocale: const Locale('de', 'DE'),
+      locale: const Locale('en', 'US'),
+      fallbackLocale: const Locale('en', 'US'),
       title: 'My App',
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(

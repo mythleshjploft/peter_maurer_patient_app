@@ -10,6 +10,8 @@ import 'package:peter_maurer_patients_app/app/custom_widget/custom_social_button
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/registration_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -25,6 +27,23 @@ class _LoginViewState extends State<LoginView> {
 
   final formKey = GlobalKey<FormState>();
   bool isPasswordVisible = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool isRememberMe =
+          await BaseStorage.read(StorageKeys.isRememberMe) ?? false;
+      if (isRememberMe) {
+        controller.emailController.text =
+            BaseStorage.read(StorageKeys.rememberEmail) ?? '';
+        controller.passwordController.text =
+            BaseStorage.read(StorageKeys.rememberPassword) ?? '';
+        controller.isRemember.value = true;
+      }
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,12 +122,18 @@ class _LoginViewState extends State<LoginView> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                          value: false, onChanged: (value) {}),
-                                      Text("Keep me login".tr),
-                                    ],
+                                  Obx(
+                                    () => Row(
+                                      children: [
+                                        Checkbox(
+                                            value: controller.isRemember.value,
+                                            onChanged: (value) {
+                                              controller.isRemember.value =
+                                                  !controller.isRemember.value;
+                                            }),
+                                        Text("Keep me login".tr),
+                                      ],
+                                    ),
                                   ),
                                   Expanded(
                                     child: TextButton(

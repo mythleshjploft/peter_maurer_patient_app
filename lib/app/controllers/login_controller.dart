@@ -14,6 +14,7 @@ import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 class LoginController extends GetxController {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  RxBool isRemember = false.obs;
 
   login() async {
     Map<String, dynamic> data = {
@@ -40,6 +41,15 @@ class LoginController extends GetxController {
             BaseStorage.write(StorageKeys.lastName,
                 response.data?.user?.lastName?.toString() ?? "");
             BaseStorage.write(StorageKeys.isLoggedIn, true);
+            if (isRemember.value) {
+              BaseStorage.write(StorageKeys.isRememberMe, true);
+              BaseStorage.write(StorageKeys.rememberEmail,
+                  emailController.text.trim().toLowerCase());
+              BaseStorage.write(
+                  StorageKeys.rememberPassword, passwordController.text);
+            } else {
+              BaseStorage.write(StorageKeys.isRememberMe, false);
+            }
             Get.offAll(() => const DashBoardView());
             showSnackBar(subtitle: response.message ?? "", isSuccess: true);
           } else {
