@@ -11,7 +11,9 @@ class ApiEndPoints {
   ///
   final String registerAccount = 'app/auth/signup';
   final String login = 'app/auth/login';
+  final String forgotPassword = 'app/auth/forgot-password';
   final String countryList = 'common/country';
+  final String notesList = 'app/note';
   final String cityList = 'common/city/';
   final String verifyOtp = 'app/auth/verify-otp';
   final String savePassword = 'app/auth/confirm_password';
@@ -22,7 +24,7 @@ class ApiEndPoints {
   final String notificationList = 'app/notification';
   final String appointmentList = 'app/appointment';
   final String dashboard = 'app/dashboard';
-  final String doctorList = 'app/dashboard/doctor?category_id=';
+  final String doctorList = 'app/dashboard/doctor';
   final String doctorDetails = 'app/doctor_clinic_detail/new/';
   final String addAppointment = 'app/appointment/book-appointment_new';
   final String chatList = 'common/getChatUsers';
@@ -30,4 +32,10 @@ class ApiEndPoints {
   final String rescheduleAppointment = 'app/appointment/reschedule_appointment';
   final String uploadMediaInChat = 'common/upload-media';
   final String socialLogin = 'app/auth/social-login';
+  final String diseaseList = 'common/get_pre_exist_deasese';
+  final String resetPassword = 'app/auth/reset-password';
+  final String getPatientNoteByAppointmentid =
+      'common/get_patient_noteByAppointmentid';
+
+  final String initiateChat = 'common/initiate-chat';
 }

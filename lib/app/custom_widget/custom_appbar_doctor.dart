@@ -70,6 +70,7 @@ class CustomAppBarDoctor extends StatelessWidget
                   [
                     InkWell(
                         onTap: () {
+                          Get.back();
                           Get.to(const MenuScreen());
                         },
                         child:

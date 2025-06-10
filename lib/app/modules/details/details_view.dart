@@ -1,13 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/doctor_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
+import 'package:peter_maurer_patients_app/app/models/doctor_screen/pre_exist_disease_list_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/dashboard/doctor_search_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -30,11 +30,14 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   void initState() {
     super.initState();
-    controller.getDoctorDetails(widget.id);
-    controller.selectedCategoriesList.clear();
-    controller.selectedConditionId.value = "";
-    controller.selectedCondition.value = "";
-    controller.selectedSlots.clear();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller.getDoctorDetails(widget.id);
+      controller.selectedCategory.value = DoctorCategory();
+      controller.selectedConditionId.value = "";
+      controller.selectedCondition.value = "";
+      controller.categorySlotDuration.value = "";
+      controller.selectedSlots.clear();
+    });
   }
 
   @override
@@ -95,11 +98,12 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        infoBox("Experience", "2 Years+"),
+                        infoBox("Experience",
+                            "${controller.doctorDetails?.value.totalExperience?.toString() ?? ""} Years"),
                         const SizedBox(
                           height: 16,
                         ),
-                        infoBox("Patient", "200+"),
+                        // infoBox("Patient", "200+"),
                       ],
                     ),
                   ],
@@ -252,15 +256,75 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                         ),
                       ],
                     ),
+                    buildSizeHeight(10),
+                    CustomTextField(
+                      hintText: "Select Category",
+                      controller: TextEditingController(
+                          text: controller.selectedCategory.value.name
+                                  ?.toString() ??
+                              ""),
+                      readOnly: true,
+                      onTap: () {
+                        showCategoryBtmSheet();
+                      },
+                    ),
+                    buildSizeHeight(15),
+                    CustomTextField(
+                      hintText: "Select Condition",
+                      controller: TextEditingController(
+                          text: controller.selectedCondition.value),
+                      readOnly: true,
+                      onTap: () {
+                        showConditionBtmSheet();
+                      },
+                    ),
+                    buildSizeHeight(15),
+                    CustomTextField(
+                      hintText: "Select Pre Existing Disease",
+                      controller: TextEditingController(
+                          text: controller.selectedDisease
+                              .map((e) => e.name.toString())
+                              .toList()
+                              .join(",")),
+                      readOnly: true,
+                      onTap: () {
+                        showDiseaseBtmSheet();
+                      },
+                    ),
                     const SizedBox(
                       height: 13,
                     ),
+                    if (controller.categorySlotDuration.value.isNotEmpty)
+                      Row(
+                        children: [
+                          Text(
+                            "${"Preferred Duration for Appointment".tr}:",
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    if (controller.categorySlotDuration.value.isNotEmpty)
+                      Row(
+                        children: [
+                          Obx(() => Text(
+                                controller.categorySlotDuration.value,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              )),
+                        ],
+                      ),
+                    buildSizeHeight(10),
                     controller.availableSlots[
                                 "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : "${_selectedDay.month}"}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : "${_selectedDay.day}"}-${_selectedDay.year}"] !=
                             null
                         ? Wrap(
                             spacing: 10,
                             runSpacing: 10,
+                            alignment: WrapAlignment.start,
                             children: controller.availableSlots[
                                     "${_selectedDay.month < 10 ? "0${_selectedDay.month}" : "${_selectedDay.month}"}-${_selectedDay.day < 10 ? "0${_selectedDay.day}" : "${_selectedDay.day}"}-${_selectedDay.year}"]!
                                 .map((slot) => timeSlot(slot))
@@ -288,35 +352,6 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                   ],
                 ),
               ),
-              buildSizeHeight(10),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: CustomTextField(
-                  hintText: "Select Category",
-                  controller: TextEditingController(
-                      text: controller.selectedCategoriesList
-                          .map((e) => e.name.toString())
-                          .toList()
-                          .join(", ")),
-                  readOnly: true,
-                  onTap: () {
-                    showCategoryBtmSheet();
-                  },
-                ),
-              ),
-              buildSizeHeight(15),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: CustomTextField(
-                  hintText: "Select Condition",
-                  controller: TextEditingController(
-                      text: controller.selectedCondition.value),
-                  readOnly: true,
-                  onTap: () {
-                    showConditionBtmSheet();
-                  },
-                ),
-              ),
 
               // Time Slots
 
@@ -333,11 +368,13 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                     //   onPressed: () {},
                     //   child: Icon(Icons.call, color: Colors.white),
                     // ),
-                    // FloatingActionButton(
-                    //   backgroundColor: Colors.grey.shade300,
-                    //   onPressed: () {},
-                    //   child: Icon(Icons.message, color: Colors.black),
-                    // ),
+                    FloatingActionButton(
+                      backgroundColor: Colors.white,
+                      onPressed: () {
+                        controller.initiateChats(doctorId: widget.id);
+                      },
+                      child: const Icon(Icons.message, color: Colors.black),
+                    ),
                     Visibility(
                       visible: widget.isFromDashboard,
                       child: Expanded(
@@ -370,8 +407,10 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                         onTap: () {
                           if (controller.selectedSlots.isEmpty) {
                             showSnackBar(subtitle: "Please select a time slot");
-                          } else if (controller
-                              .selectedCategoriesList.isEmpty) {
+                          } else if ((controller.selectedCategory.value.id
+                                      ?.toString() ??
+                                  "")
+                              .isEmpty) {
                             showSnackBar(subtitle: "Please select a category");
                           } else if (controller
                               .selectedConditionId.value.isEmpty) {
@@ -438,37 +477,37 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
                   return Obx(
                     () => InkWell(
                       onTap: () {
-                        if (controller.selectedCategoriesList
-                            .contains(category)) {
-                          controller.selectedCategoriesList.remove(category);
-                        } else {
-                          controller.selectedCategoriesList.add(category);
-                        }
-                        log("Selected Categories: ${controller.selectedCategoriesList.map((e) => e.name.toString()).toList()}");
+                        controller.selectedCategory.value = category;
+                        controller.categorySlotDuration.value =
+                            category.slotDuration?.toString() ?? "0 Minutes";
+                        // if (controller.selectedCategoriesList
+                        //     .contains(category)) {
+                        //   controller.selectedCategoriesList.remove(category);
+                        // } else {
+                        //   controller.selectedCategoriesList.add(category);
+                        // }
+                        // log("Selected Categories: ${controller.selectedCategoriesList.map((e) => e.name.toString()).toList()}");
                         controller.update();
-                        // Get.back();
+                        Get.back();
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Row(
                           children: [
-                            Checkbox(
-                                value: controller.selectedCategoriesList
-                                    .contains(category),
+                            Radio(
+                                groupValue: true,
+                                value: controller.selectedCategory.value ==
+                                    category,
                                 onChanged: (val) {
-                                  if (controller.selectedCategoriesList
-                                      .contains(category)) {
-                                    controller.selectedCategoriesList
-                                        .remove(category);
-                                  } else {
-                                    controller.selectedCategoriesList
-                                        .add(category);
-                                  }
-
+                                  controller.selectedCategory.value = category;
+                                  controller.categorySlotDuration.value =
+                                      category.slotDuration?.toString() ??
+                                          "0 Minutes";
                                   controller.update();
-                                  // Get.back();
+                                  Get.back();
                                 }),
-                            Text(category.name?.toString() ?? ""),
+                            Expanded(
+                                child: Text(category.name?.toString() ?? "")),
                           ],
                         ),
                       ),
@@ -478,6 +517,92 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
               ),
             ]),
           ),
+        );
+      },
+    );
+  }
+
+  void showDiseaseBtmSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: SingleChildScrollView(child: GetBuilder<DoctorController>(
+            builder: (logic) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Select Categories".tr,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  buildSizeHeight(20),
+                  ListView.builder(
+                    itemCount: controller.diseaseList.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return InkWell(
+                        onTap: () {
+                          if (controller.selectedDisease
+                              .contains(controller.diseaseList[index])) {
+                            controller.selectedDisease
+                                .remove(controller.diseaseList[index]);
+                            controller.selectedDisease.refresh();
+                          } else {
+                            controller.selectedDisease.add(
+                                controller.diseaseList[index] ??
+                                    DiseaseDatum());
+                            controller.selectedDisease.refresh();
+                          }
+                          controller.update();
+                          setState(() {});
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: controller.selectedDisease
+                                    .contains(controller.diseaseList[index]),
+                                onChanged: (val) {
+                                  if (val == true) {
+                                    controller.selectedDisease.add(
+                                        controller.diseaseList[index] ??
+                                            DiseaseDatum());
+                                    controller.selectedDisease.refresh();
+                                  } else {
+                                    controller.selectedDisease
+                                        .remove(controller.diseaseList[index]);
+                                    controller.selectedDisease.refresh();
+                                  }
+                                  controller.update();
+                                  setState(() {});
+                                },
+                              ),
+                              Expanded(
+                                  child: Text(
+                                      controller.diseaseList[index]?.name ??
+                                          "")),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () => Get.back(),
+                    child: const Text("Done"),
+                  ),
+                ],
+              );
+            },
+          )),
         );
       },
     );
@@ -592,7 +717,9 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
           }
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          width: 110,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(
                 color: controller.selectedSlots.contains(time)
@@ -608,7 +735,8 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
             style: TextStyle(
                 color: controller.selectedSlots.contains(time)
                     ? AppColors.primaryColor
-                    : Colors.black),
+                    : Colors.black,
+                fontSize: 13),
           ),
         ),
       ),

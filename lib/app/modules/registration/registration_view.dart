@@ -550,7 +550,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
             text: TextSpan(
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
-                const TextSpan(text: "I have read and accept 4Smile's "),
+                const TextSpan(text: "I have read and accept "),
                 // _linkText("Terms of Use", () {
                 //   // Handle Terms of Use click
                 // }),

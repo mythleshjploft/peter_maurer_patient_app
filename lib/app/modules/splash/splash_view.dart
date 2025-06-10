@@ -73,6 +73,8 @@ class _SplashViewState extends State<SplashView> {
           Image.asset(
             'assets/images/splash_background_img.png', // Replace with your background image path
             fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
           ),
 
           // Logo

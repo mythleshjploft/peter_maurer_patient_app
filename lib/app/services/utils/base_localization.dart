@@ -128,8 +128,7 @@ class BaseLocalization extends Translations {
           'Doctor Registration': 'Doctor Registration',
           'If you already have an account,': 'If you already have an account,',
           "Login here": 'Login here',
-          "I have read and accept 4Smile's ":
-              'I have read and accept 4Smile\'s ',
+          "I have read and accept ": 'I have read and accept ',
           "Terms of Use": 'Terms of Use',
           "Privacy Policy": 'Privacy Policy',
           "Available Slots": 'Available Slots',
@@ -198,7 +197,11 @@ class BaseLocalization extends Translations {
           "No Past Appointment Found": "No Past Appointment Found",
           "Doctor": "Doctor",
           "Appointments History": "Appointments History",
+          "Preferred Duration": "Preferred Duration",
+          "Password must contain uppercase, lowercase, number and special character":
+              "Password must contain uppercase, lowercase, number and special character",
         },
+
         ////////////
         //////////
         //////////
@@ -330,7 +333,7 @@ class BaseLocalization extends Translations {
           "If you already have an account,":
               "Wenn Sie bereits ein Konto haben,",
           "Login here": "Hier anmelden",
-          "I have read and accept 4Smile's ": "Ich habe die 4Smile ",
+          "I have read and accept ": "Ich habe die ",
           "Terms of Use": "Nutzungsbedingungen",
           "Privacy Policy": "Datenschutzrichtlinie",
           "Available Slots": "Verfügbare Slots",
@@ -398,7 +401,10 @@ class BaseLocalization extends Translations {
           "No Appointment Found": "Kein Termin gefunden",
           "No Past Appointment Found": "Kein vergangener Termin gefunden",
           "Doctor": "Arzt",
-          "Appointments History": "Terminhistorie"
+          "Appointments History": "Terminhistorie",
+          "Preferred Duration": "Bevorzugte Dauer",
+          "Password must contain uppercase, lowercase, number and special character":
+              "Das Passwort muss Großbuchstaben, Kleinbuchstaben, Zahlen und Sonderzeichen enthalten",
         }
       };
 }

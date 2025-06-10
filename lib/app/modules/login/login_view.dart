@@ -8,6 +8,7 @@ import 'package:peter_maurer_patients_app/app/controllers/social_login_controlle
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_social_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
+import 'package:peter_maurer_patients_app/app/modules/registration/forgot_password.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/registration_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
@@ -47,6 +48,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Form(
         key: formKey,
         child: Stack(
@@ -75,165 +77,185 @@ class _LoginViewState extends State<LoginView> {
                 child: Stack(
                   children: [
                     Center(child: Image.asset('assets/images/card_login.png')),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 56,
-                              ),
-                              CustomTextField(
-                                hintText: "Email or Name",
-                                controller: controller.emailController,
-                                validator: (val) {
-                                  if ((val ?? "").isEmpty) {
-                                    return "Please Fill this field";
-                                  }
-                                  return null;
-                                },
-                              ),
-                              const SizedBox(height: 15),
-                              CustomTextField(
-                                hintText: "Password",
-                                controller: controller.passwordController,
-                                isPassword: !isPasswordVisible,
-                                validator: (val) {
-                                  if ((val ?? "").isEmpty) {
-                                    return "Please Fill this field";
-                                  } else if ((val ?? "").length < 6) {
-                                    return "Password must be at least 6 characters";
-                                  }
-                                  return null;
-                                },
-                                suffixIcon: isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                onSuffixTap: () {
-                                  setState(() {
-                                    isPasswordVisible = !isPasswordVisible;
-                                  });
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Obx(
-                                    () => Row(
-                                      children: [
-                                        Checkbox(
-                                            value: controller.isRemember.value,
-                                            onChanged: (value) {
-                                              controller.isRemember.value =
-                                                  !controller.isRemember.value;
-                                            }),
-                                        Text("Keep me login".tr),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: TextButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "Forgot Password?".tr,
-                                        style: const TextStyle(
-                                          color: Colors
-                                              .black, // Set the text color to black
-                                          fontWeight: FontWeight.w400,
-                                          decoration: TextDecoration
-                                              .underline, // Apply underline decoration
-                                        ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 30.0),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                CustomTextField(
+                                  hintText: "Email or Name",
+                                  controller: controller.emailController,
+                                  validator: (val) {
+                                    if ((val ?? "").isEmpty) {
+                                      return "Please Fill this field";
+                                    } else if (!(GetUtils.isEmail(val ?? ""))) {
+                                      return "Please enter valid email";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                CustomTextField(
+                                  hintText: "Password",
+                                  controller: controller.passwordController,
+                                  isPassword: !isPasswordVisible,
+                                  validator: (val) {
+                                    if ((val ?? "").isEmpty) {
+                                      return "Please Fill this field";
+                                    } else if ((val ?? "").length < 6) {
+                                      return "Password must be at least 6 characters";
+                                    } else if (!RegExp(
+                                            r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                                        .hasMatch(controller
+                                            .passwordController.text)) {
+                                      return "Password must contain uppercase, lowercase, number and special character"
+                                          .tr;
+                                    }
+                                    return null;
+                                  },
+                                  suffixIcon: isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  onSuffixTap: () {
+                                    setState(() {
+                                      isPasswordVisible = !isPasswordVisible;
+                                    });
+                                  },
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Obx(
+                                      () => Row(
+                                        children: [
+                                          Checkbox(
+                                              value:
+                                                  controller.isRemember.value,
+                                              onChanged: (value) {
+                                                controller.isRemember.value =
+                                                    !controller
+                                                        .isRemember.value;
+                                              }),
+                                          Text("Keep me login".tr),
+                                        ],
                                       ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              CustomButton(
-                                text: "Login".tr,
-                                onPressed: () {
-                                  if (formKey.currentState?.validate() ??
-                                      false) {
-                                    controller.login();
-                                  }
-                                  // Get.to(const BaseView());
-                                },
-                              ),
-                              const SizedBox(height: 22),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                      "assets/icons/devider_l.svg"),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    child: Text("or login with".tr),
-                                  ),
-                                  SvgPicture.asset("assets/icons/devider_r.svg")
-                                ],
-                              ),
-                              const SizedBox(height: 24),
-                              CustomSocialButton(
-                                text: "Login with Google",
-                                imagePath:
-                                    "assets/icons/google_icon.svg", // Add your Google icon in assets
-                                onPressed: () {
-                                  showBaseLoader();
-                                  socialLoginController
-                                      .signInWithGoogle()
-                                      .then((val) {
-                                    dismissBaseLoader();
-                                    if (val.isEmpty) {
-                                      socialLoginController.socialLoginApi();
+                                    Expanded(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Get.to(() =>
+                                              const ForgotPasswordScreen());
+                                        },
+                                        child: Text(
+                                          "Forgot Password?".tr,
+                                          style: const TextStyle(
+                                            color: Colors
+                                                .black, // Set the text color to black
+                                            fontWeight: FontWeight.w400,
+                                            decoration: TextDecoration
+                                                .underline, // Apply underline decoration
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                CustomButton(
+                                  text: "Login".tr,
+                                  onPressed: () {
+                                    if (formKey.currentState?.validate() ??
+                                        false) {
+                                      controller.login();
                                     }
-                                  });
-                                  // Handle Google login
-                                },
-                              ),
-                              const SizedBox(height: 10),
-                              Visibility(
-                                visible: Platform.isIOS,
-                                child: CustomSocialButton(
-                                  text: "Login with Apple",
+                                    // Get.to(const BaseView());
+                                  },
+                                ),
+                                const SizedBox(height: 22),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(
+                                        "assets/icons/devider_l.svg"),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      child: Text("or login with".tr),
+                                    ),
+                                    SvgPicture.asset(
+                                        "assets/icons/devider_r.svg")
+                                  ],
+                                ),
+                                const SizedBox(height: 24),
+                                CustomSocialButton(
+                                  text: "Login with Google",
                                   imagePath:
-                                      "assets/icons/apple_logo.svg", // Add your Facebook icon in assets
+                                      "assets/icons/google_icon.svg", // Add your Google icon in assets
                                   onPressed: () {
                                     showBaseLoader();
                                     socialLoginController
-                                        .signInWithApple()
+                                        .signInWithGoogle()
                                         .then((val) {
                                       dismissBaseLoader();
                                       if (val.isEmpty) {
                                         socialLoginController.socialLoginApi();
                                       }
                                     });
-                                    // Handle Facebook login
+                                    // Handle Google login
                                   },
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text("Don’t have an account?".tr),
-                                  TextButton(
+                                const SizedBox(height: 10),
+                                Visibility(
+                                  visible: Platform.isIOS,
+                                  child: CustomSocialButton(
+                                    text: "Login with Apple",
+                                    imagePath:
+                                        "assets/icons/apple_logo.svg", // Add your Facebook icon in assets
                                     onPressed: () {
-                                      Get.to(
-                                          const PersonalInfoRegistrationView());
+                                      showBaseLoader();
+                                      socialLoginController
+                                          .signInWithApple()
+                                          .then((val) {
+                                        dismissBaseLoader();
+                                        if (val.isEmpty) {
+                                          socialLoginController
+                                              .socialLoginApi();
+                                        }
+                                      });
+                                      // Handle Facebook login
                                     },
-                                    child: Text("Create new account".tr),
                                   ),
-                                ],
-                              ),
-                            ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Don’t have an account?".tr),
+                                    TextButton(
+                                      onPressed: () {
+                                        Get.to(
+                                            const PersonalInfoRegistrationView());
+                                      },
+                                      child: Text("Create new account".tr),
+                                    ),
+                                  ],
+                                ),
+                                buildSizeHeight(250)
+                              ],
+                            ),
                           ),
                         ),
-                      ],
+                      ),
                     )
                   ],
                 ))

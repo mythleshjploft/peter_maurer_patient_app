@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:peter_maurer_patients_app/app/models/appointment_screen/appointment_history_reponse.dart';
+import 'package:peter_maurer_patients_app/app/models/appointment_screen/patient_form_response.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/base_responses/base_success_response.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_variables.dart';
-import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
-import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 
 class AppointmentController extends GetxController {
   @override
@@ -39,7 +38,9 @@ class AppointmentController extends GetxController {
     }
     isAppointmentLoading.value = true;
     BaseApiService()
-        .get(apiEndPoint: "${ApiEndPoints().appointmentList}?filter=$filter")
+        .get(
+            apiEndPoint: "${ApiEndPoints().appointmentList}?filter=$filter",
+            showLoader: false)
         .then((value) {
       isAppointmentLoading.value = false;
       if (value?.statusCode == 200) {
@@ -389,6 +390,39 @@ class AppointmentController extends GetxController {
         } catch (e) {
           log("$e");
           showSnackBar(subtitle: "$e");
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+
+  Rx<PatientFormData> patientFormData = PatientFormData().obs;
+  RxBool isFormLoading = true.obs;
+
+  getPatientFormData({
+    required String appointmentId,
+  }) {
+    isFormLoading.value = true;
+    BaseApiService()
+        .get(
+            apiEndPoint:
+                "${ApiEndPoints().getPatientNoteByAppointmentid}/$appointmentId")
+        .then((value) {
+      isFormLoading.value = false;
+      if (value?.statusCode == 200) {
+        try {
+          PatientFormResponse response =
+              PatientFormResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            patientFormData.value = response.data ?? PatientFormData();
+            patientFormData.refresh();
+            showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
         }
       } else {
         showSnackBar(subtitle: "Something went wrong, please try again");

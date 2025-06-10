@@ -101,17 +101,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         width: 10,
                       ),
                       InkWell(
-                        onTap: _currentPage < pages.length - 1
-                            ? () {
-                                Get.to(const LoginView());
-                                //   if(_currentPage == (pages.length -1)){
-                                //       Get.to(LoginView());
-                                //   }else{
-                                // _controller.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.ease);
-
-                                //   }
-                              }
-                            : null,
+                        onTap: () {
+                          if (_currentPage == pages.length - 1) {
+                            Get.to(const LoginView());
+                          } else {
+                            _controller.nextPage(
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease,
+                            );
+                          }
+                        },
                         child: SvgPicture.asset(
                             "assets/icons/forword_button_icon.svg"),
                       ),
@@ -143,12 +142,11 @@ class OnboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Expanded(
-              child: Image.asset(image, fit: BoxFit.cover),
-            ),
-          ],
+        Image.asset(
+          image,
+          fit: BoxFit.cover,
+          height: double.infinity,
+          width: double.infinity,
         ),
         Positioned(
           bottom: 0,

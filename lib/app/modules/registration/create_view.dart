@@ -101,6 +101,11 @@ class _CreateViewState extends State<CreateView> {
                                     return "Please Fill this field";
                                   } else if (val!.length < 6) {
                                     return "Password must be at least 6 characters";
+                                  } else if (!RegExp(
+                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                                      .hasMatch(
+                                          controller.passwordController.text)) {
+                                    return "Password must contain uppercase, lowercase, number and special character";
                                   }
                                   return null;
                                 },
@@ -127,6 +132,11 @@ class _CreateViewState extends State<CreateView> {
                                       controller
                                           .confirmPasswordController.text) {
                                     return "Password does not match";
+                                  } else if (!RegExp(
+                                          r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+                                      .hasMatch(controller
+                                          .confirmPasswordController.text)) {
+                                    return "Password must contain uppercase, lowercase, number and special character";
                                   }
                                   return null;
                                 },
@@ -206,7 +216,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
             text: TextSpan(
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
-                TextSpan(text: "I have read and accept 4Smile's ".tr),
+                TextSpan(text: "I have read and accept ".tr),
                 _linkText("Terms of Use", () {
                   // Handle Terms of Use click
                 }),

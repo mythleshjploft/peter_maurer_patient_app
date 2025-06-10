@@ -5,6 +5,7 @@ import 'package:peter_maurer_patients_app/app/controllers/appointment_controller
 import 'package:peter_maurer_patients_app/app/models/appointment_screen/appointment_history_reponse.dart';
 import 'package:peter_maurer_patients_app/app/modules/appointment/appointment_reschedule_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/appointment/appointment_webview.dart';
+import 'package:peter_maurer_patients_app/app/modules/appointment/view_form.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 
 class AppointCardListScreen extends StatefulWidget {
@@ -144,7 +145,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.appointmentDatum.doctorId?.image?.toString() ?? "",
+                    "${widget.appointmentDatum.doctorId?.totalExperience?.toString() ?? ""} years experience",
                     style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 4),
@@ -205,7 +206,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 2,
+                      // flex: 2,
                       child: GestureDetector(
                         onTap: () {
                           Get.to(AppointmentRescheduleView(
@@ -236,58 +237,133 @@ class _AppointmentCardState extends State<AppointmentCard> {
                     ),
                     buildSizeWidth(10),
                     Expanded(
-                      flex: 3,
-                      child: GestureDetector(
-                        onTap: () {
-                          controller.updateStatus(
-                              id: widget.appointmentDatum.id?.toString() ?? "",
-                              status: "Canceled");
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.primaryColor),
-                            borderRadius: BorderRadius.circular(58),
+                      child: Visibility(
+                        visible:
+                            (widget.appointmentDatum.isFormFilled ?? false),
+                        replacement: GestureDetector(
+                          onTap: () {
+                            Get.to(() => AppointmentWebViewScreen(
+                                url:
+                                    //  "https://pub.dev/packages/webview_flutter"
+                                    "http://3.109.98.222:7902/noteForm/${widget.appointmentDatum.id}"));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            margin: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              border: Border.all(color: AppColors.primaryColor),
+                              borderRadius: BorderRadius.circular(58),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Fill Form".tr,
+                              style: const TextStyle(
+                                  fontSize: 14, color: AppColors.black),
+                            ),
                           ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Cancel Appointment".tr,
-                            style: const TextStyle(
-                              fontSize: 14,
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(() => ViewFormScreen(
+                                appointmentId: widget.appointmentDatum.id));
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            margin: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              border: Border.all(color: AppColors.primaryColor),
+                              borderRadius: BorderRadius.circular(58),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              "View Form".tr,
+                              style: const TextStyle(
+                                  fontSize: 14, color: AppColors.white),
                             ),
                           ),
                         ),
                       ),
                     ),
+
+                    // Expanded(
+                    //   flex: 3,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       controller.updateStatus(
+                    //           id: widget.appointmentDatum.id?.toString() ?? "",
+                    //           status: "Canceled");
+                    //     },
+                    //     child: Container(
+                    //       padding: const EdgeInsets.symmetric(vertical: 12),
+                    //       decoration: BoxDecoration(
+                    //         border: Border.all(color: AppColors.primaryColor),
+                    //         borderRadius: BorderRadius.circular(58),
+                    //       ),
+                    //       alignment: Alignment.center,
+                    //       child: Text(
+                    //         "Cancel Appointment".tr,
+                    //         style: const TextStyle(
+                    //           fontSize: 14,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
-              Visibility(
-                visible: controller.selectedTab.value == 0,
-                child: GestureDetector(
-                  onTap: () {
-                    Get.to(() => AppointmentWebViewScreen(
-                        url:
-                            //  "https://pub.dev/packages/webview_flutter"
-                            "http://3.109.98.222:7902/noteForm/${widget.appointmentDatum.id}"));
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      border: Border.all(color: AppColors.primaryColor),
-                      borderRadius: BorderRadius.circular(58),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Fill Form".tr,
-                      style:
-                          const TextStyle(fontSize: 14, color: AppColors.white),
-                    ),
-                  ),
-                ),
-              ),
+              // Visibility(
+              //   visible: controller.selectedTab.value == 0,
+              //   child: Visibility(
+              //     visible: (widget.appointmentDatum.isFormFilled ?? false),
+              //     replacement: GestureDetector(
+              //       onTap: () {
+              //         Get.to(() => AppointmentWebViewScreen(
+              //             url:
+              //                 //  "https://pub.dev/packages/webview_flutter"
+              //                 "http://3.109.98.222:7902/noteForm/${widget.appointmentDatum.id}"));
+              //       },
+              //       child: Container(
+              //         padding: const EdgeInsets.symmetric(vertical: 12),
+              //         margin: const EdgeInsets.symmetric(vertical: 12),
+              //         decoration: BoxDecoration(
+              //           color: AppColors.primaryColor,
+              //           border: Border.all(color: AppColors.primaryColor),
+              //           borderRadius: BorderRadius.circular(58),
+              //         ),
+              //         alignment: Alignment.center,
+              //         child: Text(
+              //           "Fill Form".tr,
+              //           style: const TextStyle(
+              //               fontSize: 14, color: AppColors.white),
+              //         ),
+              //       ),
+              //     ),
+              //     child: GestureDetector(
+              //       onTap: () {
+              //         Get.to(() => ViewFormScreen(
+              //             appointmentId: widget.appointmentDatum.id));
+              //       },
+              //       child: Container(
+              //         padding: const EdgeInsets.symmetric(vertical: 12),
+              //         margin: const EdgeInsets.symmetric(vertical: 12),
+              //         decoration: BoxDecoration(
+              //           color: AppColors.primaryColor,
+              //           border: Border.all(color: AppColors.primaryColor),
+              //           borderRadius: BorderRadius.circular(58),
+              //         ),
+              //         alignment: Alignment.center,
+              //         child: Text(
+              //           "View Form".tr,
+              //           style: const TextStyle(
+              //               fontSize: 14, color: AppColors.white),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

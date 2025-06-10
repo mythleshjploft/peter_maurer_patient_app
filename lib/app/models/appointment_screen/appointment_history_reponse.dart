@@ -114,32 +114,33 @@ class AppointmentData {
   dynamic condition;
   PurpleSlot? slot;
   List<SlotElement>? slots;
-  dynamic createdAt;
+  // dynamic createdAt;
   dynamic updatedAt;
   dynamic v;
+  dynamic isFormFilled;
 
-  AppointmentData({
-    this.id,
-    this.uid,
-    this.patientId,
-    this.doctorId,
-    // this.categoryId,
-    this.preExistDiseasesId,
-    this.subCategoryId,
-    this.status,
-    this.description,
-    this.date,
-    this.slotDuration,
-    this.isDelete,
-    this.startDate,
-    this.appointmentType,
-    this.condition,
-    this.slot,
-    this.slots,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-  });
+  AppointmentData(
+      {this.id,
+      this.uid,
+      this.patientId,
+      this.doctorId,
+      // this.categoryId,
+      this.preExistDiseasesId,
+      this.subCategoryId,
+      this.status,
+      this.description,
+      this.date,
+      this.slotDuration,
+      this.isDelete,
+      this.startDate,
+      this.appointmentType,
+      this.condition,
+      this.slot,
+      this.slots,
+      // this.createdAt,
+      this.updatedAt,
+      this.v,
+      this.isFormFilled});
 
   factory AppointmentData.fromJson(Map<String, dynamic> json) =>
       AppointmentData(
@@ -169,13 +170,14 @@ class AppointmentData {
             ? []
             : List<SlotElement>.from(
                 json["slots"]!.map((x) => SlotElement.fromJson(x))),
-        createdAt: json["created_at"] == null
-            ? null
-            : DateTime.parse(json["created_at"]),
+        // createdAt: json["created_at"] == null
+        //     ? null
+        //     : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
         v: json["__v"],
+        isFormFilled: json["is_form_field"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -199,9 +201,10 @@ class AppointmentData {
         "slots": slots == null
             ? []
             : List<dynamic>.from(slots!.map((x) => x.toJson())),
-        "created_at": createdAt?.toIso8601String(),
+        // "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "__v": v,
+        "is_form_field": isFormFilled
       };
 }
 
@@ -297,7 +300,7 @@ class DoctorId {
   String? specialist;
   String? currentEmployer;
   String? previousEmployer;
-  String? areaExpertiseDate;
+  dynamic areaExpertiseDate;
   String? password;
   DateTime? createdAt;
   DateTime? updatedAt;

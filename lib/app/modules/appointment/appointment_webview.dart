@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:peter_maurer_patients_app/app/controllers/appointment_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
@@ -54,6 +55,8 @@ class _AppointmentWebViewScreenState extends State<AppointmentWebViewScreen> {
                 if ((url.url ?? "") == ApiEndPoints().callbackUrl) {
                   showSnackBar(
                       subtitle: "Form Submitted Successfully", isSuccess: true);
+                  Get.find<AppointmentController>().selectedTab.value = 0;
+                  Get.find<AppointmentController>().getAppointmentList();
                 }
               });
             }

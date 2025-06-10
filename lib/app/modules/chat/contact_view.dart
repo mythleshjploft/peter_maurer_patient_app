@@ -105,34 +105,40 @@ class _ContactViewState extends State<ContactView> {
                             controller.filteredChatsList.length, (index) {
                           var chatData = controller.filteredChatsList[index] ??
                               ChatListData();
-                          return InkWell(
-                            onTap: () {
-                              Get.to(() => ChatView(
-                                    userImg: chatData.userDetails?.image
-                                            ?.toString() ??
+                          return Visibility(
+                            visible: controller
+                                    .filteredChatsList[index]?.userDetails !=
+                                null,
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(() => ChatView(
+                                      userImg: chatData.userDetails?.image
+                                              ?.toString() ??
+                                          "",
+                                      userName:
+                                          "${chatData.userDetails?.firstName?.toString() ?? ""} ${chatData.userDetails?.lastName?.toString() ?? ""}",
+                                      chatUserId: chatData.userDetails?.id
+                                              ?.toString() ??
+                                          "",
+                                      userProfession: chatData
+                                              .userDetails?.specialist
+                                              ?.toString() ??
+                                          "",
+                                    ));
+                              },
+                              child: MessageTile(
+                                name:
+                                    "${chatData.userDetails?.firstName?.toString() ?? ""} ${chatData.userDetails?.lastName?.toString() ?? ""}",
+                                message: "${chatData.lastMsg?.text ?? ""}",
+                                time: getTimeAgo(
+                                    "${chatData.lastMsg?.updatedAt ?? ""}"),
+                                avatar:
+                                    chatData.userDetails?.image?.toString() ??
                                         "",
-                                    userName:
-                                        "${chatData.userDetails?.firstName?.toString() ?? ""} ${chatData.userDetails?.lastName?.toString() ?? ""}",
-                                    chatUserId:
-                                        chatData.userDetails?.id?.toString() ??
-                                            "",
-                                    userProfession: chatData
-                                            .userDetails?.specialist
-                                            ?.toString() ??
-                                        "",
-                                  ));
-                            },
-                            child: MessageTile(
-                              name:
-                                  "${chatData.userDetails?.firstName?.toString() ?? ""} ${chatData.userDetails?.lastName?.toString() ?? ""}",
-                              message: "${chatData.lastMsg?.text ?? ""}",
-                              time: getTimeAgo(
-                                  "${chatData.lastMsg?.updatedAt ?? ""}"),
-                              avatar:
-                                  chatData.userDetails?.image?.toString() ?? "",
-                              unreadMsgCount: int.tryParse(
-                                      "${chatData.unseenMsg?.toString() ?? 0}") ??
-                                  0,
+                                unreadMsgCount: int.tryParse(
+                                        "${chatData.unseenMsg?.toString() ?? 0}") ??
+                                    0,
+                              ),
                             ),
                           );
                         }),

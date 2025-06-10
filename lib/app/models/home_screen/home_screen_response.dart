@@ -437,6 +437,7 @@ class Blog {
   dynamic createdAt;
   dynamic updatedAt;
   dynamic v;
+  dynamic blogUrl;
 
   Blog({
     this.title,
@@ -449,6 +450,7 @@ class Blog {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.blogUrl,
   });
 
   factory Blog.fromJson(Map<String, dynamic> json) => Blog(
@@ -466,6 +468,7 @@ class Blog {
             ? null
             : DateTime.parse(json["updated_at"]),
         v: json["__v"],
+        blogUrl: json["blog_url"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -479,6 +482,7 @@ class Blog {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "__v": v,
+        "blog_url": blogUrl,
       };
 }
 

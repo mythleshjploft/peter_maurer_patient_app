@@ -14,15 +14,19 @@ class MyApp extends StatelessWidget {
       translations: BaseLocalization(),
       locale: const Locale('en', 'US'),
       fallbackLocale: const Locale('en', 'US'),
-      title: 'My App',
+      title: 'Peter Maurer Patients',
       builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-            data: MediaQuery.of(context)
-                .copyWith(textScaler: const TextScaler.linear(1.0)),
-            child: BaseMainBuilder(
-              context: context,
-              child: child,
-            ));
+        return SafeArea(
+          top: false,
+          bottom: true,
+          child: MediaQuery(
+              data: MediaQuery.of(context)
+                  .copyWith(textScaler: const TextScaler.linear(1.0)),
+              child: BaseMainBuilder(
+                context: context,
+                child: child,
+              )),
+        );
       },
       theme: ThemeData(
           fontFamily: 'Parkinsans',

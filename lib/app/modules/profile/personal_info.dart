@@ -156,6 +156,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             builder: (FormFieldState<String> state) => Column(
                                   children: [
                                     CustomIntlPhoneField(
+                                      readOnly: true,
                                       decoration: InputDecoration(
                                         contentPadding:
                                             const EdgeInsets.symmetric(
@@ -225,6 +226,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         CustomTextField(
                           hintText: "Email",
                           controller: controller.emailController,
+                          readOnly: true,
                           validator: (val) {
                             if ((val ?? "").isEmpty) {
                               return "Please Fill this field";

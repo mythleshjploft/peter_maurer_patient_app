@@ -14,11 +14,13 @@ class ProfileDetailResponse {
   bool? success;
   String? message;
   ProfileDetailResponseData? data;
+  bool? allFieldNotField;
 
   ProfileDetailResponse({
     this.success,
     this.message,
     this.data,
+    this.allFieldNotField,
   });
 
   factory ProfileDetailResponse.fromJson(Map<String, dynamic> json) =>
@@ -28,12 +30,14 @@ class ProfileDetailResponse {
         data: json["data"] == null
             ? null
             : ProfileDetailResponseData.fromJson(json["data"]),
+        allFieldNotField: json["all_field_not_field"],
       );
 
   Map<String, dynamic> toJson() => {
         "success": success,
         "message": message,
         "data": data?.toJson(),
+        "all_field_not_field": allFieldNotField,
       };
 }
 

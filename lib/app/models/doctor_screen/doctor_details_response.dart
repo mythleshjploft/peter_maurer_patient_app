@@ -57,12 +57,14 @@ class DoctorCategory {
   dynamic image;
   dynamic isDelete;
   dynamic id;
+  dynamic slotDuration;
 
   DoctorCategory({
     this.name,
     this.image,
     this.isDelete,
     this.id,
+    this.slotDuration,
   });
 
   factory DoctorCategory.fromJson(Map<String, dynamic> json) => DoctorCategory(
@@ -70,6 +72,7 @@ class DoctorCategory {
         image: json["image"],
         isDelete: json["is_delete"],
         id: json["_id"],
+        slotDuration: json["slot_duration"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -77,6 +80,7 @@ class DoctorCategory {
         "image": image,
         "is_delete": isDelete,
         "_id": id,
+        "slot_duration": slotDuration,
       };
 }
 

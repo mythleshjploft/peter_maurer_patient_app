@@ -130,6 +130,7 @@ class DoctorDatum {
   dynamic currentEmployer;
   dynamic previousEmployer;
   dynamic areaExpertiseDate;
+  dynamic totalExperience;
   dynamic profession;
   dynamic password;
   dynamic createdAt;
@@ -178,6 +179,7 @@ class DoctorDatum {
     this.password,
     this.createdAt,
     this.updatedAt,
+    this.totalExperience,
     this.v,
   });
 
@@ -226,6 +228,7 @@ class DoctorDatum {
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         v: json["__v"],
+        totalExperience: json["total_experience"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -277,6 +280,7 @@ class DoctorDatum {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "__v": v,
+        "total_experience": totalExperience,
       };
 }
 

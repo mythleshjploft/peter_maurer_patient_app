@@ -1,20 +1,71 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:peter_maurer_patients_app/app/controllers/forgot_password_controller.dart';
 import 'package:peter_maurer_patients_app/app/controllers/signup_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dart';
 import 'package:peter_maurer_patients_app/app/modules/login/login_view.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/step_progress_indicator.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_colors.dart';
 
 class OtpView extends StatefulWidget {
-  const OtpView({super.key});
+  const OtpView({super.key, this.isForgotPassword = false});
+  final bool isForgotPassword;
   @override
   State<OtpView> createState() => _OtpViewState();
 }
 
 class _OtpViewState extends State<OtpView> {
-  SignupController controller = Get.find<SignupController>();
+  dynamic controller;
+  bool isResendEnable = false;
+
+  int resendTimer = 120;
+  Timer? _timer;
+
+  void startResendTimer() {
+    setState(() {
+      isResendEnable = false;
+      resendTimer = 120;
+    });
+
+    _timer?.cancel(); // Cancel existing timer if any
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (resendTimer > 0) {
+        setState(() {
+          resendTimer--;
+        });
+      } else {
+        timer.cancel();
+        setState(() {
+          isResendEnable = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isForgotPassword == false) {
+      controller = Get.find<SignupController>();
+    } else {
+      controller = Get.find<ForgotPasswordController>();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startResendTimer();
+    });
+  }
+
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -28,12 +79,27 @@ class _OtpViewState extends State<OtpView> {
               'assets/images/splash_background_img.png', // Replace with your background image path
               fit: BoxFit.cover,
             ),
-            const Positioned(
-              top: 90,
-              left: 0,
-              right: 0,
-              child: StepProgressIndicator(
-                currenStep: 2,
+            Visibility(
+              visible: !widget.isForgotPassword,
+              replacement: Positioned(
+                top: 30,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 40),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/logo_img.png', // Replace with your logo image path
+                      width: 257,
+                    ),
+                  ),
+                ),
+              ),
+              child: const Positioned(
+                top: 90,
+                left: 0,
+                right: 0,
+                child: StepProgressIndicator(
+                  currenStep: 2,
+                ),
               ),
             ),
             Positioned(
@@ -60,7 +126,7 @@ class _OtpViewState extends State<OtpView> {
                               height: 12,
                             ),
                             Text(
-                              'An OTP has been sent your email'.tr,
+                              'An OTP has been sent on your email'.tr,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   fontSize: 25, fontWeight: FontWeight.w600),
@@ -107,7 +173,11 @@ class _OtpViewState extends State<OtpView> {
                               text: "Verify".tr,
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
-                                  controller.verifyOtp();
+                                  if (widget.isForgotPassword) {
+                                    controller.verifyForgotPasswordOtp();
+                                  } else {
+                                    controller.verifyOtp();
+                                  }
                                 }
                               },
                             ),
@@ -115,7 +185,7 @@ class _OtpViewState extends State<OtpView> {
                               height: 20,
                             ),
                             Text(
-                              'Did not recieve code? 00:30s'.tr,
+                              'Did not recieve code? ${resendTimer}s'.tr,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
@@ -123,16 +193,27 @@ class _OtpViewState extends State<OtpView> {
                             const SizedBox(
                               height: 8,
                             ),
-                            InkWell(
-                              onTap: () {
-                                // Get.to(LoginView());
-                              },
-                              child: Text(
-                                "Resend OTP".tr,
-                                style: const TextStyle(
-                                  color: Color(0xff2EB3D6),
-                                  decoration: TextDecoration.underline,
-                                  // Apply underline decoration
+                            IgnorePointer(
+                              ignoring: !isResendEnable,
+                              child: InkWell(
+                                onTap: () {
+                                  if (!widget.isForgotPassword) {
+                                    controller.registerAccount();
+                                  } else {
+                                    controller.forgotPassword();
+                                  }
+                                  startResendTimer();
+                                  // Get.to(LoginView());
+                                },
+                                child: Text(
+                                  "Resend OTP".tr,
+                                  style: TextStyle(
+                                    color: !isResendEnable
+                                        ? BaseColors.greyColorLight
+                                        : const Color(0xff2EB3D6),
+                                    decoration: TextDecoration.underline,
+                                    // Apply underline decoration
+                                  ),
                                 ),
                               ),
                             ),
@@ -185,7 +266,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
             text: TextSpan(
               style: const TextStyle(fontSize: 13, color: Colors.black),
               children: [
-                const TextSpan(text: "I have read and accept 4Smile's "),
+                const TextSpan(text: "I have read and accept "),
                 _linkText("Terms of Use".tr, () {
                   // Handle Terms of Use click
                 }),

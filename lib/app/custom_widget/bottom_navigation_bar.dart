@@ -26,8 +26,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.only(
-          left: 16, right: 16, top: 8, bottom: Platform.isIOS ? 16 : 8),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

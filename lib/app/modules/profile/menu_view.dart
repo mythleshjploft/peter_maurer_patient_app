@@ -49,11 +49,13 @@ class MenuScreen extends StatelessWidget {
             }),
             _buildMenuItem('assets/icons/home_icon.svg', "Doctor".tr,
                 onTap: () {
+              Get.back();
               Get.to(const DoctorSearchView());
             }),
             _buildMenuItem(
                 'assets/icons/history.svg', "Appointments History".tr,
                 onTap: () {
+              Get.back();
               Get.to(const ApppointmentListView());
             }),
             _buildMenuItem('assets/icons/profile_icon.svg', "Profile".tr,

@@ -42,6 +42,7 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
   void initState() {
     super.initState();
     controller.getDoctorList();
+    controller.getCategoryList();
   }
 
   @override
@@ -79,7 +80,7 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Doctors".tr,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                     InkWell(
                         onTap: () {
@@ -158,8 +159,9 @@ class _DoctorSearchViewState extends State<DoctorSearchView> {
                                       SvgPicture.asset(
                                           'assets/icons/time_icon_new.svg'),
                                       const SizedBox(width: 4),
-                                      const Text("8 years",
-                                          style: TextStyle(
+                                      Text(
+                                          "${controller.filteredDoctorList[index]?.totalExperience?.toString() ?? ""} years",
+                                          style: const TextStyle(
                                               fontSize: 14,
                                               color: AppColors.grayMedium)),
                                     ],

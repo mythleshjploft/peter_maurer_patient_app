@@ -203,7 +203,7 @@ class _DashboardViewState extends State<DashboardView> {
                                                 'assets/icons/time_icon_new.svg'),
                                             const SizedBox(width: 4),
                                             Text(
-                                                "${controller.filteredAppointments[index].date?.toString() ?? ""} ${controller.filteredAppointments[index].slot["start_time"]?.toString() ?? ""} - ${controller.homeScreenData.value?.appointemnt?[index].slot["end_time"]?.toString() ?? ""}",
+                                                "${controller.filteredAppointments[index].date?.toString() ?? ""} ${controller.filteredAppointments[index].slot?["start_time"]?.toString() ?? ""} - ${controller.homeScreenData.value?.appointemnt?[index].slot?["end_time"]?.toString() ?? ""}",
                                                 style: const TextStyle(
                                                     fontSize: 14,
                                                     color:
@@ -357,58 +357,63 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                     const SizedBox(height: 12),
                     Obx(
-                      () => Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(color: Colors.black12, blurRadius: 4)
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                    radius: 4, backgroundColor: Colors.green),
-                                const SizedBox(width: 6),
-                                Text("DAILY READ".tr,
-                                    style: const TextStyle(
-                                        color: Colors.grey, fontSize: 12)),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Visibility(
-                              visible: !controller.isHomeLoading.value,
-                              replacement: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      () => GestureDetector(
+                        onTap: () {
+                          baseLaunchUrl("http://3.109.98.222:7902/blog");
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: const [
+                              BoxShadow(color: Colors.black12, blurRadius: 4)
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  Text(
-                                      controller
-                                              .homeScreenData.value?.blog?.title
-                                              ?.toString() ??
-                                          "",
+                                  const CircleAvatar(
+                                      radius: 4, backgroundColor: Colors.green),
+                                  const SizedBox(width: 6),
+                                  Text("DAILY READ".tr,
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16)),
-                                  const SizedBox(height: 12),
-                                  cachedNetworkImage(
-                                      image: controller
-                                              .homeScreenData.value?.blog?.image
-                                              ?.toString() ??
-                                          "",
-                                      height: 230,
-                                      width: double.infinity,
-                                      borderRadius: 12),
+                                          color: Colors.grey, fontSize: 12)),
                                 ],
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 8),
+                              Visibility(
+                                visible: !controller.isHomeLoading.value,
+                                replacement: const Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                        controller.homeScreenData.value?.blog
+                                                ?.title
+                                                ?.toString() ??
+                                            "",
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16)),
+                                    const SizedBox(height: 12),
+                                    cachedNetworkImage(
+                                        image: controller.homeScreenData.value
+                                                ?.blog?.image
+                                                ?.toString() ??
+                                            "",
+                                        height: 230,
+                                        width: double.infinity,
+                                        borderRadius: 12),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

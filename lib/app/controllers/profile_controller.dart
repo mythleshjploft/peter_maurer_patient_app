@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:peter_maurer_patients_app/app/models/profile_screen/notes_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/profile_screen/profile_details_response.dart';
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/city_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list_response.dart';
@@ -50,6 +51,8 @@ class ProfileController extends GetxController {
                   response.data?.data?.firstName?.toString() ?? "");
               BaseStorage.write(StorageKeys.lastName,
                   response.data?.data?.lastName?.toString() ?? "");
+              BaseStorage.write(StorageKeys.isAllDetailsFilled,
+                  response.allFieldNotField ?? false);
               isLoading.value = false;
               update();
             } else {
@@ -211,6 +214,28 @@ class ProfileController extends GetxController {
             getProfileDetails();
             Get.back();
             showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+
+  RxList<NotesDatum> notesList = <NotesDatum>[].obs;
+  getNotesList() async {
+    BaseApiService().get(apiEndPoint: ApiEndPoints().notesList).then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          NotesListResponse response = NotesListResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            notesList.value = response.data ?? [];
+            notesList.refresh();
+            update();
           } else {
             showSnackBar(subtitle: response.message ?? "");
           }

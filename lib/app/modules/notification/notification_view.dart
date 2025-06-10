@@ -4,6 +4,7 @@ import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/base_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 import 'package:peter_maurer_patients_app/app/models/notification_screen/notification_list_response.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
 
 class NotificationView extends StatefulWidget {
@@ -61,6 +62,7 @@ class _NotificationViewState extends State<NotificationView> {
       appBar: CustomAppBar(
         title: "Notifications",
         onBackPress: () {},
+        showBackButton: false,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,9 +83,11 @@ class _NotificationViewState extends State<NotificationView> {
                   NoticationData data = controller.notificationList[index];
                   return GestureDetector(
                     onTap: () {
-                      controller.readNotification(
-                          controller.notificationList[index].id?.toString() ??
-                              "");
+                      if (!(data.isRead ?? false)) {
+                        controller.readNotification(
+                            controller.notificationList[index].id?.toString() ??
+                                "");
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -145,6 +149,12 @@ class _NotificationViewState extends State<NotificationView> {
                                 Text(data.description ?? "",
                                     style: const TextStyle(
                                         fontSize: 12, color: Colors.grey)),
+                                buildSizeHeight(5),
+                                Text(
+                                    getTimeAgo(
+                                        data.createdAt?.toString() ?? ""),
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.black)),
                               ],
                             ),
                           ),

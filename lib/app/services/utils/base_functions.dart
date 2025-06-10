@@ -1,4 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
+import 'dart:developer';
 import 'dart:io';
 
 // import 'dart:math';
@@ -25,16 +26,27 @@ triggerHapticFeedback() {
   HapticFeedback.lightImpact();
 }
 
-String formatBackendDate(String dateString, {bool? getDayFirst}) {
+String formatBackendDate(String dateString,
+    {bool? getDayFirst, bool? getTime}) {
   if (dateString.isNotEmpty && dateString != "null") {
     DateTime date = DateTime.parse(dateString);
     String day = date.day.toString().padLeft(2, '0');
     String month = date.month.toString().padLeft(2, '0');
-    String year = date.year.toString().substring(0);
-    if (getDayFirst ?? false) {
-      return '$day-$month-$year';
+    String year = date.year.toString();
+
+    String datePart =
+        (getDayFirst ?? false) ? '$day-$month-$year' : '$year-$month-$day';
+
+    if (getTime ?? false) {
+      int hour = date.hour;
+      String period = hour >= 12 ? 'PM' : 'AM';
+      String hour12 =
+          ((hour % 12 == 0) ? 12 : hour % 12).toString().padLeft(2, '0');
+      String minute = date.minute.toString().padLeft(2, '0');
+
+      return '$datePart, $hour12:$minute $period';
     } else {
-      return '$year-$month-$day';
+      return datePart;
     }
   } else {
     return "";
@@ -162,6 +174,7 @@ Future<String> showBaseDatePicker(
   bool? showBeforeDates,
   DateTime? selectedDate,
   bool? showDOBDates,
+  showMonthFirst,
 }) async {
   FocusManager.instance.primaryFocus?.unfocus();
   // Determine the initial date
@@ -201,6 +214,8 @@ Future<String> showBaseDatePicker(
     selectedDate = picked;
     if (showDOBDates ?? false) {
       return "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+    } else if (showMonthFirst ?? false) {
+      return "${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}-${picked.year}";
     } else {
       return "${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
     }
@@ -252,6 +267,7 @@ extension IsUser on String {
 
 /////////////////////////////
 Future<void> baseLaunchUrl(String url) async {
+  log(url);
   if (!await launchUrl(Uri.parse(url))) {
     throw Exception('Could not launch $url');
   }
@@ -781,7 +797,8 @@ Widget cachedNetworkImage(
     Alignment? alignment,
     double? height,
     double? width,
-    double? borderRadius}) {
+    double? borderRadius,
+    bool? isProfile}) {
   // log("Img Url--->>> ${ApiEndPoints().imgBaseUrl + image}");
   return ClipRRect(
     borderRadius: BorderRadius.circular(borderRadius ?? 0),
@@ -808,7 +825,9 @@ Widget cachedNetworkImage(
               child: Padding(
                 padding: const EdgeInsets.all(2),
                 child: Icon(
-                  Icons.image_not_supported_outlined,
+                  (isProfile ?? false)
+                      ? Icons.person
+                      : Icons.image_not_supported_outlined,
                   size: height ?? 100,
                 ),
               ),

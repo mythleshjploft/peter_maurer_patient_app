@@ -106,8 +106,9 @@ class SignupController extends GetxController {
   verifyOtp() async {
     Map<String, dynamic> data = {
       "otp": otpController.text.trim(),
-      "mobile_number": phoneController.text.trim(),
-      "country_code": countryCode.value
+      "email": emailController.text.trim(),
+      // "mobile_number": phoneController.text.trim(),
+      // "country_code": countryCode.value
     };
     BaseApiService()
         .post(apiEndPoint: ApiEndPoints().verifyOtp, data: data)

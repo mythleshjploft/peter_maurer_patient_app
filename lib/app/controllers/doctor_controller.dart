@@ -1,12 +1,20 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/home_controller.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/custom_button.dart';
+import 'package:peter_maurer_patients_app/app/custom_widget/dashboard_view.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/category_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/condition_list_response.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_details_response.dart';
 import 'package:peter_maurer_patients_app/app/models/doctor_screen/doctor_list_response.dart';
+import 'package:peter_maurer_patients_app/app/models/doctor_screen/initiate_chat_response.dart';
+import 'package:peter_maurer_patients_app/app/models/doctor_screen/pre_exist_disease_list_response.dart';
+import 'package:peter_maurer_patients_app/app/modules/appointment/apppointment_list_view.dart';
+import 'package:peter_maurer_patients_app/app/modules/chat/chat_view.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/base_api_service.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/base_responses/base_success_response.dart';
@@ -24,11 +32,14 @@ class DoctorController extends GetxController {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  getDoctorList() async {
+  getDoctorList({bool? isFilter}) async {
     isLoading.value = true;
     try {
       BaseApiService()
-          .get(apiEndPoint: ApiEndPoints().doctorList, showLoader: false)
+          .get(
+              apiEndPoint:
+                  "${ApiEndPoints().doctorList}${(isFilter ?? false) ? "?category_id=${selectedCategoryFilter.value.id ?? ""}&start_date=${filterStartDateValueApi.value}&end_date=${filterEndDateValueApi.value}&sorting_by=${selectedSorting.value?.tag ?? ""}" : ""}",
+              showLoader: false)
           .then((value) {
         isLoading.value = false;
         refreshController.refreshCompleted();
@@ -87,68 +98,35 @@ class DoctorController extends GetxController {
   void processAvailabilityDataFromModel(DoctorsAvailability? availabilityData) {
     if (availabilityData == null) return;
 
-    Set<String> weekDays = {};
-    DateTime today = DateTime.now();
-    DateTime oneYearLater = today.add(const Duration(days: 365));
-
     final RxMap<String, List<String>> tempAvailableSlots =
         <String, List<String>>{}.obs;
     final RxList<String> tempEnabledDates = <String>[].obs;
-    final Map<String, List<String>> tempWeeklySlots = {};
 
     for (var dateEntry in availabilityData.availableDates ?? []) {
-      final String? availabilityType = dateEntry.availabilityType;
-      final String? date = dateEntry.date;
-
+      final String? dateStr = dateEntry.date;
       final List<AvailableTimeSlot> slots = dateEntry.availableTimeSlot ?? [];
 
       final List<String> timeSlots = slots
           .map((slot) => "${slot.startTime ?? ""} - ${slot.endTime ?? ""}")
           .toList();
 
-      if (availabilityType == "Every Week") {
-        // Get weekday name (e.g., "Monday") from the date
-        final DateTime? dateObj = DateTime.tryParse(date ?? "");
-        if (dateObj != null) {
-          String weekDay = DateFormat('EEEE').format(dateObj);
-          weekDays.add(weekDay);
-
-          tempWeeklySlots[weekDay] ??= [];
-          tempWeeklySlots[weekDay]?.addAll(timeSlots);
-        }
-      } else if (availabilityType == "Specific Dates") {
-        if (date != null) {
-          tempEnabledDates.add(date);
-          tempAvailableSlots[date] ??= [];
-          tempAvailableSlots[date]?.addAll(timeSlots);
-        }
+      if (dateStr != null && timeSlots.isNotEmpty) {
+        tempEnabledDates.add(dateStr);
+        tempAvailableSlots[dateStr] = timeSlots;
       }
     }
 
-    // Fill available slots for recurring weekly availability for the next year
-    for (var day = today;
-        day.isBefore(oneYearLater);
-        day = day.add(const Duration(days: 1))) {
-      final String weekdayName = DateFormat('EEEE').format(day);
-      if (weekDays.contains(weekdayName)) {
-        final String key =
-            "${day.month}-${day.day < 10 ? "0${day.day}" : "${day.day}"}-${day.year}";
-        tempEnabledDates.add(key);
-        tempAvailableSlots[key] = tempWeeklySlots[weekdayName]?.toList() ?? [];
-      }
-    }
-
-    // Update reactive values
-    enabledDates
-        .assignAll(tempEnabledDates.toSet().toList()); // to avoid duplicates
+    // Remove duplicates and update reactive variables
+    enabledDates.assignAll(tempEnabledDates.toSet().toList());
     availableSlots.assignAll(tempAvailableSlots);
+
     enabledDates.refresh();
     availableSlots.refresh();
 
     log("Enabled Dates: $enabledDates");
     log("Available Slots: $availableSlots");
 
-    update();
+    update(); // If you are in a controller and using GetX
   }
 
   getDoctorDetails(String id) {
@@ -196,16 +174,15 @@ class DoctorController extends GetxController {
       });
       log("Selected Slot: $element");
     }).toList();
-    List categories = [];
-    selectedCategoriesList.map((element) {
-      categories.add(element.id?.toString() ?? "");
+    List preexistingDiseases = [];
+    selectedDisease.map((element) {
+      preexistingDiseases.add(element.id?.toString() ?? "");
     }).toList();
-    log("Selected Categories: $categories");
+    log("Selected Categories: $preexistingDiseases");
     Map<String, dynamic> data = {
       "doctor_id": doctorId,
-      "category_id": categories,
-      "preExistDiseases_id":
-          BaseStorage.read(StorageKeys.preExistingDisease) ?? "",
+      "category_id": [selectedCategory.value.id?.toString() ?? ""],
+      "preExistDiseases_id": preexistingDiseases,
       "status": "Pending",
       "description": "description",
       "date": date,
@@ -221,8 +198,34 @@ class DoctorController extends GetxController {
           BaseSuccessResponse response =
               BaseSuccessResponse.fromJson(value?.data);
           if ((response.success ?? false)) {
-            Get.back();
-            Get.find<HomeController>().getHomeScreenData();
+            showBaseDialgueBox(
+                title: const Center(
+                  child: Text(
+                    "Terminbestätigung",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryColor),
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Bitte warten Sie mindestens 15 Minuten vor Ihrem Termin. Wenn Sie den Termin verschieben müssen, rufen Sie uns bitte an.",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, color: Colors.black),
+                    ),
+                    buildSizeHeight(15),
+                    CustomButton(
+                        text: "Continue".tr,
+                        onPressed: () {
+                          Get.offAll(() => const DashBoardView());
+                          Get.to(const ApppointmentListView());
+                        })
+                  ],
+                ));
+
             showSnackBar(subtitle: response.message ?? "", isSuccess: true);
           } else {
             showSnackBar(subtitle: response.message ?? "");
@@ -240,13 +243,14 @@ class DoctorController extends GetxController {
   onInit() {
     getCategoryList();
     getConditionList();
+    getDiseaseList();
     super.onInit();
   }
 
   RxList<CategoryDatum?> categoryList = <CategoryDatum>[].obs;
-  RxString selectedCategories = "".obs;
-  RxString selectedCategoriesId = "".obs;
-  RxList<DoctorCategory> selectedCategoriesList = <DoctorCategory>[].obs;
+
+  Rx<DoctorCategory> selectedCategory = DoctorCategory().obs;
+  RxString categorySlotDuration = "".obs;
   getCategoryList() async {
     BaseApiService()
         .get(apiEndPoint: ApiEndPoints().categoriesList)
@@ -297,4 +301,134 @@ class DoctorController extends GetxController {
       }
     });
   }
+
+  RxList<DiseaseDatum?> diseaseList = <DiseaseDatum>[].obs;
+  RxList<DiseaseDatum> selectedDisease = <DiseaseDatum>[].obs;
+
+  getDiseaseList() async {
+    BaseApiService().get(apiEndPoint: ApiEndPoints().diseaseList).then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          PreExistDiseaseListResponse response =
+              PreExistDiseaseListResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            diseaseList.value = response.data ?? [];
+            diseaseList.refresh();
+            update();
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+
+  //// For Filter
+  List<SortingData> sortingData = [
+    SortingData(title: "High to low", tag: "high_to_low"),
+    SortingData(title: "Low to high", tag: "low_to_high"),
+  ];
+
+  Rx<SortingData?> selectedSorting = SortingData().obs;
+  RxString selectedCategoriesFilter = "".obs;
+  RxString selectedCategoriesIdFilter = "".obs;
+  Rx<CategoryDatum> selectedCategoryFilter = CategoryDatum().obs;
+
+  RxString filterStartDateValue = "".obs;
+  RxString filterStartDateValueApi = "".obs;
+
+  filterStartDate(BuildContext context) async {
+    await showBaseDatePicker(context,
+            isNoLastDate: true, showBeforeDates: false)
+        .then((value) {
+      if (value.isNotEmpty) {
+        DateTime selectedDate = DateTime.parse(value); // Convert to DateTime
+
+        if (filterEndDateValue.value.isNotEmpty) {
+          DateTime endDate = DateTime.parse(filterEndDateValue.value);
+
+          // Check if selected start date is after the end date
+          if (selectedDate.isAfter(endDate)) {
+            showSnackBar(subtitle: "Start date cannot be after the end date");
+            return;
+          }
+        }
+        filterStartDateValue.value = value;
+        filterStartDateValueApi.value =
+            "${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.day.toString().padLeft(2, '0')}-${selectedDate.year}";
+
+        update();
+      }
+    });
+  }
+
+  RxString filterEndDateValue = "".obs;
+  RxString filterEndDateValueApi = "".obs;
+  filterEndDate(BuildContext context) async {
+    await showBaseDatePicker(context,
+            isNoLastDate: true, showBeforeDates: false)
+        .then((value) {
+      if (value.isNotEmpty) {
+        DateTime selectedEndDate = DateTime.parse(value); // Convert to DateTime
+
+        if (filterStartDateValue.value.isNotEmpty) {
+          DateTime startDate = DateTime.parse(filterStartDateValue.value);
+
+          // Check if end date is before the start date
+          if (selectedEndDate.isBefore(startDate)) {
+            showSnackBar(subtitle: "End date cannot be before the start date");
+            return;
+          }
+        }
+
+        filterEndDateValue.value = value;
+        filterEndDateValueApi.value =
+            "${selectedEndDate.month.toString().padLeft(2, '0')}-${selectedEndDate.day.toString().padLeft(2, '0')}-${selectedEndDate.year}";
+
+        update();
+      }
+    });
+  }
+
+  initiateChats({required String doctorId}) async {
+    Map<String, dynamic> data = {"userId": doctorId, "userType": "Doctor"};
+    BaseApiService()
+        .post(apiEndPoint: ApiEndPoints().initiateChat, data: data)
+        .then((value) {
+      if (value?.statusCode == 200 || value?.statusCode == 201) {
+        try {
+          InitiateChatResponse response =
+              InitiateChatResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            Get.offAll(() => const DashBoardView(
+                  index: 1,
+                ));
+            Get.to(() => ChatView(
+                  chatUserId: doctorId,
+                  userName: response.data?.name ?? "",
+                  userImg: response.data?.profilePic ?? "",
+                  userProfession: "",
+                ));
+            // showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+          } else {
+            // showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+}
+
+class SortingData {
+  String? title;
+  String? tag;
+  SortingData({this.title, this.tag});
 }

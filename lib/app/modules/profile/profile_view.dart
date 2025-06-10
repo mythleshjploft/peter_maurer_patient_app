@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/profile_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
+import 'package:peter_maurer_patients_app/app/models/profile_screen/notes_list_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/profile/personal_info.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
@@ -25,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     controller.getProfileDetails();
+    controller.getNotesList();
   }
 
   @override
@@ -47,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onActionPress: () {
             // Add action button functionality here
           },
+          showBackButton: false,
           onBackPress: () {}),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -60,6 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           header: const WaterDropHeader(waterDropColor: AppColors.primaryColor),
           onRefresh: () {
             controller.getProfileDetails();
+            controller.getNotesList();
           },
           child: SingleChildScrollView(
             child: Padding(
@@ -100,13 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               image: controller.profileData?.value?.image ?? "",
                               borderRadius: 100,
                               height: 100,
+                              isProfile: true,
                               width: 100),
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          (controller.profileData?.value?.firstName ?? "") +
-                              " " +
-                              (controller.profileData?.value?.lastName ?? ""),
+                          "${controller.profileData?.value?.firstName?.toString() ?? ""} ${controller.profileData?.value?.lastName?.toString() ?? ""}",
                           style: const TextStyle(
                               fontSize: 30, fontWeight: FontWeight.w500),
                         ),
@@ -196,9 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           const Divider(),
                           _infoRow(
                             "Name",
-                            (controller.profileData?.value?.firstName ?? "") +
-                                " " +
-                                (controller.profileData?.value?.lastName ?? ""),
+                            "${controller.profileData?.value?.firstName?.toString() ?? ""} ${controller.profileData?.value?.lastName?.toString() ?? ""}",
                           ),
                           _infoRow(
                               "Gender",
@@ -235,6 +236,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
+                  NotesHistoryCard(notesList: controller.notesList),
+                  buildSizeHeight(20)
                 ],
               ),
             ),
@@ -251,12 +254,101 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title.tr,
-              style: const TextStyle(
-                  color: AppColors.headingColor, fontWeight: FontWeight.w500)),
-          Text(value, style: const TextStyle(color: AppColors.grayDark)),
+          Expanded(
+            child: Text(title.tr,
+                style: const TextStyle(
+                    color: AppColors.headingColor,
+                    fontWeight: FontWeight.w500)),
+          ),
+          buildSizeWidth(15),
+          Expanded(
+              child: Text(value,
+                  style: const TextStyle(color: AppColors.grayDark))),
         ],
       ),
+    );
+  }
+}
+
+class NotesHistoryCard extends StatelessWidget {
+  const NotesHistoryCard({super.key, required this.notesList});
+  final List<NotesDatum> notesList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: _cardDecoration(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _sectionTitle("Notes History"),
+          const SizedBox(height: 12),
+          if (notesList.isNotEmpty)
+            ...List.generate(
+                notesList.length,
+                (index) => _noteEntry(
+                      "${notesList[index].doctorId?.firstName?.toString() ?? ""} ${notesList[index].doctorId?.lastName?.toString() ?? ""}",
+                      formatBackendDate(
+                          notesList[index].createdAt?.toString() ?? "",
+                          getTime: true),
+                      notesList[index].description?.toString() ?? "",
+                    ))
+          else
+            const Center(child: Text("No Notes Found"))
+        ],
+      ),
+    );
+  }
+
+  Widget _noteEntry(String doctorName, String date, String description) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(doctorName,
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  date,
+                  style: const TextStyle(
+                      color: AppColors.primaryColor,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            description,
+            style: TextStyle(color: Colors.grey.shade600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionTitle(String title) {
+    return Text(
+      title,
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    );
+  }
+
+  BoxDecoration _cardDecoration() {
+    return BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 4)],
     );
   }
 }
