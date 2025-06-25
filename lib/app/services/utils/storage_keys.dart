@@ -20,5 +20,5 @@ class StorageKeys {
   static const String isRememberMe = "isRememberMe";
   static const String rememberEmail = "rememberEmail";
   static const String rememberPassword = "rememberPassword";
-  static const String isAllDetailsFilled = "isAllDetailsFilled";
+  static const String isAllDetailsNotFilled = "isAllDetailsNotFilled";
 }

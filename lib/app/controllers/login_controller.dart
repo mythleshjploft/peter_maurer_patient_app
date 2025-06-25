@@ -17,10 +17,11 @@ class LoginController extends GetxController {
   RxBool isRemember = false.obs;
 
   login() async {
+    String deviceToken = await BaseStorage.read(StorageKeys.fcmToken) ?? "";
     Map<String, dynamic> data = {
       "country_code": "",
       "mobile_number": "",
-      "device_token": "device_token_example",
+      "device_token": deviceToken,
       "device_type": Platform.isIOS ? "Ios" : "Android",
       "email": emailController.text.trim().toLowerCase(),
       "password": passwordController.text,

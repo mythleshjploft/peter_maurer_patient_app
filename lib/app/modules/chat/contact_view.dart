@@ -222,7 +222,11 @@ class MessageTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           cachedNetworkImage(
-              image: avatar, width: 40, height: 40, borderRadius: 100),
+              image: avatar,
+              width: 40,
+              height: 40,
+              borderRadius: 100,
+              isProfile: true),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

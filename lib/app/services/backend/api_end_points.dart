@@ -2,10 +2,11 @@ class ApiEndPoints {
   // final String baseUrl = 'http://192.168.29.86/macchacommunity/api/';
   // final String imgBaseUrl = 'http://192.168.29.86/macchacommunity/';
   // final String socketUrl = "http://192.168.29.86:5000/";
-  final String baseUrl = 'http://3.109.98.222:7900/api/';
-  final String imgBaseUrl = 'http://3.109.98.222:7900/uploads/images/';
-  final String socketUrl = "http://3.109.98.222:7900";
-  final String callbackUrl = "http://3.109.98.222:7902/";
+  final String baseUrl = 'https://api.mkgmaurer.smarte-ki.de/api/';
+  final String imgBaseUrl =
+      'https://api.mkgmaurer.smarte-ki.de/uploads/images/';
+  final String socketUrl = "http://mkgmaurer.smarte-ki.de:7900/";
+  final String callbackUrl = "https://mkgmaurer.smarte-ki.de/";
 
   /// Endpoints
   ///
@@ -24,6 +25,7 @@ class ApiEndPoints {
   final String notificationList = 'app/notification';
   final String appointmentList = 'app/appointment';
   final String dashboard = 'app/dashboard';
+  final String resendOtp = 'app/auth/send-otp';
   final String doctorList = 'app/dashboard/doctor';
   final String doctorDetails = 'app/doctor_clinic_detail/new/';
   final String addAppointment = 'app/appointment/book-appointment_new';

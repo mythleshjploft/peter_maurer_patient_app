@@ -166,17 +166,17 @@ class _NotificationViewState extends State<NotificationView> {
                           //       style:
                           //           TextStyle(color: Colors.white, fontSize: 12)),
                           // ),
-                          // if (item["status"] != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xffE5F7E9),
-                              borderRadius: BorderRadius.circular(12),
+                          if (data.type.toString() == "Appointment_Booking")
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: const Color(0xffE5F7E9),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: const Text("New Booking",
+                                  style: TextStyle(fontSize: 12)),
                             ),
-                            child: const Text("New Booking",
-                                style: TextStyle(fontSize: 12)),
-                          ),
                         ],
                       ),
                     ),

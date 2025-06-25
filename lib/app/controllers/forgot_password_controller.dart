@@ -46,6 +46,31 @@ class ForgotPasswordController extends GetxController {
     });
   }
 
+  resendOtp() async {
+    Map<String, dynamic> data = {
+      "email": emailController.text.trim(),
+    };
+    BaseApiService()
+        .post(apiEndPoint: ApiEndPoints().resendOtp, data: data)
+        .then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          BaseSuccessResponse response =
+              BaseSuccessResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+
   verifyForgotPasswordOtp() async {
     Map<String, dynamic> data = {
       "otp": otpController.text.trim(),

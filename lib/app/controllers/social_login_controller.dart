@@ -92,10 +92,12 @@ class SocialLoginController extends GetxController {
   }
 
   socialLoginApi() async {
+    String deviceToken = await BaseStorage.read(StorageKeys.fcmToken) ?? "";
     Map<String, dynamic> data = {
       "email": userEmail.value,
       "first_name": userName.value,
-      "social_id": userId.value
+      "social_id": userId.value,
+      "device_token": deviceToken,
     };
     BaseApiService()
         .post(apiEndPoint: ApiEndPoints().socialLogin, data: data)

@@ -86,8 +86,8 @@ class PatientFormData {
   dynamic bloodTransfusion;
   dynamic breastfeeding;
   dynamic chemotherapyRadiation;
-  dynamic cityId;
-  dynamic countryId;
+  CountryId? countryId;
+  CityId? cityId;
   dynamic delayedWoundHealing;
   dynamic dentistWithCity;
   dynamic dob;
@@ -266,8 +266,11 @@ class PatientFormData {
         bloodTransfusion: json["blood_transfusion"],
         breastfeeding: json["breastfeeding"],
         chemotherapyRadiation: json["chemotherapy_radiation"],
-        cityId: json["city_id"],
-        countryId: json["country_id"],
+        countryId: json["country_id"] == null
+            ? null
+            : CountryId.fromJson(json["country_id"]),
+        cityId:
+            json["city_id"] == null ? null : CityId.fromJson(json["city_id"]),
         delayedWoundHealing: json["delayed_wound_healing"],
         dentistWithCity: json["dentist_with_city"],
         dob: json["dob"] == null ? null : DateTime.parse(json["dob"]),
@@ -362,8 +365,8 @@ class PatientFormData {
         "blood_transfusion": bloodTransfusion,
         "breastfeeding": breastfeeding,
         "chemotherapy_radiation": chemotherapyRadiation,
-        "city_id": cityId,
-        "country_id": countryId,
+        "country_id": countryId?.toJson(),
+        "city_id": cityId?.toJson(),
         "delayed_wound_healing": delayedWoundHealing,
         "dentist_with_city": dentistWithCity,
         "dob": dob?.toIso8601String(),
@@ -403,5 +406,37 @@ class PatientFormData {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
         "__v": v,
+      };
+}
+
+class CityId {
+  String? name;
+
+  CityId({
+    this.name,
+  });
+
+  factory CityId.fromJson(Map<String, dynamic> json) => CityId(
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+      };
+}
+
+class CountryId {
+  String? name;
+
+  CountryId({
+    this.name,
+  });
+
+  factory CountryId.fromJson(Map<String, dynamic> json) => CountryId(
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
       };
 }

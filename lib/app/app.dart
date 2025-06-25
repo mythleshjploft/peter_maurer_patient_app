@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       translations: BaseLocalization(),
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US'),
+      locale: const Locale('de', 'DE'),
+      fallbackLocale: const Locale('de', 'DE'),
       title: 'Peter Maurer Patients',
       builder: (BuildContext context, Widget? child) {
         return SafeArea(

@@ -22,7 +22,9 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final TextEditingController searchController = TextEditingController();
-  HomeController controller = Get.put(HomeController());
+  HomeController controller = Get.isRegistered<HomeController>()
+      ? Get.find<HomeController>()
+      : Get.put(HomeController());
   @override
   void initState() {
     controller.getHomeScreenData();
@@ -135,7 +137,10 @@ class _DashboardViewState extends State<DashboardView> {
                     const SizedBox(height: 12),
                     Obx(() {
                       if (controller.isHomeLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(
+                            //   child:
+                            // CircularProgressIndicator()
+                            );
                       }
                       if (controller.filteredAppointments.isEmpty) {
                         return const BaseNoData(
@@ -387,8 +392,8 @@ class _DashboardViewState extends State<DashboardView> {
                               Visibility(
                                 visible: !controller.isHomeLoading.value,
                                 replacement: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                                    // child: CircularProgressIndicator(),
+                                    ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [

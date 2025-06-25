@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 
 class BaseColors {
   static const Color scaffoldBlurColor = Color(0xffA5C348);
@@ -36,8 +37,8 @@ class BaseColors {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     colors: [
-      primaryColorDark,
-      primaryColorLight,
+      AppColors.primaryColor,
+      AppColors.primaryColor,
     ],
   );
   static LinearGradient verticalGradient = const LinearGradient(

@@ -111,33 +111,33 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
               ),
 
               // Description Section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
-                  "Lorem ipsum dolor sit amet consectetur. Ac nunc faucibus auctor purus nulla pretium bibendum.Lorem ipsum dolor sit amet consectetur. Ac nunc faucibus auctor purus nulla pretium bibendum.",
-                  style: TextStyle(color: Colors.black, fontSize: 13.5),
+                  controller.doctorDetails?.value.description?.toString() ?? "",
+                  style: const TextStyle(color: Colors.black, fontSize: 13.5),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "Read More".tr,
-                        style: const TextStyle(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: [
+              //     Padding(
+              //       padding:
+              //           const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              //       child: InkWell(
+              //         onTap: () {},
+              //         child: Text(
+              //           "Read More".tr,
+              //           style: const TextStyle(
+              //             color: AppColors.primaryColor,
+              //             fontWeight: FontWeight.w400,
+              //             decoration: TextDecoration.underline,
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
 
               Padding(
                 padding:
@@ -752,48 +752,3 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
 // }
 
 // class _DetailsViewState extends State<DetailsView> {
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: CustomAppBar(
-      title: "Dr. Dr. Maurer",
-      onActionPress: () {},
-    ),
-    body: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xffBAF0FF), Color(0xffF3FFE0)],
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Row(
-              children: [
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 50,
-                      backgroundImage: AssetImage("assets/images/dr_img.png"),
-                    ),
-                    Text("Dr. Dr. Maurer"),
-                    Text("Stomach Specialist")
-                  ],
-                ),
-                Column(
-                  children: [
-                    //  Container(child:,)
-                  ],
-                )
-              ],
-            ),
-          )
-        ],
-      ),
-    ),
-  );
-}

@@ -47,7 +47,7 @@ class SignupController extends GetxController {
   }
 
   selectDob(BuildContext context) async {
-    await showBaseDatePicker(context, showDOBDates: true).then((value) {
+    await showBaseDatePicker(context).then((value) {
       if (value.isNotEmpty) {
         dobController.text = value;
       }
@@ -161,6 +161,7 @@ class SignupController extends GetxController {
   }
 
   registerAccount() async {
+    String deviceToken = await BaseStorage.read(StorageKeys.fcmToken) ?? "";
     dio.FormData data = dio.FormData.fromMap({
       "first_name": nameController.text.trim(),
       "last_name": lastNameController.text.trim(),
@@ -172,7 +173,7 @@ class SignupController extends GetxController {
       "country_id": selectedCountry?.id?.toString() ?? "",
       "city_id": selectedCity?.id?.toString() ?? "",
       "zip_code": zipCodeController.text.trim(),
-      "device_token": "123456789",
+      "device_token": deviceToken,
     });
     // if ((selectedLicenseImage?.value?.path ?? '').isNotEmpty) {
     //   data.files.add(MapEntry(
@@ -199,6 +200,33 @@ class SignupController extends GetxController {
 
             showSnackBar(subtitle: response.message ?? "", isSuccess: true);
             Get.to(() => const OtpView());
+          } else {
+            showSnackBar(subtitle: response.message ?? "");
+          }
+        } catch (e) {
+          showSnackBar(subtitle: parsingError);
+        }
+      } else {
+        showSnackBar(subtitle: "Something went wrong, please try again");
+      }
+    });
+  }
+
+  resendOtp() async {
+    Map<String, dynamic> data = {
+      "country_code": countryCode.value,
+      "mobile_number": phoneController.text.trim(),
+      "email": emailController.text.trim(),
+    };
+    BaseApiService()
+        .post(apiEndPoint: ApiEndPoints().resendOtp, data: data)
+        .then((value) {
+      if (value?.statusCode == 200) {
+        try {
+          BaseSuccessResponse response =
+              BaseSuccessResponse.fromJson(value?.data);
+          if ((response.success ?? false)) {
+            showSnackBar(subtitle: response.message ?? "", isSuccess: true);
           } else {
             showSnackBar(subtitle: response.message ?? "");
           }

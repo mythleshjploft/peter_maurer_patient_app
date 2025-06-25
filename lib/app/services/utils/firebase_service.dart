@@ -23,10 +23,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   } else {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
-        apiKey: 'AIzaSyAav5kX5_eOO_FXtkhIUVNq-0Yy4sK13rM',
-        appId: '1:947511862493:android:7482327f5e4d8ddd85e734',
-        messagingSenderId: '947511862493',
-        projectId: 'maccha-b400d',
+        apiKey: 'AIzaSyDW2PBJshaoyPxWTY988fM9tpriLAYEECE',
+        appId: '1:467194117630:android:f0b9fce6feba6726f954af',
+        messagingSenderId: '467194117630',
+        projectId: 'mkg-maurer',
       ),
     );
   }

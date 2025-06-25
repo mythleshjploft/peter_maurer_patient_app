@@ -11,6 +11,7 @@ import 'package:peter_maurer_patients_app/app/custom_widget/custom_textfiled.dar
 import 'package:peter_maurer_patients_app/app/modules/registration/forgot_password.dart';
 import 'package:peter_maurer_patients_app/app/modules/registration/registration_view.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/firebase_service.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
 
@@ -41,7 +42,9 @@ class _LoginViewState extends State<LoginView> {
             BaseStorage.read(StorageKeys.rememberPassword) ?? '';
         controller.isRemember.value = true;
       }
+      getFcmToken();
     });
+
     super.initState();
   }
 

@@ -528,10 +528,11 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
           } else {
             controller.selectedSlots.add(time);
           }
-          controller.update();
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          width: 110,
+          height: 30,
           decoration: BoxDecoration(
             border: Border.all(
                 color: controller.selectedSlots.contains(time)
@@ -547,7 +548,8 @@ class _AppointmentRescheduleViewState extends State<AppointmentRescheduleView> {
             style: TextStyle(
                 color: controller.selectedSlots.contains(time)
                     ? AppColors.primaryColor
-                    : Colors.black),
+                    : Colors.black,
+                fontSize: 13),
           ),
         ),
       ),

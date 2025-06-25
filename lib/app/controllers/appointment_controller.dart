@@ -300,68 +300,35 @@ class AppointmentController extends GetxController {
   void processAvailabilityDataFromModel(DoctorsAvailability? availabilityData) {
     if (availabilityData == null) return;
 
-    Set<String> weekDays = {};
-    DateTime today = DateTime.now();
-    DateTime oneYearLater = today.add(const Duration(days: 365));
-
     final RxMap<String, List<String>> tempAvailableSlots =
         <String, List<String>>{}.obs;
     final RxList<String> tempEnabledDates = <String>[].obs;
-    final Map<String, List<String>> tempWeeklySlots = {};
 
     for (var dateEntry in availabilityData.availableDates ?? []) {
-      final String? availabilityType = dateEntry.availabilityType;
-      final String? date = dateEntry.date;
-
+      final String? dateStr = dateEntry.date;
       final List<AvailableTimeSlot> slots = dateEntry.availableTimeSlot ?? [];
 
       final List<String> timeSlots = slots
           .map((slot) => "${slot.startTime ?? ""} - ${slot.endTime ?? ""}")
           .toList();
 
-      if (availabilityType == "Every Week") {
-        // Get weekday name (e.g., "Monday") from the date
-        final DateTime? dateObj = DateTime.tryParse(date ?? "");
-        if (dateObj != null) {
-          String weekDay = DateFormat('EEEE').format(dateObj);
-          weekDays.add(weekDay);
-
-          tempWeeklySlots[weekDay] ??= [];
-          tempWeeklySlots[weekDay]?.addAll(timeSlots);
-        }
-      } else if (availabilityType == "Specific Dates") {
-        if (date != null) {
-          tempEnabledDates.add(date);
-          tempAvailableSlots[date] ??= [];
-          tempAvailableSlots[date]?.addAll(timeSlots);
-        }
+      if (dateStr != null && timeSlots.isNotEmpty) {
+        tempEnabledDates.add(dateStr);
+        tempAvailableSlots[dateStr] = timeSlots;
       }
     }
 
-    // Fill available slots for recurring weekly availability for the next year
-    for (var day = today;
-        day.isBefore(oneYearLater);
-        day = day.add(const Duration(days: 1))) {
-      final String weekdayName = DateFormat('EEEE').format(day);
-      if (weekDays.contains(weekdayName)) {
-        final String key =
-            "${day.month}-${day.day < 10 ? "0${day.day}" : "${day.day}"}-${day.year}";
-        tempEnabledDates.add(key);
-        tempAvailableSlots[key] = tempWeeklySlots[weekdayName]?.toList() ?? [];
-      }
-    }
-
-    // Update reactive values
-    enabledDates
-        .assignAll(tempEnabledDates.toSet().toList()); // to avoid duplicates
+    // Remove duplicates and update reactive variables
+    enabledDates.assignAll(tempEnabledDates.toSet().toList());
     availableSlots.assignAll(tempAvailableSlots);
+
     enabledDates.refresh();
     availableSlots.refresh();
 
     log("Enabled Dates: $enabledDates");
     log("Available Slots: $availableSlots");
 
-    update();
+    update(); // If you are in a controller and using GetX
   }
 
   getDoctorDetails(String id) {
@@ -417,7 +384,7 @@ class AppointmentController extends GetxController {
           if ((response.success ?? false)) {
             patientFormData.value = response.data ?? PatientFormData();
             patientFormData.refresh();
-            showSnackBar(subtitle: response.message ?? "", isSuccess: true);
+            // showSnackBar(subtitle: response.message ?? "", isSuccess: true);
           } else {
             showSnackBar(subtitle: response.message ?? "");
           }

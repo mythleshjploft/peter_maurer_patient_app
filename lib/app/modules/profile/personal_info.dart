@@ -16,8 +16,11 @@ import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list
 import 'package:peter_maurer_patients_app/app/services/utils/base_colors.dart';
 
 class PersonalInfo extends StatefulWidget {
-  const PersonalInfo({super.key});
+  const PersonalInfo(
+      {super.key, required this.cityDatum, required this.countryDatum});
 
+  final CountryDatum countryDatum;
+  final CityDatum cityDatum;
   @override
   State<PersonalInfo> createState() => _PersonalInfoState();
 }
@@ -25,6 +28,15 @@ class PersonalInfo extends StatefulWidget {
 class _PersonalInfoState extends State<PersonalInfo> {
   ProfileController controller = Get.find<ProfileController>();
   final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getCityList(
+        countryId: widget.countryDatum.id?.toString() ?? "",
+      );
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +168,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                             builder: (FormFieldState<String> state) => Column(
                                   children: [
                                     CustomIntlPhoneField(
-                                      readOnly: true,
+                                      readOnly: (controller.profileData?.value
+                                                  ?.mobileNumber
+                                                  ?.toString() ??
+                                              "")
+                                          .isNotEmpty,
                                       decoration: InputDecoration(
                                         contentPadding:
                                             const EdgeInsets.symmetric(
@@ -264,7 +280,11 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         ),
                         FormField<String>(
                           validator: (value) {
-                            if ((controller.selectedCountry == null)) {
+                            if ((controller.selectedCountry?.id?.toString() ??
+                                        "")
+                                    .isEmpty &&
+                                (widget.countryDatum.id?.toString() ?? "")
+                                    .isEmpty) {
                               return 'Please fill this field'; // Custom validation message
                             }
                             return null;
@@ -272,7 +292,17 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           builder: (FormFieldState<String> state) => Column(
                             children: [
                               CustomDropdownButton2<CountryDatum?>(
-                                hintText: "Select Country",
+                                hintText:
+                                    (controller.selectedCountry?.name
+                                                    ?.toString() ??
+                                                "")
+                                            .isEmpty
+                                        ? widget.countryDatum.name
+                                                ?.toString() ??
+                                            "Select Country"
+                                        : controller.selectedCountry?.name
+                                                ?.toString() ??
+                                            "",
                                 items: controller.countryList,
                                 value: controller.selectedCountry,
                                 displayText: (item) => item?.name ?? "",
@@ -321,7 +351,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
                         ),
                         FormField<String>(
                           validator: (value) {
-                            if ((controller.selectedCountry == null)) {
+                            if (((controller.selectedCity?.id?.toString() ?? "")
+                                    .isEmpty) &&
+                                (widget.cityDatum.id?.toString() ?? "")
+                                    .isEmpty) {
                               return 'Please fill this field'; // Custom validation message
                             }
                             return null;
@@ -329,7 +362,15 @@ class _PersonalInfoState extends State<PersonalInfo> {
                           builder: (FormFieldState<String> state) => Column(
                             children: [
                               CustomDropdownButton2<CityDatum?>(
-                                hintText: "Select City",
+                                hintText: (controller.selectedCity?.name
+                                                ?.toString() ??
+                                            "")
+                                        .isEmpty
+                                    ? widget.cityDatum.name?.toString() ??
+                                        "Select City"
+                                    : controller.selectedCity?.name
+                                            ?.toString() ??
+                                        "",
                                 items: controller.cityList,
                                 hasError: state.hasError,
                                 value: controller.selectedCity,

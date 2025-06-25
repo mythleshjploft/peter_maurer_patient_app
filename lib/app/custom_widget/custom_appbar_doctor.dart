@@ -48,6 +48,7 @@ class CustomAppBarDoctor extends StatelessWidget
                     image: profileImagePath,
                     height: 40,
                     width: 40,
+                    isProfile: true,
                     borderRadius: 100),
                 child: CircleAvatar(
                   radius: 20,

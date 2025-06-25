@@ -67,9 +67,10 @@ class _ViewFormScreenState extends State<ViewFormScreen> {
               buildDetailWidget(
                   title: "Gender", value: data.gender?.toString() ?? ""),
               buildDetailWidget(
-                  title: "Country", value: data.countryId?.toString() ?? ""),
+                  title: "Country",
+                  value: data.countryId?.name?.toString() ?? ""),
               buildDetailWidget(
-                  title: "City", value: data.cityId?.toString() ?? ""),
+                  title: "City", value: data.cityId?.name?.toString() ?? ""),
               buildDetailWidget(
                   title: "Zip Code", value: data.zipCode?.toString() ?? ""),
               buildDetailWidget(

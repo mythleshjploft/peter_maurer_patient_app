@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:peter_maurer_patients_app/app/controllers/home_controller.dart';
 import 'package:peter_maurer_patients_app/app/controllers/profile_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/bottom_navigation_bar.dart';
 import 'package:peter_maurer_patients_app/app/modules/chat/contact_view.dart';
@@ -32,10 +35,11 @@ class _DashBoardViewState extends State<DashBoardView> {
       if (_currentIndex != 0) {
         pageController.jumpToPage(_currentIndex);
       }
-      await controller.getProfileDetails().then((value) {
-        bool isAllDetailsFilled =
-            BaseStorage.read(StorageKeys.isAllDetailsFilled) ?? false;
-        if (!isAllDetailsFilled) {
+      await controller.getProfileDetails().then((value) async {
+        bool isAllDetailsNotFilled =
+            await BaseStorage.read(StorageKeys.isAllDetailsNotFilled) ?? false;
+        log("===================>>>>>>>>$isAllDetailsNotFilled");
+        if (!isAllDetailsNotFilled) {
           setState(() {
             _currentIndex = 3;
           });
@@ -62,6 +66,8 @@ class _DashBoardViewState extends State<DashBoardView> {
     return true;
   }
 
+  HomeController homeController = Get.put(HomeController());
+
   List<Widget> screens = [
     const DashboardView(),
     const ContactView(),
@@ -76,10 +82,12 @@ class _DashBoardViewState extends State<DashBoardView> {
         body: screens[_currentIndex],
         bottomNavigationBar: CustomBottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) {
-            bool isAllDetailsFilled =
-                BaseStorage.read(StorageKeys.isAllDetailsFilled) ?? false;
-            if (!isAllDetailsFilled) {
+          onTap: (index) async {
+            bool isAllDetailsNotFilled =
+                await BaseStorage.read(StorageKeys.isAllDetailsNotFilled) ??
+                    false;
+            log("====>>$isAllDetailsNotFilled");
+            if (!isAllDetailsNotFilled) {
               if (index != 3) {
                 showSnackBar(subtitle: "Please complete your profile");
               }

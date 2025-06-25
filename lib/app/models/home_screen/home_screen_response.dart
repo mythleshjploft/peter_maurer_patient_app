@@ -42,12 +42,14 @@ class HomeScreenDatum {
   Blog? blog;
   UserDetail? userDetail;
   List<Appointemnt>? appointemnt;
+  dynamic notificationCount;
 
   HomeScreenDatum({
     this.pastAppointment,
     this.blog,
     this.userDetail,
     this.appointemnt,
+    this.notificationCount,
   });
 
   factory HomeScreenDatum.fromJson(Map<String, dynamic> json) =>
@@ -64,6 +66,7 @@ class HomeScreenDatum {
             ? []
             : List<Appointemnt>.from(
                 json["appointemnt"]!.map((x) => Appointemnt.fromJson(x))),
+        notificationCount: json["notificationCount"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,6 +78,7 @@ class HomeScreenDatum {
         "appointemnt": appointemnt == null
             ? []
             : List<dynamic>.from(appointemnt!.map((x) => x.toJson())),
+        "notificationCount": notificationCount,
       };
 }
 

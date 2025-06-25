@@ -198,9 +198,9 @@ class _OtpViewState extends State<OtpView> {
                               child: InkWell(
                                 onTap: () {
                                   if (!widget.isForgotPassword) {
-                                    controller.registerAccount();
+                                    controller.resendOtp();
                                   } else {
-                                    controller.forgotPassword();
+                                    controller.resendOtp();
                                   }
                                   startResendTimer();
                                   // Get.to(LoginView());

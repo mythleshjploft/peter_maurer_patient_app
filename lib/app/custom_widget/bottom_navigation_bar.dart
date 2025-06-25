@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
+import 'package:peter_maurer_patients_app/app/controllers/home_controller.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_colors.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -35,7 +38,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
           buildNavItem("assets/icons/bottom_02.svg", "", () => onTap(1),
               currentIndex == 1),
           buildNavItem("assets/icons/bottom_03.svg", "", () => onTap(2),
-              currentIndex == 2),
+              currentIndex == 2,
+              isIcon: true),
           buildNavItem(
             "assets/icons/bottom_04.svg",
             "",
@@ -50,7 +54,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   Widget buildNavItem(
       String iconsPath, String label, VoidCallback onTap, bool isSelected,
-      {bool? isImage}) {
+      {bool? isImage, bool? isIcon}) {
     return InkWell(
       focusColor: Colors.transparent,
       highlightColor: Colors.transparent,
@@ -70,11 +74,56 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       ? AppColors.primaryColor.withOpacity(0.42)
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(30)),
-              child: SvgPicture.asset(
-                iconsPath,
-                // ignore: deprecated_member_use
-                color: isSelected ? AppColors.black : const Color(0XFFCFCFCF),
-              ),
+              child: (isIcon ?? false)
+                  ? Transform.translate(
+                      offset: const Offset(-3, -4),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Icon(
+                            Icons.notifications,
+                            color: isSelected
+                                ? AppColors.black
+                                : const Color(0XFFCFCFCF),
+                            size: 30,
+                          ),
+                          Obx(() => Visibility(
+                                visible: (Get.find<HomeController>()
+                                            .homeScreenData
+                                            .value
+                                            ?.notificationCount
+                                            ?.toString() ??
+                                        "0") !=
+                                    "0",
+                                child: Positioned(
+                                  top: 0,
+                                  right: -10,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: AppColors.primaryColor,
+                                        shape: BoxShape.circle),
+                                    height: 15,
+                                    width: 15,
+                                    child: Center(
+                                      child: Text(
+                                        "${Get.find<HomeController>().homeScreenData.value?.notificationCount ?? "0"}",
+                                        style: const TextStyle(
+                                            fontSize: 10,
+                                            color: BaseColors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
+                    )
+                  : SvgPicture.asset(
+                      iconsPath,
+                      color: isSelected
+                          ? AppColors.black
+                          : const Color(0XFFCFCFCF),
+                    ),
             ),
           ),
           //Icon(icon,color: isSelected?ColorsUtil.primaryColor:ColorsUtil.unSelectedIconColor ),

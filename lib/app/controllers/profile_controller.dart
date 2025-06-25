@@ -51,7 +51,7 @@ class ProfileController extends GetxController {
                   response.data?.data?.firstName?.toString() ?? "");
               BaseStorage.write(StorageKeys.lastName,
                   response.data?.data?.lastName?.toString() ?? "");
-              BaseStorage.write(StorageKeys.isAllDetailsFilled,
+              BaseStorage.write(StorageKeys.isAllDetailsNotFilled,
                   response.allFieldNotField ?? false);
               isLoading.value = false;
               update();
@@ -163,11 +163,13 @@ class ProfileController extends GetxController {
     });
   }
 
-  getCityList() async {
+  getCityList({String? countryId}) async {
     BaseApiService()
         .get(
             apiEndPoint: ApiEndPoints().cityList +
-                (selectedCountry?.id?.toString() ?? ""))
+                ((countryId ?? "").isEmpty
+                    ? (selectedCountry?.id?.toString() ?? "")
+                    : (countryId ?? "")))
         .then((value) {
       if (value?.statusCode == 200) {
         try {

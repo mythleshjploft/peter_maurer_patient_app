@@ -200,42 +200,42 @@ class _AppointmentCardState extends State<AppointmentCard> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 15),
               Visibility(
                 visible: controller.selectedTab.value == 0,
                 child: Row(
                   children: [
-                    Expanded(
-                      // flex: 2,
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.to(AppointmentRescheduleView(
-                            appointmentId:
-                                widget.appointmentDatum.id?.toString() ?? "",
-                            patientId:
-                                widget.appointmentDatum.patientId?.toString() ??
-                                    "",
-                            doctorId: widget.appointmentDatum.doctorId?.id
-                                    ?.toString() ??
-                                "",
-                          ));
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(58),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Reschedule".tr,
-                            style: const TextStyle(
-                                fontSize: 15, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                    buildSizeWidth(10),
+                    // Expanded(
+                    //   // flex: 2,
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       Get.to(AppointmentRescheduleView(
+                    //         appointmentId:
+                    //             widget.appointmentDatum.id?.toString() ?? "",
+                    //         patientId:
+                    //             widget.appointmentDatum.patientId?.toString() ??
+                    //                 "",
+                    //         doctorId: widget.appointmentDatum.doctorId?.id
+                    //                 ?.toString() ??
+                    //             "",
+                    //       ));
+                    //     },
+                    //     child: Container(
+                    //       padding: const EdgeInsets.symmetric(vertical: 12),
+                    //       decoration: BoxDecoration(
+                    //         color: AppColors.primaryColor,
+                    //         borderRadius: BorderRadius.circular(58),
+                    //       ),
+                    //       alignment: Alignment.center,
+                    //       child: Text(
+                    //         "Reschedule".tr,
+                    //         style: const TextStyle(
+                    //             fontSize: 15, color: Colors.white),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // buildSizeWidth(10),
                     Expanded(
                       child: Visibility(
                         visible:
@@ -245,7 +245,7 @@ class _AppointmentCardState extends State<AppointmentCard> {
                             Get.to(() => AppointmentWebViewScreen(
                                 url:
                                     //  "https://pub.dev/packages/webview_flutter"
-                                    "http://3.109.98.222:7902/noteForm/${widget.appointmentDatum.id}"));
+                                    "https://mkgmaurer.smarte-ki.de/noteForm/${widget.appointmentDatum.id}"));
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),

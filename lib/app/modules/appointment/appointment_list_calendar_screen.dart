@@ -65,8 +65,8 @@ class _AppointmentListCalendarScreenState
                                 "From: ${DateFormat('EEE MMM d HH:mm a').format(event.startTime ?? DateTime.now())}"),
                             Text(
                                 "To: ${DateFormat('EEE MMM d HH:mm a').format(event.endTime ?? DateTime.now())}"),
-                            if (event.description != null)
-                              Text("Description: ${event.description}"),
+                            // if (event.description != null)
+                            //   Text("Description: ${event.description}"),
                           ],
                         ),
                         actions: [

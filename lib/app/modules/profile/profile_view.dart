@@ -7,6 +7,8 @@ import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/controllers/profile_controller.dart';
 import 'package:peter_maurer_patients_app/app/custom_widget/custom_appbar.dart';
 import 'package:peter_maurer_patients_app/app/models/profile_screen/notes_list_response.dart';
+import 'package:peter_maurer_patients_app/app/models/sign_up_screen/city_list_response.dart';
+import 'package:peter_maurer_patients_app/app/models/sign_up_screen/country_list_response.dart';
 import 'package:peter_maurer_patients_app/app/modules/profile/personal_info.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_functions.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_no_data.dart';
@@ -39,7 +41,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: InkWell(
                   onTap: () {
-                    clearSessionData();
+                    showConfirmationDialogue(
+                      title: "Logout",
+                      onTap: () {
+                        clearSessionData();
+                      },
+                      subtitle: "Are you sure want to logout this account",
+                    );
                   },
                   child: SvgPicture.asset(
                     "assets/icons/logout_icon.svg",
@@ -100,12 +108,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               }
                             });
                           },
-                          child: cachedNetworkImage(
-                              image: controller.profileData?.value?.image ?? "",
-                              borderRadius: 100,
-                              height: 100,
-                              isProfile: true,
-                              width: 100),
+                          child: Stack(
+                            children: [
+                              cachedNetworkImage(
+                                  image: controller.profileData?.value?.image ??
+                                      "",
+                                  borderRadius: 100,
+                                  height: 100,
+                                  isProfile: true,
+                                  width: 100),
+                              Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                    padding: const EdgeInsets.all(4),
+                                    child: const Icon(
+                                      Icons.edit,
+                                      color: Colors.white,
+                                      size: 20,
+                                    ),
+                                  )),
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 10),
                         Text(
@@ -187,7 +215,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       "";
                                   controller.selectedCity = null;
                                   controller.selectedCountry = null;
-                                  Get.to(const PersonalInfo());
+                                  // controller.selectedCity = CityDatum(
+                                  //     id: controller
+                                  //             .profileData?.value?.cityId?.id
+                                  //             ?.toString() ??
+                                  //         "",
+                                  //     name: controller
+                                  //             .profileData?.value?.cityId?.name
+                                  //             ?.toString() ??
+                                  //         "");
+                                  // controller.selectedCountry = CountryDatum(
+                                  //   id: controller
+                                  //           .profileData?.value?.countryId?.id
+                                  //           ?.toString() ??
+                                  //       "",
+                                  //   name: controller
+                                  //           .profileData?.value?.countryId?.name
+                                  //           ?.toString() ??
+                                  //       "",
+                                  // );
+                                  Get.to(PersonalInfo(
+                                    countryDatum: CountryDatum(
+                                      id: controller
+                                              .profileData?.value?.countryId?.id
+                                              ?.toString() ??
+                                          "",
+                                      name: controller.profileData?.value
+                                              ?.countryId?.name
+                                              ?.toString() ??
+                                          "",
+                                    ),
+                                    cityDatum: CityDatum(
+                                        id: controller
+                                                .profileData?.value?.cityId?.id
+                                                ?.toString() ??
+                                            "",
+                                        name: controller.profileData?.value
+                                                ?.cityId?.name
+                                                ?.toString() ??
+                                            ""),
+                                  ));
                                 },
                                 child: Text("Edit".tr,
                                     style: const TextStyle(
@@ -263,6 +330,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           buildSizeWidth(15),
           Expanded(
               child: Text(value,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(color: AppColors.grayDark))),
         ],
       ),

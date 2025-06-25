@@ -17,6 +17,8 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:peter_maurer_patients_app/app/colors/app_colors.dart';
 import 'package:peter_maurer_patients_app/app/modules/login/login_view.dart';
 import 'package:peter_maurer_patients_app/app/services/backend/api_end_points.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_button.dart';
+import 'package:peter_maurer_patients_app/app/services/utils/base_colors.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/base_variables.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/get_storage.dart';
 import 'package:peter_maurer_patients_app/app/services/utils/storage_keys.dart';
@@ -26,10 +28,102 @@ triggerHapticFeedback() {
   HapticFeedback.lightImpact();
 }
 
+showConfirmationDialogue({
+  String? imgIcon,
+  String? title,
+  String? subtitle,
+  void Function()? onTap,
+}) {
+  return showBaseDialgueBox(
+    icon: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(
+            Icons.close,
+            size: 25,
+            color: BaseColors.greyColorLight,
+          ),
+        ),
+      ],
+    ),
+    title: Column(
+      children: [
+        SvgPicture.asset(
+          imgIcon ?? "assets/icons/logout_icon.svg",
+          colorFilter: const ColorFilter.mode(
+            AppColors.primaryColor,
+            BlendMode.srcIn,
+          ),
+          height: 50,
+          width: 45,
+        ),
+        buildSizeHeight(10),
+        Text(title ?? "Logout",
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            )),
+      ],
+    ),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          subtitle ?? "Are you sure want to logout this account",
+          style: const TextStyle(
+            color: BaseColors.greyColorDark,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        buildSizeHeight(25),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: BaseButton(
+                  btnHeight: 37,
+                  onPressed: () {
+                    Get.back();
+                    if (onTap != null) {
+                      onTap();
+                    }
+                  },
+                  title: "Yes",
+                  borderRadius: 30,
+                  fontSize: 15,
+                ),
+              ),
+              Expanded(
+                child: BaseButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  btnHeight: 37,
+                  fontSize: 15,
+                  borderRadius: 30,
+                  btnColor: Colors.white,
+                  titleColor: AppColors.primaryColor,
+                  title: "No",
+                ),
+              ),
+            ],
+          ),
+        ),
+        buildSizeHeight(10),
+      ],
+    ),
+  );
+}
+
 String formatBackendDate(String dateString,
     {bool? getDayFirst, bool? getTime}) {
   if (dateString.isNotEmpty && dateString != "null") {
-    DateTime date = DateTime.parse(dateString);
+    DateTime date = DateTime.parse(dateString).toLocal();
     String day = date.day.toString().padLeft(2, '0');
     String month = date.month.toString().padLeft(2, '0');
     String year = date.year.toString();

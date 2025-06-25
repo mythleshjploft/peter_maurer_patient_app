@@ -118,6 +118,7 @@ class _ChatViewState extends State<ChatView> {
                                 image: widget.userImg,
                                 height: 40,
                                 width: 40,
+                                isProfile: true,
                                 borderRadius: 100),
                             const SizedBox(width: 8),
                             Column(
@@ -230,6 +231,7 @@ class _ChatViewState extends State<ChatView> {
                 image: widget.userImg,
                 height: 35,
                 width: 35,
+                isProfile: true,
                 borderRadius: 100),
 
           const SizedBox(width: 8), // Space between avatar and message
